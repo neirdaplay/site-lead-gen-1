@@ -8,84 +8,68 @@
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0F2745">
 <link rel="canonical" href="https://www.mon-couvreur-nord.fr/mentions-legales.html">
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <style>
-@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/assets/fonts/inter-400.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('/assets/fonts/inter-600.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url('/assets/fonts/inter-700.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;src:url('/assets/fonts/inter-800.woff2') format('woff2')}
-@font-face{font-family:'Inter Repli';src:local('Arial'),local('Helvetica Neue'),local('Liberation Sans');ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;size-adjust:107.4%}
-:root{--bleu:#0F2745;--bleu-clair:#16345C;--bleu-pale:#EEF4FB;--blanc:#FFFFFF;
---gris:#F5F7FA;--bord:#E4E9F0;--vert:#12B76A;--vert-fonce:#0A7A46;--vert-pale:#ECFBF3;
---orange:#F26522;--orange-fonce:#D9541A;--texte:#4A5568;--titre:#0F2745;--note:#667085;
---rayon:10px;--rayon-s:8px;--max:1120px;--ombre:0 1px 2px rgba(15,39,69,.04)}
+:root{--bleu:#0F2745;--bleu-clair:#16345C;--blanc:#fff;--gris:#F5F7FA;--bord:#E4E9F0;
+--vert-fonce:#0A7A46;--texte:#4A5568;--titre:#0F2745;--note:#667085}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--blanc);color:var(--texte);
-font-family:'Inter','Inter Repli',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4,p,ul,ol,figure{margin:0}
+h1,h2,h3,p,ul,ol{margin:0}
 ul{padding:0}
-img,svg{max-width:100%}
 a{color:inherit}
-button{font-family:inherit}
-/* Unique usage de l'orange hors CTA : le contour de focus clavier.
-   C'est la seule teinte qui atteint 3:1 a la fois sur fond blanc (3,15)
-   et sur le bleu nuit du hero (4,77). */
-:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:4px}
-.container{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px}
-.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.bouton{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;
-padding:14px 26px;border:0;border-radius:var(--rayon-s);font:inherit;font-size:18px;font-weight:700;
-line-height:1.2;text-decoration:none;cursor:pointer;transition:background-color .15s ease}
-.bouton--orange{background:var(--orange);color:#fff}
-.bouton--orange:hover{background:var(--orange-fonce)}
-.bouton--vert{background:var(--vert-fonce);color:#fff;min-height:44px;padding:11px 18px;font-size:15px}
-.bouton--vert:hover{background:#08633A}
-.bouton--fantome{background:transparent;color:var(--titre);border:1px solid #CBD3DF;font-size:16px;font-weight:600}
-.entete{position:relative;z-index:20;background:var(--blanc);border-bottom:1px solid var(--bord)}
-.entete__interne{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:66px}
+svg{max-width:100%}
+:focus-visible{outline:3px solid #F26522;outline-offset:2px;border-radius:4px}
+.container{width:100%;max-width:1120px;margin:0 auto;padding:0 20px}
+.entete{background:var(--blanc);border-bottom:1px solid var(--bord)}
+.entete__interne{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px}
 .logo{display:flex;align-items:center;gap:10px;min-height:44px;padding:2px 0;text-decoration:none;color:var(--titre)}
 .logo svg{flex:0 0 auto;width:30px;height:30px;color:var(--bleu)}
-.logo b{display:block;font-size:17.5px;font-weight:800;letter-spacing:-.015em;line-height:1.1}
-.logo small{display:block;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--note)}
+.logo b{display:block;font-size:16px;font-weight:800;letter-spacing:-.015em;line-height:1.15;white-space:nowrap}
+.logo small{display:block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--note);white-space:nowrap}
+.bouton{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 18px;
+border:0;border-radius:8px;background:var(--vert-fonce);color:#fff;font:inherit;font-size:15px;
+font-weight:700;text-decoration:none;white-space:nowrap}
+.bouton:hover{background:#08633A}
 .legal{padding:40px 0 72px}
 .legal__contenu{max-width:780px;margin:0 auto}
-.legal h1{margin:0 0 10px;font-size:30px;line-height:1.2;font-weight:800;color:var(--titre)}
-.legal .maj{margin:0 0 32px;font-size:13.5px;color:var(--note)}
-.legal h2{margin:36px 0 12px;font-size:20px;line-height:1.3;font-weight:700;color:var(--titre)}
-.legal h3{margin:24px 0 8px;font-size:16.5px;font-weight:700;color:var(--titre)}
+h1{margin:0 0 10px;font-size:30px;line-height:1.2;font-weight:800;color:var(--titre)}
+.maj{margin:0 0 32px;font-size:13.5px;color:var(--note)}
+h2{margin:36px 0 12px;font-size:20px;line-height:1.3;font-weight:700;color:var(--titre)}
+h3{margin:24px 0 8px;font-size:16.5px;font-weight:700;color:var(--titre)}
 .legal p,.legal li{font-size:16px;line-height:1.7;color:var(--texte)}
 .legal p{margin:0 0 14px}
 .legal ul,.legal ol{margin:0 0 16px;padding-left:22px}
 .legal li{margin-bottom:8px}
 .legal a{color:var(--bleu-clair)}
-.a-completer{padding:1px 6px;border-radius:4px;background:#FFF3CD;border:1px solid #E6D28A;color:#6B5312;font-size:.95em;font-weight:600}
-@media (min-width:900px){.legal h1{font-size:36px}.entete__interne{min-height:72px}}
+.encadre{margin:20px 0;padding:18px;background:#EEF4FB;border:1px solid #CBDDF0;border-radius:8px}
+.encadre p:last-child{margin-bottom:0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;
+background:var(--gris);padding:1px 5px;border-radius:4px}
+.tableau{margin:18px 0 24px;overflow-x:auto;border:1px solid var(--bord);border-radius:8px}
+table{width:100%;min-width:460px;border-collapse:collapse;font-size:15px}
+th,td{padding:13px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--bord)}
+thead th{background:var(--bleu);color:#fff;font-size:14px;border-bottom:none}
+tbody tr:nth-child(even){background:var(--gris)}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:none}
+.valeur{font-weight:700;color:var(--vert-fonce);white-space:nowrap}
+.a-completer{padding:1px 6px;border-radius:4px;background:#FFF3CD;border:1px solid #E6D28A;
+color:#6B5312;font-size:.95em;font-weight:600}
+.pied{background:var(--blanc);border-top:1px solid var(--bord);padding:32px 0 40px;
+font-size:13px;line-height:1.65;color:var(--note)}
+.pied__liens{display:flex;flex-wrap:wrap;gap:0 18px;margin:0 0 16px;padding:0;list-style:none}
+.pied__liens a{display:inline-flex;align-items:center;min-height:44px;color:var(--texte)}
+.pied p{margin:0 0 10px}
+@media (min-width:900px){h1{font-size:36px}.entete__interne{min-height:72px}}
 </style>
-<script>
-window.MCN_CONFIG = {
-  gtmId: 'GTM-XXXXXXX', ga4Id: 'G-XXXXXXXXXX', clarityId: 'xxxxxxxxxx',
-  endpoint: '/.netlify/functions/submit-lead', chargerGtmApresChoix: false, debug: false
-};
-window.dataLayer = window.dataLayer || [];
-function gtag(){ dataLayer.push(arguments); }
-gtag('consent', 'default', {
-  ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
-  analytics_storage: 'denied', functionality_storage: 'granted',
-  security_storage: 'granted', wait_for_update: 500
-});
-gtag('set', 'ads_data_redaction', true);
-</script>
-<link rel="preload" href="/assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/assets/css/main.css"></noscript>
 </head>
-<body data-page="mentions-legales">
+<body>
 
 <header class="entete">
   <div class="container entete__interne">
-    <a class="logo" href="/" aria-label="Mon Couvreur Nord, retour à l’accueil">
+    <a class="logo" href="index.html" aria-label="Mon Couvreur Nord, retour à l’accueil">
       <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
         <path d="M2 15 16 4l14 11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -93,7 +77,7 @@ gtag('set', 'ads_data_redaction', true);
       </svg>
       <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
     </a>
-    <a class="bouton bouton--vert" href="/#devis">Ma demande de devis</a>
+    <a class="bouton" href="index.html#devis">Ma demande de devis</a>
   </div>
 </header>
 
@@ -102,7 +86,6 @@ gtag('set', 'ads_data_redaction', true);
     <article class="legal__contenu">
       <h1>Mentions légales</h1>
 <p class="maj">Dernière mise à jour : <span class="a-completer">date de mise en ligne à compléter</span>.</p>
-
       <p>
         Conformément à l’article 6 de la loi n° 2004-575 du 21 juin 2004 pour la
         confiance dans l’économie numérique, les informations suivantes sont
@@ -113,14 +96,14 @@ gtag('set', 'ads_data_redaction', true);
       <h2>1. Éditeur du site</h2>
       <ul>
         <li><b>Dénomination sociale :</b> <span class="a-completer">raison sociale à compléter</span></li>
-        <li><b>Forme juridique :</b> <span class="a-completer">forme juridique à compléter (SASU, EURL, entrepreneur individuel…)</span></li>
-        <li><b>Capital social :</b> <span class="a-completer">à compléter, ou « sans objet » pour un entrepreneur individuel</span></li>
+        <li><b>Forme juridique :</b> <span class="a-completer">à compléter (SASU, EURL, entrepreneur individuel…)</span></li>
+        <li><b>Capital social :</b> <span class="a-completer">à compléter, ou « sans objet »</span></li>
         <li><b>Siège social :</b> 80 rue du Docteur Legay, 59110 La Madeleine, France</li>
         <li><b>SIRET :</b> <span class="a-completer">à compléter</span></li>
-        <li><b>RCS :</b> <span class="a-completer">ville et numéro d’immatriculation à compléter</span></li>
-        <li><b>Numéro de TVA intracommunautaire :</b> <span class="a-completer">à compléter, ou mention « TVA non applicable, art. 293 B du CGI »</span></li>
+        <li><b>RCS :</b> <span class="a-completer">ville et numéro à compléter</span></li>
+        <li><b>TVA intracommunautaire :</b> <span class="a-completer">à compléter, ou mention « TVA non applicable, art. 293 B du CGI »</span></li>
         <li><b>Téléphone :</b> <a href="tel:+33786505580">07 86 50 55 80</a></li>
-        <li><b>Adresse électronique :</b> <span class="a-completer">adresse de contact à créer sur le domaine, par exemple contact@mon-couvreur-nord.fr</span></li>
+        <li><b>Adresse électronique :</b> <span class="a-completer">à créer sur le domaine, par exemple contact@mon-couvreur-nord.fr</span></li>
       </ul>
 
       <h2>2. Directeur de la publication</h2>
@@ -138,31 +121,38 @@ gtag('set', 'ads_data_redaction', true);
       </p>
       <p>
         Les serveurs de diffusion utilisés par cet hébergeur peuvent être situés
-        en dehors de l’Union européenne. Les conséquences de cette situation sur
-        vos données personnelles sont détaillées dans la
-        <a href="/confidentialite.html">politique de confidentialité</a>.
+        en dehors de l’Union européenne. Les conséquences sur vos données
+        personnelles sont détaillées dans la
+        <a href="confidentialite.html">politique de confidentialité</a>.
       </p>
 
       <h2>4. Nature du service</h2>
       <p>
         <b>Mon Couvreur Nord est un service de mise en relation</b> entre des
         particuliers propriétaires d’un logement situé dans le département du
-        Nord (59) et un professionnel de la couverture.
+        Nord (59) et un professionnel de la toiture.
       </p>
       <p>
-        L’éditeur du site <b>n’exécute aucun travaux de couverture</b>, n’établit
-        aucun devis, ne fournit aucune fourniture et n’est pas partie au contrat
-        qui pourrait être conclu entre l’utilisateur et le professionnel. Les
-        travaux sont réalisés par l’entreprise partenaire, seule responsable de
-        leur exécution, de leurs garanties légales et de la souscription de ses
+        Trois prestations seulement sont proposées : le <b>nettoyage /
+        démoussage</b>, la <b>reprotection de toiture</b> et la <b>couverture
+        neuve</b>.
+      </p>
+      <p>
+        L’éditeur du site <b>n’exécute aucun travaux</b>, n’établit aucun devis,
+        ne fournit aucun matériau et n’est pas partie au contrat qui pourrait
+        être conclu entre l’utilisateur et le professionnel. Les travaux sont
+        réalisés par l’entreprise partenaire, seule responsable de leur
+        exécution, de leurs garanties légales et de la souscription de ses
         assurances professionnelles, notamment l’assurance de responsabilité
         civile décennale prévue par les articles 1792 et suivants du Code civil.
       </p>
       <p>
-        Les fourchettes de prix publiées sur ce site sont des ordres de grandeur
-        indicatifs. Elles ne constituent ni une offre, ni un engagement
-        contractuel. Seul un devis écrit établi par l’entreprise après visite
-        sur place a valeur d’offre.
+        Les prix publiés sur ce site sont des ordres de grandeur indicatifs. Ils
+        ne constituent ni une offre, ni un engagement contractuel. Seul un devis
+        écrit établi par l’entreprise après visite a valeur d’offre. La mention
+        de garantie associée à la reprotection de toiture est celle accordée par
+        l’entreprise qui réalise les travaux, dans les conditions figurant à son
+        devis.
       </p>
 
       <h2>5. Propriété intellectuelle</h2>
@@ -173,48 +163,39 @@ gtag('set', 'ads_data_redaction', true);
         propriété exclusive de l’éditeur ou de ses ayants droit.
       </p>
       <p>
-        Toute reproduction, représentation, adaptation ou exploitation, totale
-        ou partielle, par quelque procédé que ce soit et sur quelque support que
-        ce soit, sans autorisation écrite préalable de l’éditeur, est interdite
-        et constitue une contrefaçon au sens des articles L. 335-2 et suivants
-        du Code de la propriété intellectuelle.
-      </p>
-      <p>
-        La police de caractères Inter est utilisée sous licence SIL Open Font
-        License 1.1. Le texte de cette licence est joint au fichier de police
-        dans le dossier <code>/assets/fonts/</code>.
+        Toute reproduction, représentation, adaptation ou exploitation, totale ou
+        partielle, sans autorisation écrite préalable, est interdite et constitue
+        une contrefaçon au sens des articles L. 335-2 et suivants du Code de la
+        propriété intellectuelle.
       </p>
 
       <h2>6. Crédits photographiques</h2>
       <p>
         <span class="a-completer">Crédits à compléter une fois les photographies définitives en place.</span>
-        Les visuels illustrant des chantiers correspondent à des interventions
-        réellement réalisées. Aucune photographie n’est légendée avec une
-        commune où le chantier n’a pas eu lieu.
+        Les visuels « avant / après » correspondent à des interventions
+        réellement réalisées, photographiées sous le même angle. Aucune
+        photographie n’est légendée avec une commune où le chantier n’a pas eu
+        lieu.
       </p>
 
       <h2>7. Liens hypertextes</h2>
       <p>
         Ce site peut contenir des liens vers des sites tiers. L’éditeur n’exerce
-        aucun contrôle sur leur contenu et décline toute responsabilité quant
-        aux informations qui y figurent.
+        aucun contrôle sur leur contenu et décline toute responsabilité quant aux
+        informations qui y figurent.
       </p>
 
-      <h2>8. Données personnelles et cookies</h2>
+      <h2>8. Données personnelles</h2>
       <p>
-        Le traitement des données personnelles et l’usage des cookies sont
-        décrits en détail dans la
-        <a href="/confidentialite.html">politique de confidentialité</a>.
-        Vous pouvez modifier vos choix à tout moment via le lien
-        <a href="#" data-action="gerer-cookies">Gérer mes cookies</a>
-        présent en bas de chaque page.
+        Le traitement des données personnelles est décrit en détail dans la
+        <a href="confidentialite.html">politique de confidentialité</a>.
       </p>
 
       <h2>9. Droit applicable</h2>
       <p>
-        Les présentes mentions légales sont soumises au droit français. En cas
-        de litige, et à défaut de résolution amiable, les tribunaux français
-        sont compétents.
+        Les présentes mentions légales sont soumises au droit français. En cas de
+        litige, et à défaut de résolution amiable, les tribunaux français sont
+        compétents.
       </p>
 
     </article>
@@ -223,80 +204,24 @@ gtag('set', 'ads_data_redaction', true);
 
 <footer class="pied">
   <div class="container">
-    <div class="pied__haut">
-      <a class="logo" href="/" aria-label="Mon Couvreur Nord, retour à l’accueil">
-        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
-        <path d="M2 15 16 4l14 11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 27v-6.5h8V27" stroke="#12B76A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-        <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
-      </a>
-      <ul class="pied__liens">
-        <li><a href="/mentions-legales.html">Mentions légales</a></li>
-        <li><a href="/confidentialite.html">Politique de confidentialité</a></li>
-        <li><a href="/conditions-generales.html">Conditions générales</a></li>
-        <li><a href="#" data-action="gerer-cookies">Gérer mes cookies</a></li>
-      </ul>
-    </div>
-    <p class="pied__statut">
+    <ul class="pied__liens">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="mentions-legales.html">Mentions légales</a></li>
+      <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+      <li><a href="conditions-generales.html">Conditions générales</a></li>
+    </ul>
+    <p>
       <b>Mon Couvreur Nord est un service de mise en relation.</b>
-      Le site n’exécute aucun travaux de couverture, n’établit aucun devis et
+      Le site n’exécute aucun travaux de toiture, n’établit aucun devis et
       n’est pas partie au contrat conclu entre vous et l’entreprise.
     </p>
-    <p class="pied__mention">
+    <p>
       Éditeur : <span class="a-completer">RAISON SOCIALE à compléter</span> —
       SIRET <span class="a-completer">à compléter</span> —
       80 rue du Docteur Legay, 59110 La Madeleine —
       Tél. <a href="tel:+33786505580">07 86 50 55 80</a>
     </p>
-    <p class="pied__france-renov"></p>
-    <p class="pied__mention">© <span id="annee">2026</span> Mon Couvreur Nord. Tous droits réservés.</p>
   </div>
 </footer>
-
-<div class="cookies" id="bandeau-cookies" role="dialog" aria-modal="false"
-     aria-labelledby="cookies-titre" aria-describedby="cookies-texte">
-  <p class="cookies__titre" id="cookies-titre">Cookies et mesure d’audience</p>
-  <p class="cookies__texte" id="cookies-texte">
-    Nous utilisons des cookies pour mesurer l’efficacité de nos annonces et
-    améliorer cette page. Vous pouvez accepter, refuser, ou choisir en détail.
-  </p>
-  <div class="cookies__actions">
-    <button type="button" class="bouton bouton--orange" id="cookies-accepter"
-            style="font-size:15px;padding:11px 18px">Tout accepter</button>
-    <button type="button" class="bouton bouton--fantome" id="cookies-refuser"
-            style="font-size:15px;padding:11px 18px">Tout refuser</button>
-    <button type="button" class="bouton bouton--fantome" id="cookies-personnaliser"
-            aria-expanded="false" aria-controls="cookies-reglages"
-            style="font-size:15px;padding:11px 18px">Personnaliser</button>
-  </div>
-  <div class="cookies__reglages" id="cookies-reglages">
-    <div class="reglage">
-      <input type="checkbox" checked disabled aria-label="Cookies nécessaires, toujours actifs">
-      <span><b>Nécessaires — toujours actifs</b>
-      Cookie d’attribution first-party <code>attr</code> (90 jours) et cookie
-      d’enregistrement de votre choix (6 mois).</span>
-    </div>
-    <div class="reglage">
-      <input type="checkbox" id="cookie-mesure">
-      <label for="cookie-mesure"><b>Mesure d’audience</b> Statistiques de fréquentation et points d’abandon.</label>
-    </div>
-    <div class="reglage">
-      <input type="checkbox" id="cookie-publicite">
-      <label for="cookie-publicite"><b>Publicité</b> Mesure des conversions Google Ads et personnalisation publicitaire.</label>
-    </div>
-    <button type="button" class="bouton bouton--orange" id="cookies-enregistrer"
-            style="margin-top:12px;font-size:15px;padding:11px 18px">Enregistrer mes choix</button>
-  </div>
-</div>
-
-<script src="/assets/js/tracking.js" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var annee = document.getElementById('annee');
-  if (annee) { annee.textContent = String(new Date().getFullYear()); }
-});
-</script>
 </body>
 </html>

@@ -1,44 +1,24 @@
 # ==================================================================
 # Mon Couvreur Nord — configuration Netlify
-# Site 100 % statique : aucune etape de build, aucun bundler front.
-# Le seul paquet npm du depot (@netlify/blobs) sert uniquement a la
-# Netlify Function ; il n'a aucun effet sur le HTML/CSS/JS livre.
+# Site statique en fichier unique : aucun build, aucune dependance,
+# aucun bundler. Le seul fichier serveur est la fonction evenementielle
+# netlify/functions/submission-created.js, declenchee automatiquement
+# par Netlify Forms. Aucune Edge Function.
 # ==================================================================
 
 [build]
-  # Le site est a la racine du depot : index.html et les pages legales y
-  # sont, /assets et /shared sont publies tels quels. netlify/ et
-  # node_modules/ ne sont jamais servis.
+  # Le site est a la racine du depot.
   publish = "."
   functions = "netlify/functions"
-  edge_functions = "netlify/edge-functions"
-  # Pas de commande de build : le dossier est servi tel quel.
+  # Pas de commande de build : les fichiers sont servis tels quels.
   command = ""
-
-[functions]
-  node_bundler = "esbuild"
-
-# ------------------------------------------------------------------
-# Edge Functions
-# Declarees ICI et nulle part ailleurs : geo.js n'exporte plus de
-# `config`, pour eviter toute double declaration.
-# Le dossier netlify/edge-functions/ ne contient que geo.js — voir son
-# README : tout fichier .js qui s'y trouve est traite comme une fonction
-# et doit exporter par defaut une fonction appelable. Les modules et les
-# donnees partages vivent dans netlify/lib/ et shared/.
-# ------------------------------------------------------------------
-[[edge_functions]]
-  function = "geo"
-  path = "/"
-  cache = "manual"
-
-[[edge_functions]]
-  function = "geo"
-  path = "/index.html"
-  cache = "manual"
 
 # ------------------------------------------------------------------
 # En-tetes
+# La politique de securite est stricte parce que la page ne fait
+# AUCUNE requete reseau sortante : ni police, ni CDN, ni bibliotheque.
+# 'unsafe-inline' est necessaire pour le CSS et le JS inline, qui sont
+# la contrainte du fichier unique.
 # ------------------------------------------------------------------
 [[headers]]
   for = "/*"
@@ -48,9 +28,9 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), interest-cohort=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://www.googleadservices.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://region1.google-analytics.com; frame-src https://td.doubleclick.net https://www.googletagmanager.com; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests"
 
-# Le HTML est personnalise par l'Edge Function : jamais de cache partage.
+# Le HTML porte la personnalisation par commune : pas de cache partage.
 [[headers]]
   for = "/*.html"
   [headers.values]
@@ -61,41 +41,14 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# Les polices ne changent jamais : cache long et immuable.
-[[headers]]
-  for = "/assets/fonts/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Access-Control-Allow-Origin = "*"
-
-# CSS / JS : une semaine. Les noms de fichiers ne sont pas hashes,
-# donc ajouter ?v=2 aux URLs lors d'une modification urgente.
-[[headers]]
-  for = "/assets/css/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
-[[headers]]
-  for = "/assets/js/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
-
 [[headers]]
   for = "/assets/img/*"
   [headers.values]
     Cache-Control = "public, max-age=2592000"
 
 # ------------------------------------------------------------------
-# Redirections
+# Redirections de confort vers les pages legales
 # ------------------------------------------------------------------
-# Alias court et lisible pour l'endpoint de soumission.
-[[redirects]]
-  from = "/api/lead"
-  to = "/.netlify/functions/submit-lead"
-  status = 200
-  force = true
-
-# Anciennes URLs eventuelles / confort.
 [[redirects]]
   from = "/mentions-legales"
   to = "/mentions-legales.html"

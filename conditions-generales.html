@@ -8,84 +8,68 @@
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0F2745">
 <link rel="canonical" href="https://www.mon-couvreur-nord.fr/conditions-generales.html">
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <style>
-@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/assets/fonts/inter-400.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('/assets/fonts/inter-600.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url('/assets/fonts/inter-700.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;src:url('/assets/fonts/inter-800.woff2') format('woff2')}
-@font-face{font-family:'Inter Repli';src:local('Arial'),local('Helvetica Neue'),local('Liberation Sans');ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;size-adjust:107.4%}
-:root{--bleu:#0F2745;--bleu-clair:#16345C;--bleu-pale:#EEF4FB;--blanc:#FFFFFF;
---gris:#F5F7FA;--bord:#E4E9F0;--vert:#12B76A;--vert-fonce:#0A7A46;--vert-pale:#ECFBF3;
---orange:#F26522;--orange-fonce:#D9541A;--texte:#4A5568;--titre:#0F2745;--note:#667085;
---rayon:10px;--rayon-s:8px;--max:1120px;--ombre:0 1px 2px rgba(15,39,69,.04)}
+:root{--bleu:#0F2745;--bleu-clair:#16345C;--blanc:#fff;--gris:#F5F7FA;--bord:#E4E9F0;
+--vert-fonce:#0A7A46;--texte:#4A5568;--titre:#0F2745;--note:#667085}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--blanc);color:var(--texte);
-font-family:'Inter','Inter Repli',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4,p,ul,ol,figure{margin:0}
+h1,h2,h3,p,ul,ol{margin:0}
 ul{padding:0}
-img,svg{max-width:100%}
 a{color:inherit}
-button{font-family:inherit}
-/* Unique usage de l'orange hors CTA : le contour de focus clavier.
-   C'est la seule teinte qui atteint 3:1 a la fois sur fond blanc (3,15)
-   et sur le bleu nuit du hero (4,77). */
-:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:4px}
-.container{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px}
-.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.bouton{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;
-padding:14px 26px;border:0;border-radius:var(--rayon-s);font:inherit;font-size:18px;font-weight:700;
-line-height:1.2;text-decoration:none;cursor:pointer;transition:background-color .15s ease}
-.bouton--orange{background:var(--orange);color:#fff}
-.bouton--orange:hover{background:var(--orange-fonce)}
-.bouton--vert{background:var(--vert-fonce);color:#fff;min-height:44px;padding:11px 18px;font-size:15px}
-.bouton--vert:hover{background:#08633A}
-.bouton--fantome{background:transparent;color:var(--titre);border:1px solid #CBD3DF;font-size:16px;font-weight:600}
-.entete{position:relative;z-index:20;background:var(--blanc);border-bottom:1px solid var(--bord)}
-.entete__interne{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:66px}
+svg{max-width:100%}
+:focus-visible{outline:3px solid #F26522;outline-offset:2px;border-radius:4px}
+.container{width:100%;max-width:1120px;margin:0 auto;padding:0 20px}
+.entete{background:var(--blanc);border-bottom:1px solid var(--bord)}
+.entete__interne{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px}
 .logo{display:flex;align-items:center;gap:10px;min-height:44px;padding:2px 0;text-decoration:none;color:var(--titre)}
 .logo svg{flex:0 0 auto;width:30px;height:30px;color:var(--bleu)}
-.logo b{display:block;font-size:17.5px;font-weight:800;letter-spacing:-.015em;line-height:1.1}
-.logo small{display:block;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--note)}
+.logo b{display:block;font-size:16px;font-weight:800;letter-spacing:-.015em;line-height:1.15;white-space:nowrap}
+.logo small{display:block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--note);white-space:nowrap}
+.bouton{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 18px;
+border:0;border-radius:8px;background:var(--vert-fonce);color:#fff;font:inherit;font-size:15px;
+font-weight:700;text-decoration:none;white-space:nowrap}
+.bouton:hover{background:#08633A}
 .legal{padding:40px 0 72px}
 .legal__contenu{max-width:780px;margin:0 auto}
-.legal h1{margin:0 0 10px;font-size:30px;line-height:1.2;font-weight:800;color:var(--titre)}
-.legal .maj{margin:0 0 32px;font-size:13.5px;color:var(--note)}
-.legal h2{margin:36px 0 12px;font-size:20px;line-height:1.3;font-weight:700;color:var(--titre)}
-.legal h3{margin:24px 0 8px;font-size:16.5px;font-weight:700;color:var(--titre)}
+h1{margin:0 0 10px;font-size:30px;line-height:1.2;font-weight:800;color:var(--titre)}
+.maj{margin:0 0 32px;font-size:13.5px;color:var(--note)}
+h2{margin:36px 0 12px;font-size:20px;line-height:1.3;font-weight:700;color:var(--titre)}
+h3{margin:24px 0 8px;font-size:16.5px;font-weight:700;color:var(--titre)}
 .legal p,.legal li{font-size:16px;line-height:1.7;color:var(--texte)}
 .legal p{margin:0 0 14px}
 .legal ul,.legal ol{margin:0 0 16px;padding-left:22px}
 .legal li{margin-bottom:8px}
 .legal a{color:var(--bleu-clair)}
-.a-completer{padding:1px 6px;border-radius:4px;background:#FFF3CD;border:1px solid #E6D28A;color:#6B5312;font-size:.95em;font-weight:600}
-@media (min-width:900px){.legal h1{font-size:36px}.entete__interne{min-height:72px}}
+.encadre{margin:20px 0;padding:18px;background:#EEF4FB;border:1px solid #CBDDF0;border-radius:8px}
+.encadre p:last-child{margin-bottom:0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;
+background:var(--gris);padding:1px 5px;border-radius:4px}
+.tableau{margin:18px 0 24px;overflow-x:auto;border:1px solid var(--bord);border-radius:8px}
+table{width:100%;min-width:460px;border-collapse:collapse;font-size:15px}
+th,td{padding:13px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--bord)}
+thead th{background:var(--bleu);color:#fff;font-size:14px;border-bottom:none}
+tbody tr:nth-child(even){background:var(--gris)}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:none}
+.valeur{font-weight:700;color:var(--vert-fonce);white-space:nowrap}
+.a-completer{padding:1px 6px;border-radius:4px;background:#FFF3CD;border:1px solid #E6D28A;
+color:#6B5312;font-size:.95em;font-weight:600}
+.pied{background:var(--blanc);border-top:1px solid var(--bord);padding:32px 0 40px;
+font-size:13px;line-height:1.65;color:var(--note)}
+.pied__liens{display:flex;flex-wrap:wrap;gap:0 18px;margin:0 0 16px;padding:0;list-style:none}
+.pied__liens a{display:inline-flex;align-items:center;min-height:44px;color:var(--texte)}
+.pied p{margin:0 0 10px}
+@media (min-width:900px){h1{font-size:36px}.entete__interne{min-height:72px}}
 </style>
-<script>
-window.MCN_CONFIG = {
-  gtmId: 'GTM-XXXXXXX', ga4Id: 'G-XXXXXXXXXX', clarityId: 'xxxxxxxxxx',
-  endpoint: '/.netlify/functions/submit-lead', chargerGtmApresChoix: false, debug: false
-};
-window.dataLayer = window.dataLayer || [];
-function gtag(){ dataLayer.push(arguments); }
-gtag('consent', 'default', {
-  ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
-  analytics_storage: 'denied', functionality_storage: 'granted',
-  security_storage: 'granted', wait_for_update: 500
-});
-gtag('set', 'ads_data_redaction', true);
-</script>
-<link rel="preload" href="/assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/assets/css/main.css"></noscript>
 </head>
-<body data-page="conditions-generales">
+<body>
 
 <header class="entete">
   <div class="container entete__interne">
-    <a class="logo" href="/" aria-label="Mon Couvreur Nord, retour à l’accueil">
+    <a class="logo" href="index.html" aria-label="Mon Couvreur Nord, retour à l’accueil">
       <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
         <path d="M2 15 16 4l14 11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -93,7 +77,7 @@ gtag('set', 'ads_data_redaction', true);
       </svg>
       <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
     </a>
-    <a class="bouton bouton--vert" href="/#devis">Ma demande de devis</a>
+    <a class="bouton" href="index.html#devis">Ma demande de devis</a>
   </div>
 </header>
 
@@ -102,13 +86,12 @@ gtag('set', 'ads_data_redaction', true);
     <article class="legal__contenu">
       <h1>Conditions générales d’utilisation</h1>
 <p class="maj">Dernière mise à jour : <span class="a-completer">date de mise en ligne à compléter</span>.</p>
-
       <h2>Article 1 — Objet</h2>
       <p>
         Les présentes conditions générales d’utilisation (ci-après les
         « Conditions ») définissent les modalités d’accès et d’utilisation du
-        site <b>www.mon-couvreur-nord.fr</b> (ci-après le « Site ») et du
-        service de mise en relation qu’il propose.
+        site <b>www.mon-couvreur-nord.fr</b> (ci-après le « Site ») et du service
+        de mise en relation qu’il propose.
       </p>
       <p>
         Toute utilisation du Site emporte acceptation pleine et entière des
@@ -119,60 +102,62 @@ gtag('set', 'ads_data_redaction', true);
       <h2>Article 2 — Éditeur</h2>
       <p>
         Le Site est édité par
-        <span class="a-completer">raison sociale à compléter</span>,
-        dont le siège est situé 80 rue du Docteur Legay, 59110 La Madeleine,
+        <span class="a-completer">raison sociale à compléter</span>, dont le
+        siège est situé 80 rue du Docteur Legay, 59110 La Madeleine,
         SIRET <span class="a-completer">à compléter</span> (ci-après
         l’« Éditeur »). Les informations légales complètes figurent dans les
-        <a href="/mentions-legales.html">mentions légales</a>.
+        <a href="mentions-legales.html">mentions légales</a>.
       </p>
 
       <h2>Article 3 — Description du service</h2>
       <p>
-        Le Site propose un <b>service d’intermédiation</b>. Il recueille, au
-        moyen d’un formulaire, la description d’un besoin en matière de
-        couverture (réparation, rénovation, démoussage et traitement
-        hydrofuge, gouttières et zinguerie, toiture plate) portant sur un
+        Le Site propose un <b>service d’intermédiation</b>. Il recueille, au moyen
+        d’un formulaire, la description d’un projet de toiture portant sur un
         logement situé dans le département du Nord (59), puis transmet les
-        coordonnées de l’utilisateur à <b>un seul professionnel partenaire</b>,
-        nommément désigné avant l’envoi du formulaire, afin que celui-ci le
-        rappelle et lui propose, s’il y a lieu, un devis.
+        coordonnées de l’utilisateur à un professionnel partenaire afin que
+        celui-ci le contacte et lui propose, s’il y a lieu, un devis après visite.
+      </p>
+      <p>Trois prestations, et trois seulement, sont proposées :</p>
+      <ul>
+        <li><b>Nettoyage / Démoussage</b></li>
+        <li><b>Reprotection de toiture</b></li>
+        <li><b>Couverture neuve</b></li>
+      </ul>
+      <p>
+        L’Éditeur agit exclusivement comme intermédiaire. <b>Il n’exécute aucun
+        travaux, ne fournit aucun matériau, n’établit aucun devis et n’est pas
+        partie au contrat</b> qui pourrait être conclu entre l’utilisateur et le
+        professionnel.
       </p>
       <p>
-        L’Éditeur agit exclusivement comme intermédiaire.
-        <b>Il n’exécute aucun travaux, ne fournit aucun matériau, n’établit
-        aucun devis et n’est pas partie au contrat</b> qui pourrait être
-        conclu entre l’utilisateur et le professionnel.
+        Le service est <b>limité géographiquement</b> au département du Nord (59).
+        Une demande dont le code postal ne relève pas de ce département n’est
+        transmise à personne, et l’utilisateur en est informé immédiatement, avant
+        toute collecte de coordonnées.
       </p>
       <p>
-        Le service est <b>limité géographiquement</b> au département du Nord
-        (59). Une demande dont le code postal ne relève pas de ce département
-        n’est transmise à personne, et l’utilisateur en est informé
-        immédiatement.
-      </p>
-      <p>
-        Le service suppose que le demandeur soit <b>propriétaire</b> du
-        logement concerné, ou dûment mandaté par celui-ci. Une demande émanant
-        d’un locataire, ou portant sur un appartement ou un immeuble en
-        copropriété, n’est pas transmise : la signature d’un devis de
-        couverture relève du propriétaire ou, en copropriété, des instances de
-        celle-ci.
+        Le service suppose que le demandeur soit <b>propriétaire</b> du logement
+        concerné. Une demande émanant d’un locataire n’est pas transmise : la
+        signature d’un devis de toiture relève du propriétaire. Le formulaire le
+        signale dès la deuxième question et s’arrête là, sans collecter la moindre
+        coordonnée.
       </p>
 
       <h2>Article 4 — Gratuité et absence d’engagement</h2>
       <p>
-        L’utilisation du Site et le dépôt d’une demande sont <b>gratuits</b>
-        pour l’utilisateur. Aucune somme ne lui est demandée par l’Éditeur, à
-        aucun stade.
+        L’utilisation du Site, le dépôt d’une demande, la visite et le devis sont
+        <b>gratuits</b> pour l’utilisateur. Aucune somme ne lui est demandée par
+        l’Éditeur, à aucun stade.
       </p>
       <p>
-        Le dépôt d’une demande <b>n’engage à rien</b>. L’utilisateur reste
-        libre de ne pas donner suite au rappel du professionnel, de refuser le
-        devis proposé, ou de solliciter d’autres entreprises de son choix.
+        Le dépôt d’une demande <b>n’engage à rien</b>. L’utilisateur reste libre
+        de ne pas donner suite à l’appel du professionnel, de refuser le devis
+        proposé, ou de solliciter d’autres entreprises de son choix.
       </p>
       <p>
-        L’Éditeur est rémunéré par le professionnel partenaire au titre de la
-        mise en relation. Cette rémunération est sans incidence sur le prix des
-        travaux, qui est fixé librement par le professionnel dans son devis.
+        L’Éditeur est rémunéré par le professionnel partenaire au titre de la mise
+        en relation. Cette rémunération est sans incidence sur le prix des
+        travaux, fixé librement par le professionnel dans son devis.
       </p>
 
       <h2>Article 5 — Engagements de l’utilisateur</h2>
@@ -183,13 +168,10 @@ gtag('set', 'ads_data_redaction', true);
           particulier son numéro de téléphone et son code postal ;
         </li>
         <li>
-          n’utiliser le formulaire que pour un projet réel le concernant, ou
-          concernant un bien dont il est propriétaire ou pour lequel il dispose
-          d’un mandat ;
+          n’utiliser le formulaire que pour un projet réel le concernant, portant
+          sur un bien dont il est propriétaire ;
         </li>
-        <li>
-          ne pas renseigner les coordonnées d’un tiers sans son accord préalable ;
-        </li>
+        <li>ne pas renseigner les coordonnées d’un tiers sans son accord préalable ;</li>
         <li>
           ne pas utiliser le Site à des fins de démarchage, de collecte
           automatisée, de test de charge, ou de toute manière susceptible d’en
@@ -208,132 +190,131 @@ gtag('set', 'ads_data_redaction', true);
 
       <h2>Article 6 — Fonctionnement de la mise en relation</h2>
       <p>
-        Après validation du formulaire, la demande est transmise au
-        professionnel partenaire. Celui-ci s’efforce de rappeler l’utilisateur
-        dans un délai de <b>24 à 48 heures ouvrées</b>. Ce délai est un
-        objectif de service et non une obligation de résultat : il peut être
-        allongé en période de forte activité, notamment après un épisode de
-        tempête.
+        Après validation du formulaire, la demande est transmise au professionnel
+        partenaire. Celui-ci s’efforce de contacter l’utilisateur dans un délai de
+        <b>24 à 48 heures ouvrées</b>. Ce délai est un objectif de service et non
+        une obligation de résultat : il peut être allongé en période de forte
+        activité, notamment après un épisode de tempête.
       </p>
       <p>
-        Les coordonnées de l’utilisateur sont transmises à <b>un seul</b>
-        professionnel. Elles ne font l’objet d’aucune revente, d’aucune
-        location et d’aucune diffusion à un réseau d’entreprises.
+        Les coordonnées de l’utilisateur sont transmises de sorte qu’<b>un seul
+        technicien</b> le contacte. Elles ne font l’objet d’aucune revente,
+        d’aucune location et d’aucune diffusion à un réseau d’entreprises.
       </p>
 
       <h2>Article 7 — Informations publiées sur le Site</h2>
       <p>
         Les contenus informatifs publiés sur le Site, notamment les repères de
-        prix et les descriptions de désordres de couverture, sont fournis à
-        titre <b>indicatif et pédagogique</b>. Ils ne constituent ni un
-        diagnostic, ni un conseil technique personnalisé, ni une offre
-        commerciale.
+        prix, les durabilités indiquées et les descriptions de désordres de
+        toiture, sont fournis à titre <b>indicatif et pédagogique</b>. Ils ne
+        constituent ni un diagnostic, ni un conseil technique personnalisé, ni une
+        offre commerciale.
       </p>
       <p>
-        Les fourchettes de prix sont des ordres de grandeur constatés. Elles
-        n’ont <b>aucune valeur contractuelle</b>. Seul un devis écrit établi
-        par le professionnel après visite sur place a valeur d’offre et engage
-        son auteur.
+        Les prix au mètre carré sont des ordres de grandeur, variables selon
+        l’état du support, l’accessibilité, la pente et l’exposition. Ils n’ont
+        <b>aucune valeur contractuelle</b>. Seul un devis écrit établi par le
+        professionnel après visite engage son auteur.
+      </p>
+      <p>
+        La garantie mentionnée pour la reprotection de toiture est celle accordée
+        par l’entreprise qui exécute les travaux, dans les conditions, limites et
+        exclusions figurant à son devis et à ses conditions de garantie. Elle
+        n’est pas accordée par l’Éditeur, qui n’exécute aucun travaux.
       </p>
 
       <h2>Article 8 — Limitation de responsabilité</h2>
       <p>
-        L’Éditeur est tenu à une <b>obligation de moyens</b> dans la
-        transmission des demandes. Sa responsabilité ne saurait être engagée :
+        L’Éditeur est tenu à une <b>obligation de moyens</b> dans la transmission
+        des demandes. Sa responsabilité ne saurait être engagée :
       </p>
       <ul>
         <li>
           au titre de l’exécution, de la qualité, du prix, des délais ou des
-          garanties des travaux réalisés par le professionnel, l’Éditeur
-          n’étant pas partie au contrat de travaux ;
+          garanties des travaux réalisés par le professionnel, l’Éditeur n’étant
+          pas partie au contrat de travaux ;
         </li>
         <li>
-          en cas d’absence de rappel, de retard de rappel, ou de refus du
-          professionnel de se déplacer ;
+          en cas d’absence d’appel, de retard, ou de refus du professionnel de se
+          déplacer ;
         </li>
-        <li>
-          en cas d’inexactitude des informations fournies par l’utilisateur ;
-        </li>
+        <li>en cas d’inexactitude des informations fournies par l’utilisateur ;</li>
         <li>
           en cas d’interruption, de dysfonctionnement ou d’indisponibilité du
-          Site, notamment pour maintenance, panne de l’hébergeur ou cas de
-          force majeure ;
+          Site, notamment pour maintenance, panne de l’hébergeur ou cas de force
+          majeure ;
         </li>
         <li>
-          au titre des dommages indirects, tels que perte d’exploitation,
-          perte de chance ou préjudice commercial.
+          au titre des dommages indirects, tels que perte d’exploitation, perte de
+          chance ou préjudice commercial.
         </li>
       </ul>
       <p>
         Les garanties légales dues par le professionnel — garantie de parfait
-        achèvement, garantie biennale de bon fonctionnement et garantie
-        décennale prévue aux articles 1792 et suivants du Code civil — relèvent
-        exclusivement de ce dernier et de ses assureurs. Il appartient à
-        l’utilisateur de demander au professionnel son attestation d’assurance
-        de responsabilité civile décennale <b>avant la signature du devis</b>.
+        achèvement, garantie biennale de bon fonctionnement et garantie décennale
+        prévue aux articles 1792 et suivants du Code civil — relèvent exclusivement
+        de ce dernier et de ses assureurs. Il appartient à l’utilisateur de
+        demander au professionnel son attestation d’assurance de responsabilité
+        civile décennale <b>avant la signature du devis</b>.
       </p>
 
       <h2>Article 9 — Droit de rétractation</h2>
       <p>
         Le service de mise en relation étant gratuit, il ne donne lieu à aucun
-        contrat à titre onéreux entre l’Éditeur et l’utilisateur, et donc à
-        aucun droit de rétractation à l’égard de l’Éditeur.
+        contrat à titre onéreux entre l’Éditeur et l’utilisateur, et donc à aucun
+        droit de rétractation à l’égard de l’Éditeur.
       </p>
       <p>
-        En revanche, si l’utilisateur signe un devis à son domicile à l’issue
-        de la visite, il bénéficie du <b>droit de rétractation de quatorze
-        jours</b> prévu aux articles L. 221-18 et suivants du Code de la
-        consommation en matière de contrat conclu hors établissement. Le devis
-        doit comporter un formulaire de rétractation détachable.
+        En revanche, si l’utilisateur signe un devis à son domicile à l’issue de la
+        visite, il bénéficie du <b>droit de rétractation de quatorze jours</b>
+        prévu aux articles L. 221-18 et suivants du Code de la consommation en
+        matière de contrat conclu hors établissement. Le devis doit comporter un
+        formulaire de rétractation détachable.
       </p>
 
       <h2>Article 10 — Propriété intellectuelle</h2>
       <p>
-        L’ensemble des éléments du Site est protégé par le droit de la
-        propriété intellectuelle et demeure la propriété de l’Éditeur ou de ses
-        ayants droit. Toute reproduction ou exploitation non autorisée est
-        interdite, dans les conditions détaillées dans les
-        <a href="/mentions-legales.html">mentions légales</a>.
+        L’ensemble des éléments du Site est protégé par le droit de la propriété
+        intellectuelle et demeure la propriété de l’Éditeur ou de ses ayants droit,
+        dans les conditions détaillées dans les
+        <a href="mentions-legales.html">mentions légales</a>.
       </p>
 
       <h2>Article 11 — Données personnelles</h2>
       <p>
         Le traitement des données personnelles est décrit dans la
-        <a href="/confidentialite.html">politique de confidentialité</a>, qui
-        fait partie intégrante des présentes Conditions.
+        <a href="confidentialite.html">politique de confidentialité</a>, qui fait
+        partie intégrante des présentes Conditions.
       </p>
 
       <h2>Article 12 — Liens hypertextes</h2>
       <p>
-        Le Site peut renvoyer vers des sites tiers dont l’Éditeur ne maîtrise
-        pas le contenu et dont il ne peut être tenu responsable. La création
-        d’un lien vers le Site est libre, sous réserve qu’elle ne porte pas
-        atteinte à l’image de l’Éditeur et qu’elle n’induise pas en erreur sur
-        la nature du service.
+        Le Site peut renvoyer vers des sites tiers dont l’Éditeur ne maîtrise pas
+        le contenu et dont il ne peut être tenu responsable. La création d’un lien
+        vers le Site est libre, sous réserve qu’elle ne porte pas atteinte à
+        l’image de l’Éditeur et qu’elle n’induise pas en erreur sur la nature du
+        service.
       </p>
 
       <h2>Article 13 — Modification des Conditions</h2>
       <p>
-        L’Éditeur peut modifier les présentes Conditions à tout moment. La
-        version applicable est celle en ligne au moment de l’utilisation du
-        Site. La date de dernière mise à jour figure en haut de page.
+        L’Éditeur peut modifier les présentes Conditions à tout moment. La version
+        applicable est celle en ligne au moment de l’utilisation du Site. La date
+        de dernière mise à jour figure en haut de page.
       </p>
 
       <h2>Article 14 — Droit applicable et règlement des litiges</h2>
-      <p>
-        Les présentes Conditions sont soumises au <b>droit français</b>.
-      </p>
+      <p>Les présentes Conditions sont soumises au <b>droit français</b>.</p>
       <p>
         En cas de difficulté, l’utilisateur est invité à contacter l’Éditeur en
         priorité, afin de rechercher une solution amiable.
       </p>
       <p>
-        S’agissant d’un éventuel litige portant sur les travaux, l’utilisateur
-        peut recourir gratuitement au médiateur de la consommation dont relève
-        le professionnel ; les coordonnées de ce médiateur doivent figurer sur
-        le devis et sur les documents contractuels de l’entreprise. La
-        plateforme européenne de règlement en ligne des litiges est également
-        accessible à l’adresse
+        S’agissant d’un éventuel litige portant sur les travaux, l’utilisateur peut
+        recourir gratuitement au médiateur de la consommation dont relève le
+        professionnel ; ses coordonnées doivent figurer sur le devis et les
+        documents contractuels de l’entreprise. La plateforme européenne de
+        règlement en ligne des litiges est également accessible à l’adresse
         <a href="https://ec.europa.eu/consumers/odr" rel="noopener nofollow" target="_blank">ec.europa.eu/consumers/odr</a>.
       </p>
       <p>
@@ -347,80 +328,24 @@ gtag('set', 'ads_data_redaction', true);
 
 <footer class="pied">
   <div class="container">
-    <div class="pied__haut">
-      <a class="logo" href="/" aria-label="Mon Couvreur Nord, retour à l’accueil">
-        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
-        <path d="M2 15 16 4l14 11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 27v-6.5h8V27" stroke="#12B76A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-        <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
-      </a>
-      <ul class="pied__liens">
-        <li><a href="/mentions-legales.html">Mentions légales</a></li>
-        <li><a href="/confidentialite.html">Politique de confidentialité</a></li>
-        <li><a href="/conditions-generales.html">Conditions générales</a></li>
-        <li><a href="#" data-action="gerer-cookies">Gérer mes cookies</a></li>
-      </ul>
-    </div>
-    <p class="pied__statut">
+    <ul class="pied__liens">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="mentions-legales.html">Mentions légales</a></li>
+      <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+      <li><a href="conditions-generales.html">Conditions générales</a></li>
+    </ul>
+    <p>
       <b>Mon Couvreur Nord est un service de mise en relation.</b>
-      Le site n’exécute aucun travaux de couverture, n’établit aucun devis et
+      Le site n’exécute aucun travaux de toiture, n’établit aucun devis et
       n’est pas partie au contrat conclu entre vous et l’entreprise.
     </p>
-    <p class="pied__mention">
+    <p>
       Éditeur : <span class="a-completer">RAISON SOCIALE à compléter</span> —
       SIRET <span class="a-completer">à compléter</span> —
       80 rue du Docteur Legay, 59110 La Madeleine —
       Tél. <a href="tel:+33786505580">07 86 50 55 80</a>
     </p>
-    <p class="pied__france-renov"></p>
-    <p class="pied__mention">© <span id="annee">2026</span> Mon Couvreur Nord. Tous droits réservés.</p>
   </div>
 </footer>
-
-<div class="cookies" id="bandeau-cookies" role="dialog" aria-modal="false"
-     aria-labelledby="cookies-titre" aria-describedby="cookies-texte">
-  <p class="cookies__titre" id="cookies-titre">Cookies et mesure d’audience</p>
-  <p class="cookies__texte" id="cookies-texte">
-    Nous utilisons des cookies pour mesurer l’efficacité de nos annonces et
-    améliorer cette page. Vous pouvez accepter, refuser, ou choisir en détail.
-  </p>
-  <div class="cookies__actions">
-    <button type="button" class="bouton bouton--orange" id="cookies-accepter"
-            style="font-size:15px;padding:11px 18px">Tout accepter</button>
-    <button type="button" class="bouton bouton--fantome" id="cookies-refuser"
-            style="font-size:15px;padding:11px 18px">Tout refuser</button>
-    <button type="button" class="bouton bouton--fantome" id="cookies-personnaliser"
-            aria-expanded="false" aria-controls="cookies-reglages"
-            style="font-size:15px;padding:11px 18px">Personnaliser</button>
-  </div>
-  <div class="cookies__reglages" id="cookies-reglages">
-    <div class="reglage">
-      <input type="checkbox" checked disabled aria-label="Cookies nécessaires, toujours actifs">
-      <span><b>Nécessaires — toujours actifs</b>
-      Cookie d’attribution first-party <code>attr</code> (90 jours) et cookie
-      d’enregistrement de votre choix (6 mois).</span>
-    </div>
-    <div class="reglage">
-      <input type="checkbox" id="cookie-mesure">
-      <label for="cookie-mesure"><b>Mesure d’audience</b> Statistiques de fréquentation et points d’abandon.</label>
-    </div>
-    <div class="reglage">
-      <input type="checkbox" id="cookie-publicite">
-      <label for="cookie-publicite"><b>Publicité</b> Mesure des conversions Google Ads et personnalisation publicitaire.</label>
-    </div>
-    <button type="button" class="bouton bouton--orange" id="cookies-enregistrer"
-            style="margin-top:12px;font-size:15px;padding:11px 18px">Enregistrer mes choix</button>
-  </div>
-</div>
-
-<script src="/assets/js/tracking.js" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var annee = document.getElementById('annee');
-  if (annee) { annee.textContent = String(new Date().getFullYear()); }
-});
-</script>
 </body>
 </html>

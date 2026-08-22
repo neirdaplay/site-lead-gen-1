@@ -1,5 +1,6 @@
-# Dependances (installees par Netlify au deploiement, pas versionnees)
+# Dependances : le site n'en a aucune. Filet de securite.
 node_modules/
+package-lock.json
 
 # Netlify
 .netlify/
@@ -7,7 +8,6 @@ node_modules/
 # Secrets — ne JAMAIS versionner
 .env
 .env.*
-!.env.example
 
 # Systeme / editeurs
 .DS_Store

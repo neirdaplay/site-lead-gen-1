@@ -1,1 +1,0 @@
-Ce dossier ne doit contenir que des Edge Functions : un fichier par fonction, chacun exportant par défaut une fonction appelable (`export default async (request, context) => Response`). Toute donnée ou tout module partagé va dans `netlify/lib/` — sinon le bundler Netlify échoue au déploiement.
