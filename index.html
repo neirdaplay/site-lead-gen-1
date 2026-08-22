@@ -82,12 +82,17 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
 
 /* --- Hero (valide, ne pas modifier la mise en forme) --- */
 .hero{position:relative;background-color:var(--bleu);color:#fff;overflow:hidden}
-/* Photo du hero. Le navigateur prend le premier fichier trouve ; si aucun
-   n'existe, seul le bleu nuit du .hero s'affiche — jamais d'image cassee. */
-.hero__fond{position:absolute;inset:0;
+/* Photo du hero, volontairement en FAIBLE OPACITE : elle sert de texture,
+   pas de sujet. Le bleu nuit du .hero reste la couleur dominante, et le
+   voile passe encore par-dessus. Deux reglages seulement :
+     .hero__fond opacity  -> combien de photo on laisse passer
+     .hero__voile alpha   -> intensite du bleu par-dessus
+   Le navigateur prend le premier fichier trouve ; si aucun n'existe, il
+   ne reste que le bleu nuit — jamais d'image cassee. */
+.hero__fond{position:absolute;inset:0;opacity:.18;
 background-image:url('assets/img/hero-couvreur.jpg'),url('assets/img/hero-couvreur.svg');
 background-size:cover;background-position:center 38%}
-.hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.8)}
+.hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.45)}
 .hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding:20px 0 30px}
 .hero__badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
 background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.26);
@@ -381,7 +386,8 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 }
 @media (min-width:1000px){
 .hero__interne{grid-template-columns:1.05fr 400px;align-items:center;gap:40px;padding:56px 0 64px}
-.hero__voile{background:rgba(15,39,69,.72)}
+.hero__fond{opacity:.24}
+.hero__voile{background:rgba(15,39,69,.35)}
 .hero__titre{font-size:38px;min-height:calc(3 * 1.16em)}
 .hero__sous-titre{font-size:17px}
 .formulaire{padding:26px 24px}

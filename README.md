@@ -195,9 +195,27 @@ en place.
   vraies photos déposées : le repli n'a plus de raison d'être, et une image
   réellement manquante doit se voir.
 
-Pour le hero, choisissez une photo lumineuse : le voile bleu couvre 72 % de
-l'image, une prise de vue sombre disparaît. Sujet décentré vers la droite, le
-texte occupe la gauche sur desktop.
+#### Réglage du hero
+
+La photo du hero est volontairement en **faible opacité** : elle sert de
+texture, pas de sujet. Le bleu nuit reste la couleur dominante, et un voile
+bleu passe encore par-dessus. Deux réglages, tous deux dans le `<style>` de
+`index.html` :
+
+| Réglage | Mobile | Desktop (≥ 1000 px) | Effet |
+|---|---|---|---|
+| `.hero__fond { opacity }` | `.18` | `.24` | Combien de photo on laisse passer |
+| `.hero__voile { background }` | `rgba(15,39,69,.45)` | `rgba(15,39,69,.35)` | Intensité du bleu par-dessus |
+
+Monter l'opacité rend la photo plus présente **et le texte moins lisible** :
+le contraste a été mesuré sur le composite réel, pixel par pixel, avec ces
+valeurs. Sur le fond le plus clair derrière le titre, on obtient 9,9:1 pour le
+blanc et 3,8:1 pour le mot en vert (grand texte). Si vous augmentez `opacity`,
+remesurez — ou compensez en augmentant l'alpha du voile.
+
+Choisissez malgré tout une photo **lumineuse et lisible** : à 24 % d'opacité,
+une prise de vue sombre ne donne plus qu'un aplat. Sujet décentré vers la
+droite, le texte occupe la gauche sur desktop.
 
 Pour l'avant / après, le **même angle** est ce qui rend la preuve crédible :
 repérez un point fixe (souche de cheminée, poteau, lampadaire) et gardez-le au
