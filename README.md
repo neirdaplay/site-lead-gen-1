@@ -231,9 +231,17 @@ Pour l'avant / après, le **même angle** est ce qui rend la preuve crédible :
 repérez un point fixe (souche de cheminée, poteau, lampadaire) et gardez-le au
 même endroit dans le cadre.
 
-> **Les légendes mentionnent Hazebrouck.** Si vous changez de chantier, changez
-> la commune dans les deux `figcaption` et dans le sous-titre de la section.
-> Ne légendez jamais une photo avec une commune où le chantier n'a pas eu lieu.
+> **Les légendes mentionnent Hazebrouck et une toiture en tuile béton.** Si
+> vous changez de chantier, changez la commune et le matériau dans les deux
+> `figcaption`, dans les deux `alt` et dans le sous-titre de la section. Ne
+> légendez jamais une photo avec une commune où le chantier n'a pas eu lieu.
+
+> **Le sous-titre annonce « tranquille pendant 15 ans »** alors que le tableau
+> de prix annonce « garantie 10 ans ». Les deux peuvent coexister — une durée
+> de vie constatée n'est pas une garantie contractuelle — mais un lecteur
+> attentif verra la différence, et une durabilité annoncée doit pouvoir être
+> justifiée. Harmonisez, ou assumez la distinction en la formulant
+> explicitement.
 
 ### Chiffres affichés
 
@@ -245,12 +253,18 @@ elles doivent rester **exactes et justifiables**. Mettez-les à jour quand elles
 évoluent, et ne les arrondissez jamais vers le haut. Un commentaire le rappelle
 à l'endroit du code concerné.
 
-La carte est un tracé schématique du département, dessiné à la main en SVG
-inline — aucune requête réseau. Les points verts marquent les **secteurs
-couverts**, pas des chantiers précis : c'est ce que dit la légende, et c'est
-volontaire tant qu'on ne dispose pas de la liste réelle des communes. Si vous
-voulez qu'ils représentent de vrais chantiers, remplacez les coordonnées des
-`<circle>` et reformulez la légende en conséquence.
+La carte est un tracé du département dessiné à la main en SVG inline —
+aucune requête réseau. Elle porte huit villes repères (Dunkerque, Hazebrouck,
+Lille, Roubaix, Douai, Valenciennes, Cambrai, Maubeuge) pour que le lecteur se
+situe, et 116 points semés sur une trame régulière bruitée à l'intérieur du
+contour. Sur petit écran, les deux repères les plus proches d'un autre
+(Roubaix, Douai) sont masqués et les libellés grossis.
+
+La légende dit « **répartition indicative** » et non « un point = un
+chantier » : 116 points ne représentent pas les 3 000 chantiers réalisés, ils
+en montrent l'étendue géographique. Gardez cette formulation tant que vous ne
+disposez pas de la liste réelle des communes ; le jour où vous l'aurez,
+remplacez les coordonnées des `<circle>` et reformulez la légende.
 
 ---
 
