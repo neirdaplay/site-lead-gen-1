@@ -1,0 +1,22 @@
+# Dependances (installees par Netlify au deploiement, pas versionnees)
+node_modules/
+
+# Netlify
+.netlify/
+
+# Secrets — ne JAMAIS versionner
+.env
+.env.*
+!.env.example
+
+# Systeme / editeurs
+.DS_Store
+Thumbs.db
+*.swp
+*.log
+.idea/
+.vscode/
+
+# Exports de leads (donnees personnelles)
+exports/
+*.leads.json

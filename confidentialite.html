@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Politique de confidentialité — Mon Couvreur Nord</title>
+<meta name="description" content="Quelles données sont collectées sur Mon Couvreur Nord, pourquoi, combien de temps, qui les reçoit, et comment exercer vos droits RGPD.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0F2745">
+<link rel="canonical" href="https://www.mon-couvreur-nord.fr/confidentialite.html">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('/assets/fonts/inter-400.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('/assets/fonts/inter-600.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url('/assets/fonts/inter-700.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;src:url('/assets/fonts/inter-800.woff2') format('woff2')}
+@font-face{font-family:'Inter Repli';src:local('Arial'),local('Helvetica Neue'),local('Liberation Sans');ascent-override:90.2%;descent-override:22.48%;line-gap-override:0%;size-adjust:107.4%}
+:root{--bleu:#0F2745;--bleu-clair:#16345C;--bleu-pale:#EEF4FB;--blanc:#FFFFFF;
+--gris:#F5F7FA;--bord:#E4E9F0;--vert:#12B76A;--vert-fonce:#0A7A46;--vert-pale:#ECFBF3;
+--orange:#F26522;--orange-fonce:#D9541A;--texte:#4A5568;--titre:#0F2745;--note:#667085;
+--rayon:10px;--rayon-s:8px;--max:1120px;--ombre:0 1px 2px rgba(15,39,69,.04)}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--blanc);color:var(--texte);
+font-family:'Inter','Inter Repli',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p,ul,ol,figure{margin:0}
+ul{padding:0}
+img,svg{max-width:100%}
+a{color:inherit}
+button{font-family:inherit}
+/* Unique usage de l'orange hors CTA : le contour de focus clavier.
+   C'est la seule teinte qui atteint 3:1 a la fois sur fond blanc (3,15)
+   et sur le bleu nuit du hero (4,77). */
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:4px}
+.container{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.bouton{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;
+padding:14px 26px;border:0;border-radius:var(--rayon-s);font:inherit;font-size:18px;font-weight:700;
+line-height:1.2;text-decoration:none;cursor:pointer;transition:background-color .15s ease}
+.bouton--orange{background:var(--orange);color:#fff}
+.bouton--orange:hover{background:var(--orange-fonce)}
+.bouton--vert{background:var(--vert-fonce);color:#fff;min-height:44px;padding:11px 18px;font-size:15px}
+.bouton--vert:hover{background:#08633A}
+.bouton--fantome{background:transparent;color:var(--titre);border:1px solid #CBD3DF;font-size:16px;font-weight:600}
+.entete{position:relative;z-index:20;background:var(--blanc);border-bottom:1px solid var(--bord)}
+.entete__interne{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:66px}
+.logo{display:flex;align-items:center;gap:10px;min-height:44px;padding:2px 0;text-decoration:none;color:var(--titre)}
+.logo svg{flex:0 0 auto;width:30px;height:30px;color:var(--bleu)}
+.logo b{display:block;font-size:17.5px;font-weight:800;letter-spacing:-.015em;line-height:1.1}
+.logo small{display:block;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--note)}
+.legal{padding:40px 0 72px}
+.legal__contenu{max-width:780px;margin:0 auto}
+.legal h1{margin:0 0 10px;font-size:30px;line-height:1.2;font-weight:800;color:var(--titre)}
+.legal .maj{margin:0 0 32px;font-size:13.5px;color:var(--note)}
+.legal h2{margin:36px 0 12px;font-size:20px;line-height:1.3;font-weight:700;color:var(--titre)}
+.legal h3{margin:24px 0 8px;font-size:16.5px;font-weight:700;color:var(--titre)}
+.legal p,.legal li{font-size:16px;line-height:1.7;color:var(--texte)}
+.legal p{margin:0 0 14px}
+.legal ul,.legal ol{margin:0 0 16px;padding-left:22px}
+.legal li{margin-bottom:8px}
+.legal a{color:var(--bleu-clair)}
+.a-completer{padding:1px 6px;border-radius:4px;background:#FFF3CD;border:1px solid #E6D28A;color:#6B5312;font-size:.95em;font-weight:600}
+@media (min-width:900px){.legal h1{font-size:36px}.entete__interne{min-height:72px}}
+</style>
+<script>
+window.MCN_CONFIG = {
+  gtmId: 'GTM-XXXXXXX', ga4Id: 'G-XXXXXXXXXX', clarityId: 'xxxxxxxxxx',
+  endpoint: '/.netlify/functions/submit-lead', chargerGtmApresChoix: false, debug: false
+};
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('consent', 'default', {
+  ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+  analytics_storage: 'denied', functionality_storage: 'granted',
+  security_storage: 'granted', wait_for_update: 500
+});
+gtag('set', 'ads_data_redaction', true);
+</script>
+<link rel="preload" href="/assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/assets/css/main.css"></noscript>
+</head>
+<body data-page="confidentialite">
+
+<header class="entete">
+  <div class="container entete__interne">
+    <a class="logo" href="/" aria-label="Mon Couvreur Nord, retour à l’accueil">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+        <path d="M2 15 16 4l14 11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 27v-6.5h8V27" stroke="#12B76A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
+    </a>
+    <a class="bouton bouton--vert" href="/#devis">Ma demande de devis</a>
+  </div>
+</header>
+
+<main class="legal">
+  <div class="container">
+    <article class="legal__contenu">
+      <h1>Politique de confidentialité</h1>
+<p class="maj">Dernière mise à jour : <span class="a-completer">date de mise en ligne à compléter</span>.</p>
+
+      <p>
+        Cette page explique quelles données personnelles sont collectées sur
+        <b>www.mon-couvreur-nord.fr</b>, pourquoi, pendant combien de temps, qui
+        y a accès, et comment exercer vos droits. Elle est rédigée en
+        application du règlement (UE) 2016/679 (RGPD) et de la loi n° 78-17 du
+        6 janvier 1978 modifiée.
+      </p>
+
+      <div class="encadre">
+        <p>
+          <b>L’essentiel en trois phrases.</b> Vos coordonnées servent
+          uniquement à vous faire rappeler par <b>un seul professionnel</b>,
+          nommé avant l’envoi du formulaire. Elles ne sont ni revendues, ni
+          diffusées à un réseau de partenaires. Vous pouvez demander leur
+          effacement à tout moment, sans justification.
+        </p>
+      </div>
+
+      <h2>1. Responsable de traitement</h2>
+      <p>
+        Le responsable de traitement est
+        <span class="a-completer">raison sociale à compléter</span>,
+        dont le siège est situé 80 rue du Docteur Legay, 59110 La Madeleine,
+        SIRET <span class="a-completer">à compléter</span>.
+      </p>
+      <p>
+        Contact pour toute question relative aux données personnelles :
+        <span class="a-completer">adresse e-mail à créer sur le domaine</span>,
+        ou par courrier à l’adresse du siège.
+      </p>
+      <p>
+        Compte tenu de la nature et du volume des traitements réalisés, aucun
+        délégué à la protection des données (DPO) n’a été désigné. Cette
+        situation sera réévaluée si l’activité évolue.
+      </p>
+
+      <h2>2. Données collectées</h2>
+      <p>
+        Aucune donnée n’est collectée par la simple consultation de la page,
+        en dehors des données techniques listées au point 2.3.
+      </p>
+
+      <h3>2.1 Données que vous saisissez dans le formulaire</h3>
+      <ul>
+        <li>Nature du besoin (réparation, rénovation, démoussage, gouttières, toiture plate, autre)</li>
+        <li>Statut d’occupation (propriétaire occupant, propriétaire bailleur, locataire)</li>
+        <li>Type de logement (maison individuelle, appartement, immeuble en copropriété)</li>
+        <li>Surface approximative de toiture (tranche)</li>
+        <li>Délai souhaité pour l’intervention</li>
+        <li>Code postal</li>
+        <li>Prénom et nom</li>
+        <li>Numéro de téléphone</li>
+        <li>Adresse électronique</li>
+      </ul>
+
+      <h3>2.2 Preuve de votre consentement</h3>
+      <p>
+        Au moment de l’envoi du formulaire, sont enregistrés :
+        le <b>texte intégral</b> de la case de consentement tel qu’il vous a été
+        affiché, l’horodatage de l’envoi (heure du serveur), votre adresse IP de
+        connexion et l’identifiant de votre navigateur (<i>user agent</i>).
+        Ces éléments constituent la preuve du consentement exigée par
+        l’article 7.1 du RGPD. Ils ne sont utilisés à aucune autre fin.
+      </p>
+
+      <h3>2.3 Données techniques et de provenance</h3>
+      <ul>
+        <li>
+          Identifiants de clic publicitaire : <code>gclid</code>,
+          <code>gbraid</code>, <code>wbraid</code>, <code>msclkid</code>
+        </li>
+        <li>
+          Paramètres de campagne : <code>utm_source</code>,
+          <code>utm_medium</code>, <code>utm_campaign</code>,
+          <code>utm_content</code>, <code>utm_term</code>, ainsi que des
+          paramètres internes (<code>intent</code>, <code>ville</code>,
+          <code>kw</code>, <code>campaignid</code>, <code>adgroupid</code>,
+          <code>device</code>, <code>matchtype</code>, <code>placement</code>)
+        </li>
+        <li>Page d’entrée, page de soumission et site référent</li>
+        <li>Horodatage de première et de dernière visite</li>
+        <li>Langue du navigateur et définition d’écran</li>
+        <li>
+          Commune estimée à partir de l’adresse IP par l’hébergeur, utilisée
+          uniquement pour adapter le texte affiché. <b>Cette estimation n’est
+          jamais utilisée comme adresse.</b> En cas de divergence, c’est le code
+          postal que vous saisissez qui fait foi et qui est enregistré.
+        </li>
+      </ul>
+
+      <h3>2.4 Données de parcours (sans identifiant direct)</h3>
+      <p>
+        Pour savoir à quelle étape du formulaire les visiteurs s’arrêtent, un
+        message est envoyé au serveur à chaque changement d’étape. Ce message
+        contient le numéro d’étape atteint, les réponses déjà données aux
+        questions à choix, les paramètres de campagne et un identifiant
+        technique aléatoire propre à la session.
+        <b>Il ne contient ni nom, ni téléphone, ni adresse e-mail, ni adresse IP.</b>
+        Il permet également d’enregistrer les demandes hors périmètre
+        (hors département du Nord, locataire, appartement) afin d’affiner le
+        ciblage publicitaire et d’éviter de diffuser des annonces à des
+        personnes que nous ne pouvons pas aider.
+      </p>
+
+      <h2>3. Finalité et base légale</h2>
+      <p>
+        La finalité est <b>unique</b> : vous mettre en relation avec un
+        professionnel de la couverture afin qu’il vous rappelle et vous
+        établisse un devis.
+      </p>
+      <p>
+        La base légale est votre <b>consentement</b>, au sens de l’article 6.1.a
+        du RGPD, matérialisé par une case à cocher non pré-cochée, distincte de
+        tout autre engagement, et obligatoire pour l’envoi du formulaire.
+      </p>
+      <p>
+        Vos données ne sont utilisées ni pour de la prospection commerciale sur
+        d’autres produits ou services, ni pour l’envoi d’une lettre
+        d’information, ni pour la constitution d’un fichier revendu ou loué à
+        des tiers.
+      </p>
+      <p>
+        Les données de parcours du point 2.4, dépourvues d’identifiant direct,
+        reposent sur l’<b>intérêt légitime</b> du responsable de traitement
+        (article 6.1.f du RGPD) à mesurer l’efficacité de son formulaire et à
+        limiter ses dépenses publicitaires inutiles. Vous pouvez vous y opposer
+        en écrivant à l’adresse de contact.
+      </p>
+
+      <h2>4. Destinataires</h2>
+      <p>
+        Vos coordonnées sont transmises à <b>un seul destinataire</b>, nommé
+        explicitement avant l’envoi du formulaire :
+      </p>
+      <ul>
+        <li>
+          <b>Adrien Heddebaut</b>, conseiller au sein du réseau <b>Technitoit</b>
+          — <span class="a-completer">raison sociale et SIRET de l’entreprise partenaire à compléter</span>.
+          Il agit en qualité de responsable de traitement distinct pour la suite
+          de la relation commerciale qu’il pourrait nouer avec vous.
+        </li>
+      </ul>
+      <p>
+        Interviennent par ailleurs, en qualité de <b>sous-traitants</b> au sens
+        de l’article 28 du RGPD, et sans droit d’usage des données pour leur
+        propre compte :
+      </p>
+      <ul>
+        <li>
+          <b>Netlify, Inc.</b> — hébergement du site, exécution de la fonction
+          de réception du formulaire et stockage des demandes.
+        </li>
+        <li>
+          <b>Telegram Messenger</b> — acheminement de la notification interne
+          signalant l’arrivée d’une nouvelle demande.
+        </li>
+        <li>
+          <span class="a-completer">Le cas échéant, l’outil de gestion des demandes retenu (Google Sheets, Firestore, CRM) — à compléter s’il est activé.</span>
+        </li>
+      </ul>
+      <p>
+        Si, et seulement si, vous y avez consenti via le bandeau cookies,
+        <b>Google Ireland Limited</b> (Google Ads, Google Analytics) et
+        <b>Microsoft Ireland Operations Limited</b> (Clarity) reçoivent des
+        données de mesure d’audience et de conversion. En cas de refus, aucune
+        donnée ne leur est transmise et aucun cookie de mesure n’est déposé.
+      </p>
+      <p>
+        Vos données peuvent enfin être communiquées à une autorité judiciaire ou
+        administrative, sur réquisition régulière.
+      </p>
+
+      <h2>5. Transferts hors Union européenne</h2>
+      <p>
+        Certains sous-traitants sont établis aux États-Unis ou y opèrent des
+        serveurs. Les transferts correspondants sont encadrés :
+      </p>
+      <ul>
+        <li>
+          <b>Netlify, Inc.</b> (États-Unis) : clauses contractuelles types de la
+          Commission européenne et, le cas échéant, certification au titre du
+          <i>Data Privacy Framework</i> UE–États-Unis.
+        </li>
+        <li>
+          <b>Telegram</b> : les serveurs sont répartis dans plusieurs
+          juridictions. Le message de notification ne contient que le nécessaire
+          au rappel (besoin, code postal, délai, prénom, nom, téléphone,
+          e-mail). <span class="a-completer">Si ce transfert n’est pas souhaité, basculer la notification vers un canal européen — voir README.md.</span>
+        </li>
+        <li>
+          <b>Google</b> et <b>Microsoft</b> : contrats européens et clauses
+          contractuelles types, applicables uniquement en cas de consentement.
+        </li>
+      </ul>
+
+      <h2>6. Durées de conservation</h2>
+      <div class="tableau-enveloppe">
+        <table class="reperes">
+          <thead>
+            <tr><th scope="col">Donnée</th><th scope="col">Durée</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Coordonnées et détail de la demande</th>
+              <td><span class="valeur">3 ans</span> à compter du dernier contact avec vous</td>
+            </tr>
+            <tr>
+              <th scope="row">Preuve du consentement (texte, horodatage, IP, user agent)</th>
+              <td><span class="valeur">3 ans</span> à compter du recueil, puis suppression</td>
+            </tr>
+            <tr>
+              <th scope="row">Données de parcours sans identifiant direct</th>
+              <td><span class="valeur">14 mois</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Cookie d’attribution <code>attr</code></th>
+              <td><span class="valeur">90 jours</span> glissants</td>
+            </tr>
+            <tr>
+              <th scope="row">Cookie d’enregistrement de vos choix de cookies</th>
+              <td><span class="valeur">6 mois</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Cookies de mesure et de publicité (si acceptés)</th>
+              <td>Au maximum <span class="valeur">13 mois</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="source">
+        Au terme de ces durées, les données sont supprimées. Les documents
+        nécessaires au respect d’une obligation légale (comptabilité, preuve en
+        cas de litige) peuvent être conservés en archivage intermédiaire à accès
+        restreint pendant la durée de prescription applicable.
+      </p>
+
+      <h2>7. Vos droits</h2>
+      <p>Vous disposez, sur vos données, des droits suivants :</p>
+      <ul>
+        <li><b>Droit d’accès</b> : obtenir une copie des données vous concernant.</li>
+        <li><b>Droit de rectification</b> : faire corriger une donnée inexacte.</li>
+        <li><b>Droit à l’effacement</b> : demander la suppression de vos données.</li>
+        <li><b>Droit à la limitation</b> du traitement.</li>
+        <li><b>Droit à la portabilité</b> : recevoir vos données dans un format structuré et lisible par machine.</li>
+        <li><b>Droit d’opposition</b>, notamment aux traitements fondés sur l’intérêt légitime.</li>
+        <li>
+          <b>Droit de retirer votre consentement</b> à tout moment. Le retrait ne
+          remet pas en cause la licéité du traitement effectué avant celui-ci.
+        </li>
+        <li>
+          <b>Droit de définir des directives</b> relatives au sort de vos données
+          après votre décès.
+        </li>
+      </ul>
+      <p>
+        Pour exercer ces droits, écrivez à
+        <span class="a-completer">adresse e-mail de contact à compléter</span>
+        ou par courrier au siège, en précisant l’objet de votre demande. Une
+        réponse vous sera apportée dans un délai d’un mois. Une preuve
+        d’identité pourra être demandée en cas de doute raisonnable sur
+        l’identité du demandeur.
+      </p>
+
+      <h2>8. Réclamation auprès de l’autorité de contrôle</h2>
+      <p>
+        Si vous estimez, après nous avoir contactés, que vos droits ne sont pas
+        respectés, vous pouvez introduire une réclamation auprès de la
+        Commission nationale de l’informatique et des libertés (CNIL) :
+      </p>
+      <p>
+        CNIL — 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 —
+        <a href="https://www.cnil.fr" rel="noopener nofollow" target="_blank">www.cnil.fr</a>
+      </p>
+
+      <h2>9. Cookies et traceurs</h2>
+      <p>
+        Un bandeau vous permet d’accepter, de refuser ou de choisir en détail
+        les traceurs déposés. <b>Le refus est effectif</b> : aucun cookie de
+        mesure ni de publicité n’est déposé, et le consentement reste sur
+        l’état « refusé » du <i>Consent Mode</i> de Google. Vous pouvez revenir
+        sur votre choix à tout moment via le lien
+        <a href="#" data-action="gerer-cookies">Gérer mes cookies</a>
+        en bas de page.
+      </p>
+
+      <div class="tableau-enveloppe">
+        <table class="reperes">
+          <thead>
+            <tr>
+              <th scope="col">Cookie</th>
+              <th scope="col">Finalité</th>
+              <th scope="col">Durée</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>attr</code></th>
+              <td>
+                Cookie <b>first-party</b>, déposé par ce site. Il retient la
+                provenance de votre visite (campagne, identifiant de clic) afin
+                de rattacher votre demande à la bonne annonce et d’éviter de
+                payer deux fois le même contact. Il ne permet pas de vous suivre
+                sur d’autres sites.
+              </td>
+              <td>90 jours</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>mcn_consent</code></th>
+              <td>Mémorise votre choix en matière de cookies, pour ne pas vous le redemander.</td>
+              <td>6 mois</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>_ga</code>, <code>_ga_*</code></th>
+              <td>Mesure d’audience Google Analytics. <b>Déposés uniquement après acceptation.</b></td>
+              <td>13 mois</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>_gcl_*</code></th>
+              <td>Mesure des conversions Google Ads. <b>Déposés uniquement après acceptation.</b></td>
+              <td>90 jours</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>_clck</code>, <code>_clsk</code></th>
+              <td>Microsoft Clarity, analyse du comportement de navigation. <b>Déposés uniquement après acceptation.</b></td>
+              <td>1 an / 1 jour</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="source">
+        Le formulaire conserve par ailleurs votre progression dans la mémoire
+        de session de votre navigateur (<code>sessionStorage</code>), afin que
+        vous ne perdiez pas vos réponses en cas de rafraîchissement accidentel
+        de la page. Cette donnée reste sur votre appareil, n’est jamais
+        transmise à un tiers et disparaît à la fermeture de l’onglet.
+      </p>
+
+      <h2>10. Sécurité</h2>
+      <p>
+        Le site est servi exclusivement en HTTPS. Les données sont transmises
+        chiffrées et stockées sur une infrastructure à accès restreint. Aucune
+        clé d’accès n’est présente dans le code du site : elles sont conservées
+        dans des variables d’environnement de l’hébergeur.
+      </p>
+
+      <h2>11. Décision automatisée</h2>
+      <p>
+        Le formulaire écarte automatiquement les demandes situées hors du
+        département du Nord et celles émanant de locataires ou portant sur un
+        appartement, parce que le service ne peut pas les traiter utilement.
+        Il ne s’agit pas d’une décision produisant des effets juridiques à votre
+        égard au sens de l’article 22 du RGPD : vous restez libre de contacter
+        directement un professionnel, et le message affiché vous l’indique.
+        Aucun profilage n’est réalisé.
+      </p>
+
+      <h2>12. Modification de la présente politique</h2>
+      <p>
+        Cette politique peut être mise à jour, notamment en cas d’évolution du
+        service ou de la réglementation. La date de dernière mise à jour figure
+        en haut de page. Les données déjà collectées restent traitées selon la
+        politique en vigueur au moment de leur collecte.
+      </p>
+
+    </article>
+  </div>
+</main>
+
+<footer class="pied">
+  <div class="container">
+    <div class="pied__haut">
+      <a class="logo" href="/" aria-label="Mon Couvreur Nord, retour à l’accueil">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+        <path d="M2 15 16 4l14 11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 27v-6.5h8V27" stroke="#12B76A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+        <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
+      </a>
+      <ul class="pied__liens">
+        <li><a href="/mentions-legales.html">Mentions légales</a></li>
+        <li><a href="/confidentialite.html">Politique de confidentialité</a></li>
+        <li><a href="/conditions-generales.html">Conditions générales</a></li>
+        <li><a href="#" data-action="gerer-cookies">Gérer mes cookies</a></li>
+      </ul>
+    </div>
+    <p class="pied__statut">
+      <b>Mon Couvreur Nord est un service de mise en relation.</b>
+      Le site n’exécute aucun travaux de couverture, n’établit aucun devis et
+      n’est pas partie au contrat conclu entre vous et l’entreprise.
+    </p>
+    <p class="pied__mention">
+      Éditeur : <span class="a-completer">RAISON SOCIALE à compléter</span> —
+      SIRET <span class="a-completer">à compléter</span> —
+      80 rue du Docteur Legay, 59110 La Madeleine —
+      Tél. <a href="tel:+33786505580">07 86 50 55 80</a>
+    </p>
+    <p class="pied__france-renov"></p>
+    <p class="pied__mention">© <span id="annee">2026</span> Mon Couvreur Nord. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<div class="cookies" id="bandeau-cookies" role="dialog" aria-modal="false"
+     aria-labelledby="cookies-titre" aria-describedby="cookies-texte">
+  <p class="cookies__titre" id="cookies-titre">Cookies et mesure d’audience</p>
+  <p class="cookies__texte" id="cookies-texte">
+    Nous utilisons des cookies pour mesurer l’efficacité de nos annonces et
+    améliorer cette page. Vous pouvez accepter, refuser, ou choisir en détail.
+  </p>
+  <div class="cookies__actions">
+    <button type="button" class="bouton bouton--orange" id="cookies-accepter"
+            style="font-size:15px;padding:11px 18px">Tout accepter</button>
+    <button type="button" class="bouton bouton--fantome" id="cookies-refuser"
+            style="font-size:15px;padding:11px 18px">Tout refuser</button>
+    <button type="button" class="bouton bouton--fantome" id="cookies-personnaliser"
+            aria-expanded="false" aria-controls="cookies-reglages"
+            style="font-size:15px;padding:11px 18px">Personnaliser</button>
+  </div>
+  <div class="cookies__reglages" id="cookies-reglages">
+    <div class="reglage">
+      <input type="checkbox" checked disabled aria-label="Cookies nécessaires, toujours actifs">
+      <span><b>Nécessaires — toujours actifs</b>
+      Cookie d’attribution first-party <code>attr</code> (90 jours) et cookie
+      d’enregistrement de votre choix (6 mois).</span>
+    </div>
+    <div class="reglage">
+      <input type="checkbox" id="cookie-mesure">
+      <label for="cookie-mesure"><b>Mesure d’audience</b> Statistiques de fréquentation et points d’abandon.</label>
+    </div>
+    <div class="reglage">
+      <input type="checkbox" id="cookie-publicite">
+      <label for="cookie-publicite"><b>Publicité</b> Mesure des conversions Google Ads et personnalisation publicitaire.</label>
+    </div>
+    <button type="button" class="bouton bouton--orange" id="cookies-enregistrer"
+            style="margin-top:12px;font-size:15px;padding:11px 18px">Enregistrer mes choix</button>
+  </div>
+</div>
+
+<script src="/assets/js/tracking.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var annee = document.getElementById('annee');
+  if (annee) { annee.textContent = String(new Date().getFullYear()); }
+});
+</script>
+</body>
+</html>

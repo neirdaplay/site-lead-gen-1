@@ -1,0 +1,98 @@
+# ==================================================================
+# Mon Couvreur Nord — configuration Netlify
+# Site 100 % statique : aucune etape de build, aucun bundler front.
+# Le seul paquet npm du depot (@netlify/blobs) sert uniquement a la
+# Netlify Function ; il n'a aucun effet sur le HTML/CSS/JS livre.
+# ==================================================================
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  # Pas de commande de build : le dossier est servi tel quel.
+  command = ""
+
+[functions]
+  node_bundler = "esbuild"
+
+# Les Edge Functions sont declarees en ligne, via `export const config`
+# dans netlify/edge-functions/geo.js. Ne PAS les redeclarer ici : cela
+# provoquerait une double execution sur la meme requete.
+
+# ------------------------------------------------------------------
+# En-tetes
+# ------------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://www.googleadservices.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.clarity.ms https://www.google.com https://www.google.fr https://googleads.g.doubleclick.net; font-src 'self'; connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.clarity.ms https://region1.google-analytics.com; frame-src https://td.doubleclick.net https://www.googletagmanager.com; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests"
+
+# Le HTML est personnalise par l'Edge Function : jamais de cache partage.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Les polices ne changent jamais : cache long et immuable.
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+# CSS / JS : une semaine. Les noms de fichiers ne sont pas hashes,
+# donc ajouter ?v=2 aux URLs lors d'une modification urgente.
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# ------------------------------------------------------------------
+# Redirections
+# ------------------------------------------------------------------
+# Alias court et lisible pour l'endpoint de soumission.
+[[redirects]]
+  from = "/api/lead"
+  to = "/.netlify/functions/submit-lead"
+  status = 200
+  force = true
+
+# Anciennes URLs eventuelles / confort.
+[[redirects]]
+  from = "/mentions-legales"
+  to = "/mentions-legales.html"
+  status = 301
+
+[[redirects]]
+  from = "/confidentialite"
+  to = "/confidentialite.html"
+  status = 301
+
+[[redirects]]
+  from = "/cgu"
+  to = "/conditions-generales.html"
+  status = 301
+
+[[redirects]]
+  from = "/conditions-generales"
+  to = "/conditions-generales.html"
+  status = 301

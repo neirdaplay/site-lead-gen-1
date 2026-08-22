@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="PHOTO HERO A FOURNIR">
+  <defs>
+    <linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1B3557"/>
+      <stop offset="100%" stop-color="#0C1E36"/>
+    </linearGradient>
+    <pattern id="tuiles" width="48" height="28" patternUnits="userSpaceOnUse">
+      <rect width="48" height="28" fill="#15304F"/>
+      <path d="M0 27h48M24 0v27" stroke="#0E2440" stroke-width="3"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#ciel)"/>
+  <path d="M0 1000V620L800 300l800 320v380Z" fill="url(#tuiles)"/>
+  <path d="M0 620 800 300l800 320" fill="none" stroke="#20456E" stroke-width="10"/>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#7E97B5">
+    <text x="800" y="200" font-size="42" font-weight="bold">PHOTO HERO A FOURNIR</text>
+    <text x="800" y="248" font-size="22">Couvreur en action sur toit en tuiles — voir assets/img/SHOTLIST.md n°1</text>
+  </g>
+</svg>
