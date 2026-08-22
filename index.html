@@ -82,8 +82,11 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
 
 /* --- Hero (valide, ne pas modifier la mise en forme) --- */
 .hero{position:relative;background-color:var(--bleu);color:#fff;overflow:hidden}
-.hero__fond{position:absolute;inset:0;background-image:url('assets/img/hero-couvreur.svg');
-background-size:cover;background-position:center 30%}
+/* Photo du hero. Le navigateur prend le premier fichier trouve ; si aucun
+   n'existe, seul le bleu nuit du .hero s'affiche — jamais d'image cassee. */
+.hero__fond{position:absolute;inset:0;
+background-image:url('assets/img/hero-couvreur.jpg'),url('assets/img/hero-couvreur.svg');
+background-size:cover;background-position:center 38%}
 .hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.8)}
 .hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding:20px 0 30px}
 .hero__badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
@@ -200,7 +203,57 @@ margin-bottom:14px;border-radius:50%;background:var(--vert-fonce);color:var(--bl
 .realisation figcaption{padding:14px 16px;font-size:14.5px;line-height:1.5;color:var(--texte)}
 .realisation figcaption b{display:block;color:var(--titre);font-size:15.5px;margin-bottom:3px}
 
-/* --- Prestations --- */
+/* --- Avant / apres --- */
+.diptyque{display:grid;gap:16px;grid-template-columns:1fr;margin-top:32px}
+.vue{position:relative;background:var(--blanc);border:1px solid var(--bord);
+border-radius:var(--rayon);overflow:hidden;box-shadow:var(--ombre)}
+.vue img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#E8ECF2}
+.vue__etiquette{position:absolute;top:12px;left:12px;padding:5px 12px;border-radius:999px;
+background:var(--bleu);color:#fff;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.vue--apres .vue__etiquette{background:var(--vert-fonce)}
+.vue figcaption{padding:14px 16px;font-size:14.5px;line-height:1.5;color:var(--texte)}
+.vue figcaption b{display:block;color:var(--titre);font-size:15.5px;margin-bottom:3px}
+
+.procede{display:grid;gap:16px;grid-template-columns:1fr;margin-top:36px}
+.procede__etape{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--rayon);
+padding:22px 20px;box-shadow:var(--ombre)}
+.procede__haut{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.procede__num{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:28px;height:28px;
+border-radius:50%;background:var(--vert-fonce);color:#fff;font-size:14px;font-weight:800;line-height:1}
+.procede__icone{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:44px;height:44px;
+border-radius:10px;background:var(--gris);color:var(--bleu)}
+.procede__icone svg{width:24px;height:24px}
+.procede__titre{margin:0;font-size:16.5px;font-weight:700;color:var(--titre);line-height:1.3}
+.procede__texte{margin:0;font-size:15.5px;line-height:1.6;color:var(--texte)}
+
+.mecanisme{margin-top:36px;background:var(--bleu-pale);border:1px solid #CBDDF0;
+border-radius:var(--rayon);padding:26px 22px}
+.mecanisme__titre{margin:0 0 6px;font-size:19px;font-weight:800;color:var(--titre);text-align:center}
+.mecanisme__intro{margin:0 auto 24px;max-width:640px;text-align:center;font-size:15.5px;line-height:1.6;color:var(--texte)}
+.mecanisme__grille{display:grid;gap:16px;grid-template-columns:1fr}
+.schema{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--rayon-s);padding:18px}
+.schema svg{display:block;width:100%;height:auto}
+.schema h4{margin:12px 0 5px;font-size:15.5px;font-weight:700;color:var(--titre)}
+.schema p{margin:0;font-size:14.5px;line-height:1.55;color:var(--texte)}
+.schema--traite{border-color:#A9E7C7;background:var(--vert-pale)}
+.mecanisme__note{margin:20px auto 0;max-width:680px;text-align:center;font-size:14.5px;line-height:1.6;color:var(--texte)}
+
+/* --- Chiffres et carte --- */
+.stats{display:grid;gap:16px;grid-template-columns:1fr;margin-top:36px}
+.stat{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--rayon);
+padding:24px 18px;text-align:center;box-shadow:var(--ombre)}
+.stat__valeur{display:block;font-size:34px;font-weight:800;line-height:1.05;color:var(--vert-fonce);letter-spacing:-.02em}
+.stat__libelle{display:block;margin-top:8px;font-size:14.5px;line-height:1.45;color:var(--texte)}
+.carte-zone{display:grid;gap:20px;grid-template-columns:1fr;margin-top:24px;align-items:start}
+.carte-nord{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--rayon);
+padding:20px;box-shadow:var(--ombre)}
+.carte-nord svg{display:block;width:100%;height:auto}
+.carte-nord__legende{display:flex;align-items:center;justify-content:center;gap:8px;
+margin-top:12px;font-size:13px;color:var(--note)}
+.carte-nord__legende span{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--vert)}
+.carte-nord__note{margin:8px 0 0;font-size:12px;line-height:1.5;color:var(--note);text-align:center}
+
+/* --- Prestations --- 
 .presta{background:var(--blanc);border:1px solid var(--bord);border-radius:var(--rayon);
 padding:26px 20px;text-align:center;box-shadow:var(--ombre)}
 .presta--phare{background:var(--vert-pale);border-color:#A9E7C7}
@@ -299,6 +352,9 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 .formulaire{padding:14px 14px 16px}
 }
 @media (min-width:640px){
+.diptyque{grid-template-columns:repeat(2,1fr)}
+.mecanisme__grille{grid-template-columns:repeat(2,1fr)}
+.stats{grid-template-columns:repeat(3,1fr)}
 .grille--2{grid-template-columns:repeat(2,1fr)}
 .grille--3{grid-template-columns:repeat(2,1fr)}
 .grille--4{grid-template-columns:repeat(2,1fr)}
@@ -310,6 +366,9 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 .hero__titre{font-size:36px;min-height:calc(3 * 1.16em)}
 }
 @media (min-width:900px){
+.procede{grid-template-columns:repeat(3,1fr)}
+.carte-zone{grid-template-columns:1.05fr 1fr;gap:28px}
+.mecanisme{padding:32px 28px}
 .section{padding:88px 0}
 .section__titre{font-size:32px}
 .grille--3{grid-template-columns:repeat(3,1fr)}
@@ -583,6 +642,11 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
   </symbol>
   <symbol id="i-loupe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="10.6" cy="10.6" r="6.6"/><path d="M15.3 15.3 20.6 20.6"/>
+  </symbol>
+
+  <!-- Procede de reprotection -->
+  <symbol id="i-goutte" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.2c3.4 4 5.3 6.7 5.3 9.1a5.3 5.3 0 0 1-10.6 0c0-2.4 1.9-5.1 5.3-9.1Z"/>
   </symbol>
 
   <!-- Utilitaires -->
@@ -1055,35 +1119,176 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 </section>
 
 <!-- ================= AVANT / APRES =================
-     À FAIRE AVANT MISE EN LIGNE : remplacer les deux gabarits par de vraies
-     photographies du MÊME toit, prises sous le MÊME angle. Renseigner la
-     commune réelle du chantier. Ne jamais légender une photo avec une
-     commune où le chantier n'a pas eu lieu. -->
-<section class="section section--gris" aria-labelledby="titre-avant-apres">
+     PHOTOS À DÉPOSER (voir README.md) :
+       assets/img/avant-hazebrouck.jpg   toiture chargée, avant intervention
+       assets/img/apres-hazebrouck.jpg   même toiture, même angle, après reprotection
+     Tant qu'un fichier .jpg est absent, l'attribut onerror bascule sur le
+     gabarit .svg : la page n'affiche jamais d'image cassée. Retirer les deux
+     attributs onerror une fois les vraies photos en place. -->
+<section class="section section--gris" id="avant-apres" aria-labelledby="titre-avant-apres">
   <div class="container">
-    <h2 class="section__titre" id="titre-avant-apres">Avant / après</h2>
+    <h2 class="section__titre" id="titre-avant-apres">Avant / après : la reprotection en images</h2>
     <p class="section__sous-titre">
-      Le même toit, le même angle, avant et après reprotection.
+      Une toiture en tuiles terre cuite à Hazebrouck. Même maison, même angle,
+      avant et après.
     </p>
 
-    <div class="galerie">
-      <figure class="realisation">
-        <img src="assets/img/avant.svg" width="900" height="675" loading="lazy" decoding="async"
-             alt="Gabarit à remplacer : versant de toiture couvert de mousse, avant intervention">
+    <div class="diptyque">
+      <figure class="vue vue--avant">
+        <span class="vue__etiquette">Avant</span>
+        <img src="assets/img/avant-hazebrouck.jpg" width="1600" height="900"
+             loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='assets/img/avant.svg'"
+             alt="Maison en briques à Hazebrouck, toiture en tuiles terre cuite encrassée et ternie, bâches de protection déployées au sol avant l’intervention">
         <figcaption>
           <b>Avant</b>
-          Versant nord chargé de mousse — <span class="a-completer">commune à renseigner</span>.
+          Tuiles ternies et encrassées, teinte devenue irrégulière. Bâches
+          posées et abords protégés avant le démoussage.
         </figcaption>
       </figure>
 
-      <figure class="realisation">
-        <img src="assets/img/apres.svg" width="900" height="675" loading="lazy" decoding="async"
-             alt="Gabarit à remplacer : le même versant de toiture nettoyé et reprotégé, même angle de prise de vue">
+      <figure class="vue vue--apres">
+        <span class="vue__etiquette">Après</span>
+        <img src="assets/img/apres-hazebrouck.jpg" width="1600" height="900"
+             loading="lazy" decoding="async"
+             onerror="this.onerror=null;this.src='assets/img/apres.svg'"
+             alt="La même maison après nettoyage et application d’une résine hydrofuge colorée : la toiture a retrouvé une teinte terre cuite uniforme">
         <figcaption>
           <b>Après</b>
-          Nettoyage puis reprotection — <span class="a-completer">commune à renseigner</span>.
+          Toiture nettoyée puis reprotégée à la résine hydrofuge colorée.
+          Teinte uniforme, porosité refermée.
         </figcaption>
       </figure>
+    </div>
+
+    <h3 class="section__titre" style="font-size:22px;margin-top:48px">Ce que le technicien fait, dans l’ordre</h3>
+    <div class="procede">
+      <article class="procede__etape">
+        <div class="procede__haut">
+          <span class="procede__num" aria-hidden="true">1</span>
+          <span class="procede__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-jet"></use></svg></span>
+        </div>
+        <h4 class="procede__titre">Nettoyage complet</h4>
+        <p class="procede__texte">
+          L’intégralité des versants est démoussée : mousses, lichens et dépôts
+          sont retirés jusqu’à retrouver la tuile nue. Sans cette étape, tout ce
+          qu’on applique ensuite se pose sur de la saleté et ne tient pas.
+        </p>
+      </article>
+
+      <article class="procede__etape">
+        <div class="procede__haut">
+          <span class="procede__num" aria-hidden="true">2</span>
+          <span class="procede__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-goutte"></use></svg></span>
+        </div>
+        <h4 class="procede__titre">Traitement anti-mousse</h4>
+        <p class="procede__texte">
+          Un traitement rémanent est pulvérisé sur l’ensemble de la toiture. Il
+          élimine ce qui subsiste de spores et de racines à l’intérieur même de
+          la porosité de la tuile, invisible à l’œil nu.
+        </p>
+      </article>
+
+      <article class="procede__etape">
+        <div class="procede__haut">
+          <span class="procede__num" aria-hidden="true">3</span>
+          <span class="procede__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-bouclier"></use></svg></span>
+        </div>
+        <h4 class="procede__titre">Résine hydrofuge colorée</h4>
+        <p class="procede__texte">
+          La résine est appliquée <b>jusqu’à saturation du support</b> : on
+          charge la tuile tant qu’elle absorbe. Elle referme la porosité et
+          ravive la teinte d’origine.
+        </p>
+      </article>
+    </div>
+
+    <div class="mecanisme">
+      <h3 class="mecanisme__titre">Pourquoi la mousse ne revient pas</h3>
+      <p class="mecanisme__intro">
+        La résine est <b>microporeuse</b>. C’est la propriété qui fait toute la
+        différence : elle laisse la tuile évacuer son humidité, tout en
+        empêchant l’eau de pluie d’y entrer.
+      </p>
+
+      <div class="mecanisme__grille">
+        <div class="schema">
+          <svg viewBox="0 0 190 130" role="img" aria-labelledby="schema-a-titre">
+            <title id="schema-a-titre">Sur une tuile poreuse, l’eau de pluie pénètre dans le matériau et la mousse s’installe en surface</title>
+            <g fill="none" stroke="#0F2745" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="74" width="174" height="42" rx="5"/>
+              <path d="M40 26c4 5 6 7.5 6 9.5a6 6 0 0 1-12 0c0-2 2-4.5 6-9.5Z"/>
+              <path d="M95 20c4 5 6 7.5 6 9.5a6 6 0 0 1-12 0c0-2 2-4.5 6-9.5Z"/>
+              <path d="M150 28c4 5 6 7.5 6 9.5a6 6 0 0 1-12 0c0-2 2-4.5 6-9.5Z"/>
+              <path d="M40 50v18M36.5 64.5 40 68.5l3.5-4"/>
+              <path d="M95 44v24M91.5 64.5 95 68.5l3.5-4"/>
+              <path d="M150 52v16M146.5 64.5l3.5 4 3.5-4"/>
+            </g>
+            <g fill="none" stroke="#7A8899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 74c1-6 5-8 7-4 2-5 6-4 6 2 2-3 5-1 4 2"/>
+              <path d="M74 74c1-6 5-8 7-4 2-5 6-4 6 2 2-3 5-1 4 2"/>
+              <path d="M128 74c1-6 5-8 7-4 2-5 6-4 6 2 2-3 5-1 4 2"/>
+            </g>
+            <g fill="#C9D8E9">
+              <circle cx="30" cy="88" r="3.6"/><circle cx="56" cy="97" r="3.6"/>
+              <circle cx="82" cy="88" r="3.6"/><circle cx="106" cy="99" r="3.6"/>
+              <circle cx="132" cy="89" r="3.6"/><circle cx="158" cy="97" r="3.6"/>
+              <circle cx="44" cy="106" r="3.6"/><circle cx="96" cy="108" r="3.6"/>
+              <circle cx="146" cy="107" r="3.6"/>
+            </g>
+          </svg>
+          <h4>Tuile poreuse</h4>
+          <p>
+            L’eau de pluie pénètre dans la tuile et y stagne. Cette humidité
+            permanente est exactement ce dont la mousse a besoin pour
+            s’installer, puis s’étendre.
+          </p>
+        </div>
+
+        <div class="schema schema--traite">
+          <svg viewBox="0 0 190 130" role="img" aria-labelledby="schema-b-titre">
+            <title id="schema-b-titre">Sur une tuile hydrofugée, l’eau perle en surface et ruisselle, tandis que la tuile continue d’évacuer son humidité</title>
+            <g fill="none" stroke="#0F2745" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="74" width="174" height="42" rx="5"/>
+            </g>
+            <path d="M13 74h164" fill="none" stroke="#0A7A46" stroke-width="4" stroke-linecap="round"/>
+            <g fill="none" stroke="#0A7A46" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M30 74a11 9 0 0 1 22 0"/>
+              <path d="M74 74a13 11 0 0 1 26 0"/>
+              <path d="M122 74a10 8 0 0 1 20 0"/>
+              <path d="M152 62c9-3 16 1 21 8M169 63l4.5 7.5-8.5 1.5"/>
+            </g>
+            <g fill="none" stroke="#0F2745" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity=".55">
+              <path d="M60 108V84M57 87.5l3-4 3 4"/>
+              <path d="M110 108V84M107 87.5l3-4 3 4"/>
+            </g>
+            <g fill="none" stroke="#0F2745" stroke-width="1.2" opacity=".35">
+              <circle cx="36" cy="96" r="3.4"/><circle cx="84" cy="99" r="3.4"/>
+              <circle cx="136" cy="96" r="3.4"/><circle cx="160" cy="104" r="3.4"/>
+            </g>
+          </svg>
+          <h4>Tuile hydrofugée</h4>
+          <p>
+            L’eau perle en surface et ruisselle au lieu de s’infiltrer. Elle
+            emporte au passage poussières et spores : à chaque pluie, la
+            toiture se rince d’elle-même.
+          </p>
+        </div>
+      </div>
+
+      <p class="mecanisme__note">
+        La tuile reste sèche : les micro-organismes n’ont plus le support humide
+        dont ils ont besoin pour se réinstaller. C’est aussi ce qui la protège
+        du gel — une tuile qui n’absorbe plus d’eau ne peut plus éclater quand
+        il gèle.
+      </p>
+    </div>
+
+    <div class="section__cta">
+      <button type="button" class="bouton bouton--orange"
+              data-action="aller-au-formulaire" data-emplacement="section-avant-apres">
+        Estimer mon projet →
+      </button>
     </div>
   </div>
 </section>
@@ -1293,33 +1498,107 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
   </div>
 </section>
 
-<!-- ================= ZONE D'INTERVENTION ================= -->
+<!-- ================= ZONE D'INTERVENTION =================
+     CHIFFRES : 2012 (création), 250 chantiers par an, 3 000+ depuis l'ouverture.
+     Ce sont des affirmations commerciales : elles doivent rester exactes et
+     justifiables. Mettez-les à jour, ne les arrondissez jamais vers le haut.
+
+     CARTE : tracé schématique du département, dessiné à la main en SVG inline
+     (aucune requête réseau). Les points marquent les secteurs couverts, pas des
+     chantiers précis — c'est ce que dit la légende, et c'est volontaire tant
+     qu'on ne dispose pas des communes réelles. Si vous voulez qu'ils
+     représentent de vrais chantiers, remplacez les coordonnées des <circle>
+     par celles des communes concernées et reformulez la légende. -->
 <section class="section section--gris" aria-labelledby="titre-zone">
   <div class="container">
     <h2 class="section__titre" id="titre-zone">
-      Intervention <span data-geo="en-secteur">dans le Nord</span>
+      Intervention <span data-geo="en-secteur">dans le Nord</span>, et nulle part ailleurs
     </h2>
     <p class="section__sous-titre">
-      Le service couvre l’ensemble du département du Nord (59), et uniquement lui.
+      Depuis 2012, nous ne travaillons que dans le département du Nord (59).
+      C’est ce qui permet à un technicien d’être chez vous rapidement — et de
+      connaître les tuiles de votre secteur avant même d’être monté sur le toit.
     </p>
 
-    <div class="zone">
-      <p class="zone__secteur"><span data-geo="secteur">le Nord</span></p>
-      <p class="zone__texte">
-        Nous intervenons <span data-geo="a-ville">dans le Nord</span> et dans les
-        communes environnantes. Le technicien se déplace depuis son secteur
-        habituel : c’est ce qui permet un rappel rapide et une visite sans frais
-        de déplacement facturés.
-      </p>
-      <ul class="puces-communes" data-geo="voisines">
-        <li>Métropole lilloise</li><li>Pévèle</li><li>Douaisis</li>
-        <li>Valenciennois</li><li>Flandre intérieure</li><li>Dunkerquois</li>
-        <li>Cambrésis</li><li>Avesnois</li>
-      </ul>
-      <p class="zone__note">
-        Votre commune n’apparaît pas ? Tant que le code postal commence par 59,
-        la demande est traitée.
-      </p>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat__valeur">2012</span>
+        <span class="stat__libelle">Année de création</span>
+      </div>
+      <div class="stat">
+        <span class="stat__valeur">250</span>
+        <span class="stat__libelle">Chantiers par an dans le Nord</span>
+      </div>
+      <div class="stat">
+        <span class="stat__valeur">3 000+</span>
+        <span class="stat__libelle">Toitures traitées depuis l’ouverture</span>
+      </div>
+    </div>
+
+    <div class="carte-zone">
+      <div class="carte-nord">
+        <svg viewBox="14 6 378 318" role="img" aria-labelledby="carte-titre">
+          <title id="carte-titre">Carte schématique du département du Nord (59), des Flandres et du Dunkerquois à l’ouest jusqu’à l’Avesnois à l’est, avec les secteurs couverts</title>
+          <path d="M28,40 L73,30 L103,17 L111,46 L129,74 L136,92 L149,98 L161,113 L181,100 L219,103 L225,118 L214,129 L225,144 L247,157 L260,170 L268,186 L285,183 L297,209 L315,207 L326,217 L351,209 L376,225 L373,243 L381,308 L351,313 L335,300 L310,287 L285,287 L269,287 L244,293 L219,280 L194,274 L174,261 L169,235 L178,217 L169,202 L153,191 L136,170 L128,163 L111,144 L95,131 L81,118 L78,98 L70,85 L58,72 L48,61 Z" fill="#EEF4FB" stroke="#0F2745" stroke-width="2.4"
+                stroke-linejoin="round" stroke-linecap="round"/>
+          <g fill="#12B76A" stroke="#FFFFFF" stroke-width="1.6">
+              <circle cx="74" cy="32" r="4.6"/>
+              <circle cx="33" cy="44" r="4.6"/>
+              <circle cx="83" cy="48" r="4.6"/>
+              <circle cx="108" cy="46" r="4.6"/>
+              <circle cx="92" cy="92" r="4.6"/>
+              <circle cx="101" cy="112" r="4.6"/>
+              <circle cx="134" cy="109" r="4.6"/>
+              <circle cx="118" cy="132" r="4.6"/>
+              <circle cx="158" cy="122" r="4.6"/>
+              <circle cx="187" cy="137" r="4.6"/>
+              <circle cx="204" cy="112" r="4.6"/>
+              <circle cx="206" cy="121" r="4.6"/>
+              <circle cx="183" cy="158" r="4.6"/>
+              <circle cx="145" cy="161" r="4.6"/>
+              <circle cx="218" cy="177" r="4.6"/>
+              <circle cx="248" cy="184" r="4.6"/>
+              <circle cx="191" cy="204" r="4.6"/>
+              <circle cx="224" cy="207" r="4.6"/>
+              <circle cx="264" cy="208" r="4.6"/>
+              <circle cx="243" cy="215" r="4.6"/>
+              <circle cx="216" cy="255" r="4.6"/>
+              <circle cx="268" cy="274" r="4.6"/>
+              <circle cx="261" cy="251" r="4.6"/>
+              <circle cx="339" cy="228" r="4.6"/>
+              <circle cx="309" cy="223" r="4.6"/>
+              <circle cx="331" cy="268" r="4.6"/>
+              <circle cx="352" cy="298" r="4.6"/>
+          </g>
+        </svg>
+        <p class="carte-nord__legende">
+          <span aria-hidden="true"></span> Secteurs couverts
+        </p>
+        <p class="carte-nord__note">
+          Carte schématique. Nous intervenons dans les huit secteurs du
+          département : métropole lilloise, Pévèle, Douaisis, Valenciennois,
+          Flandre intérieure, Dunkerquois, Cambrésis et Avesnois.
+        </p>
+      </div>
+
+      <div class="zone">
+        <p class="zone__secteur"><span data-geo="secteur">le Nord</span></p>
+        <p class="zone__texte">
+          Nous intervenons <span data-geo="a-ville">dans le Nord</span> et dans
+          les communes environnantes. Le technicien se déplace depuis son
+          secteur habituel : c’est ce qui permet un rappel rapide et une visite
+          sans frais de déplacement facturés.
+        </p>
+        <ul class="puces-communes" data-geo="voisines">
+          <li>Métropole lilloise</li><li>Pévèle</li><li>Douaisis</li>
+          <li>Valenciennois</li><li>Flandre intérieure</li><li>Dunkerquois</li>
+          <li>Cambrésis</li><li>Avesnois</li>
+        </ul>
+        <p class="zone__note">
+          Votre commune n’apparaît pas ? Tant que le code postal commence par
+          59, la demande est traitée.
+        </p>
+      </div>
     </div>
   </div>
 </section>

@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="675" viewBox="0 0 900 675" role="img" aria-label="PHOTO « AVANT »">
-  <rect width="900" height="675" fill="#DDE3EA"/>
-  <rect x="1" y="1" width="898" height="673" fill="none" stroke="#C3CEDC" stroke-width="2"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="PHOTO « AVANT »">
+  <rect width="1600" height="900" fill="#DDE3EA"/>
+  <rect x="1" y="1" width="1598" height="898" fill="none" stroke="#C3CEDC" stroke-width="2"/>
   <g font-family="Helvetica, Arial, sans-serif" text-anchor="middle" fill="#7A8899">
-    <text x="450" y="329" font-size="30" font-weight="bold">PHOTO « AVANT »</text>
-    <text x="450" y="363" font-size="16">Toit charge de mousse — meme angle que la photo « apres »</text>
+    <text x="800" y="440" font-size="46" font-weight="bold">PHOTO « AVANT »</text>
+    <text x="800" y="484" font-size="22">a deposer : assets/img/avant-hazebrouck.jpg</text>
   </g>
 </svg>

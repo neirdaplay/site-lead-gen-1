@@ -174,22 +174,55 @@ grep -rn "a-completer" *.html
 ### Photos
 
 `assets/img/` contient des **gabarits gris aux bonnes dimensions** : la mise en
-page est déjà juste, remplacer une image ne déplacera rien.
+page est déjà juste, déposer une photo ne déplacera rien.
 
-| Fichier | Ce qu'il faut |
-|---|---|
-| `hero-couvreur.svg` | Fond du hero, sous un voile bleu nuit à 72 % (80 % sur mobile). Technicien en action sur un toit en tuiles, lumière naturelle, ciel du Nord. Sujet décentré à droite : le texte occupe la gauche sur desktop. Format 16/10, 1600 × 1000 px minimum. |
-| `avant.svg` | Toit chargé de mousse, avant intervention. |
-| `apres.svg` | **Le même toit, le même angle, la même heure**, après reprotection. C'est le « même angle » qui rend la preuve crédible : repérez un point fixe (souche de cheminée, poteau) et gardez-le au même endroit dans le cadre. Format 4/3, 900 × 675 px minimum. |
-| `og-partage.svg` | Aperçu lors d'un partage. 1200 × 630 px exactement. |
+Trois fichiers à déposer, **exactement sous ces noms** :
 
-Remplacez les fichiers par des `.jpg` et mettez à jour les trois références dans
-`index.html` (`.hero__fond` dans le `<style>`, et les deux `<img>`). Conservez
-les attributs `width` et `height` : c'est ce qui garantit un CLS nul.
+| Fichier à déposer | Emplacement sur la page | Format |
+|---|---|---|
+| `assets/img/hero-couvreur.jpg` | Fond du hero, sous un voile bleu nuit à 72 % (80 % sur mobile) | Paysage, 1600 × 1000 px minimum |
+| `assets/img/avant-hazebrouck.jpg` | Vignette « Avant » | 16/9, 1600 × 900 px |
+| `assets/img/apres-hazebrouck.jpg` | Vignette « Après » | 16/9, 1600 × 900 px |
 
-> **Ne rédigez pas de légendes inventées.** Tant que les vraies photos ne sont
-> pas là, la commune reste marquée « à renseigner ». Une légende fausse est une
-> pratique commerciale trompeuse.
+**Il n'y a rien d'autre à modifier dans le code** : les trois chemins sont déjà
+en place.
+
+- Le hero est un `background-image` à deux valeurs : le navigateur prend le
+  `.jpg` s'il existe, sinon le gabarit `.svg`, sinon il reste sur le bleu nuit.
+  Jamais d'image cassée.
+- Les deux vignettes portent un attribut `onerror` qui bascule sur le gabarit
+  tant que le `.jpg` est absent. **Retirez ces deux `onerror`** une fois les
+  vraies photos déposées : le repli n'a plus de raison d'être, et une image
+  réellement manquante doit se voir.
+
+Pour le hero, choisissez une photo lumineuse : le voile bleu couvre 72 % de
+l'image, une prise de vue sombre disparaît. Sujet décentré vers la droite, le
+texte occupe la gauche sur desktop.
+
+Pour l'avant / après, le **même angle** est ce qui rend la preuve crédible :
+repérez un point fixe (souche de cheminée, poteau, lampadaire) et gardez-le au
+même endroit dans le cadre.
+
+> **Les légendes mentionnent Hazebrouck.** Si vous changez de chantier, changez
+> la commune dans les deux `figcaption` et dans le sous-titre de la section.
+> Ne légendez jamais une photo avec une commune où le chantier n'a pas eu lieu.
+
+### Chiffres affichés
+
+La section « Intervention dans le Nord » affiche **2012** (année de création),
+**250** chantiers par an et **3 000+** toitures traitées depuis l'ouverture.
+
+Ce sont des affirmations commerciales au sens du Code de la consommation :
+elles doivent rester **exactes et justifiables**. Mettez-les à jour quand elles
+évoluent, et ne les arrondissez jamais vers le haut. Un commentaire le rappelle
+à l'endroit du code concerné.
+
+La carte est un tracé schématique du département, dessiné à la main en SVG
+inline — aucune requête réseau. Les points verts marquent les **secteurs
+couverts**, pas des chantiers précis : c'est ce que dit la légende, et c'est
+volontaire tant qu'on ne dispose pas de la liste réelle des communes. Si vous
+voulez qu'ils représentent de vrais chantiers, remplacez les coordonnées des
+`<circle>` et reformulez la légende en conséquence.
 
 ---
 
@@ -363,5 +396,7 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] Notification e-mail Netlify Forms activée vers l'adresse de contact
 - [ ] Une soumission de test déclenche bien la notification Telegram
 - [ ] Plus aucune occurrence de `a-completer` : `grep -rn "a-completer" *.html`
-- [ ] Photos réelles en place, communes exactes dans les légendes
+- [ ] Les trois photos déposées sous les noms exacts, `onerror` retirés
+- [ ] Commune des légendes avant / après exacte (Hazebrouck par défaut)
+- [ ] Chiffres 2012 / 250 / 3 000+ vérifiés et à jour
 - [ ] Test sur mobile réel : le formulaire est visible sans défilement
