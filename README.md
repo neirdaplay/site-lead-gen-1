@@ -178,11 +178,21 @@ page est déjà juste, déposer une photo ne déplacera rien.
 
 Trois fichiers à déposer, **exactement sous ces noms** :
 
-| Fichier à déposer | Emplacement sur la page | Format |
-|---|---|---|
-| `assets/img/hero-couvreur.jpg` | Fond du hero, sous un voile bleu nuit à 72 % (80 % sur mobile) | Paysage, 1600 × 1000 px minimum |
-| `assets/img/avant-hazebrouck.jpg` | Vignette « Avant » | 16/9, 1600 × 900 px |
-| `assets/img/apres-hazebrouck.jpg` | Vignette « Après » | 16/9, 1600 × 900 px |
+| Fichier | Emplacement sur la page | Format | État |
+|---|---|---|---|
+| `assets/img/hero-couvreur.jpg` | Fond du hero, en faible opacité sous le voile bleu nuit | Paysage, 1600 px de large | **en place** |
+| `assets/img/avant-hazebrouck.jpg` | Vignette « Avant » | 16/9, 1600 × 900 px | à déposer |
+| `assets/img/apres-hazebrouck.jpg` | Vignette « Après » | 16/9, 1600 × 900 px | à déposer |
+
+> **Compressez avant de déposer.** La photo du hero est arrivée en
+> 2560 × 1707 pour 545 Ko ; elle a été ramenée à 1600 px et 157 Ko, soit
+> 71 % de moins, sans différence visible. C'est la ressource la plus lourde
+> de la page et elle pèse directement sur le temps de chargement en 4G.
+> Visez **moins de 200 Ko** pour chaque photo, en 1600 px de large.
+>
+> Et **un seul fichier par image** : un `hero-couvreur.jpeg` en doublon du
+> `.jpg` a été supprimé. Le nom attendu est celui du tableau ci-dessus, à la
+> lettre près.
 
 **Il n'y a rien d'autre à modifier dans le code** : les trois chemins sont déjà
 en place.
@@ -414,7 +424,8 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] Notification e-mail Netlify Forms activée vers l'adresse de contact
 - [ ] Une soumission de test déclenche bien la notification Telegram
 - [ ] Plus aucune occurrence de `a-completer` : `grep -rn "a-completer" *.html`
-- [ ] Les trois photos déposées sous les noms exacts, `onerror` retirés
+- [x] Photo du hero déposée et compressée
+- [ ] Photos avant / après déposées sous les noms exacts, `onerror` retirés
 - [ ] Commune des légendes avant / après exacte (Hazebrouck par défaut)
 - [ ] Chiffres 2012 / 250 / 3 000+ vérifiés et à jour
 - [ ] Test sur mobile réel : le formulaire est visible sans défilement

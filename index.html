@@ -88,10 +88,13 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
      .hero__fond opacity  -> combien de photo on laisse passer
      .hero__voile alpha   -> intensite du bleu par-dessus
    Le navigateur prend le premier fichier trouve ; si aucun n'existe, il
-   ne reste que le bleu nuit — jamais d'image cassee. */
+   ne reste que le bleu nuit — jamais d'image cassee.
+   background-position 60% : sans effet sur desktop (la photo fait
+   exactement la largeur du bloc), mais sur mobile le cadrage est bien plus
+   haut que large et 60% garde le couvreur dans le champ. */
 .hero__fond{position:absolute;inset:0;opacity:.18;
 background-image:url('assets/img/hero-couvreur.jpg'),url('assets/img/hero-couvreur.svg');
-background-size:cover;background-position:center 38%}
+background-size:cover;background-position:60% 38%}
 .hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.45)}
 .hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding:20px 0 30px}
 .hero__badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
