@@ -431,6 +431,9 @@ export default async function submitLead(request) {
   });
 }
 
-export const config = {
-  path: '/.netlify/functions/submit-lead'
-};
+/* Pas d'export `config` ici. En Functions v2, declarer un `path` REMPLACE
+   la route par defaut, et le prefixe reserve /.netlify/functions/ y est
+   refuse : la fonction devient injoignable a sa propre URL (404).
+   On garde donc la route automatique /.netlify/functions/submit-lead,
+   celle qu'appellent form.js et le beacon anti-abandon. L'alias court
+   /api/lead est fourni par une redirection dans netlify.toml. */

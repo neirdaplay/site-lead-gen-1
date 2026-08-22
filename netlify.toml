@@ -6,17 +6,36 @@
 # ==================================================================
 
 [build]
+  # Le site est a la racine du depot : index.html et les pages legales y
+  # sont, /assets et /shared sont publies tels quels. netlify/ et
+  # node_modules/ ne sont jamais servis.
   publish = "."
   functions = "netlify/functions"
+  edge_functions = "netlify/edge-functions"
   # Pas de commande de build : le dossier est servi tel quel.
   command = ""
 
 [functions]
   node_bundler = "esbuild"
 
-# Les Edge Functions sont declarees en ligne, via `export const config`
-# dans netlify/edge-functions/geo.js. Ne PAS les redeclarer ici : cela
-# provoquerait une double execution sur la meme requete.
+# ------------------------------------------------------------------
+# Edge Functions
+# Declarees ICI et nulle part ailleurs : geo.js n'exporte plus de
+# `config`, pour eviter toute double declaration.
+# Le dossier netlify/edge-functions/ ne contient que geo.js — voir son
+# README : tout fichier .js qui s'y trouve est traite comme une fonction
+# et doit exporter par defaut une fonction appelable. Les modules et les
+# donnees partages vivent dans netlify/lib/ et shared/.
+# ------------------------------------------------------------------
+[[edge_functions]]
+  function = "geo"
+  path = "/"
+  cache = "manual"
+
+[[edge_functions]]
+  function = "geo"
+  path = "/index.html"
+  cache = "manual"
 
 # ------------------------------------------------------------------
 # En-tetes

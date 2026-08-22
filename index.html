@@ -205,41 +205,22 @@ margin:0;padding:14px 0;list-style:none}
 @media (min-width:1280px){.hero__titre{font-size:46px}}
 </style>
 
-<!-- Table des communes : chargee de maniere SYNCHRONE pour que le script
-     suivant puisse ecrire le titre personnalise AVANT la premiere peinture. -->
-<script src="/assets/js/communes.js"></script>
 <script>
 /* ==================================================================
-   GEO-PERSONNALISATION — repli sans flash
-   En production, l'Edge Function /netlify/edge-functions/geo.js a deja
+   GEO-PERSONNALISATION
+   En production, l'Edge Function netlify/edge-functions/geo.js a deja
    reecrit le HTML et injecte window.__GEO a la place du marqueur GEO
-   place en tete de <head>.
-   Ce bloc ne sert que si l'Edge Function n'a pas tourne (preview local,
-   hebergement statique nu). Ordre : ?ville= > __GEO injecte > generique.
+   place en tete de <head> : le navigateur ne voit JAMAIS la version
+   generique, il n'y a donc aucun flash et rien a faire ici.
+
+   Ce bloc ne fait que deux choses :
+     - garantir que window.__GEO existe toujours (repli generique) ;
+     - exposer __appliquerGeo(), utilise par le repli asynchrone de
+       assets/js/communes.js quand l'Edge Function n'a pas tourne
+       (apercu local, hebergement statique nu).
    ================================================================== */
 (function () {
   'use strict';
-  function param(nom) {
-    var r = new RegExp('[?&]' + nom + '=([^&#]*)');
-    var m = r.exec(window.location.search);
-    if (!m) { return ''; }
-    try { return decodeURIComponent(m[1].replace(/\+/g, ' ')); }
-    catch (e) { return m[1]; }
-  }
-
-  var villeURL = param('ville');
-  var dejaResolu = window.__GEO && window.__GEO.source === 'edge';
-
-  if (villeURL && window.MCN_GEO) {
-    var r = window.MCN_GEO.resoudre(villeURL, param('cp'));
-    if (r.connue) {
-      window.__GEO = {
-        ville: r.ville, secteur: r.secteur, aVille: r.aVille,
-        enSecteur: r.enSecteur, voisines: r.voisines, source: 'url'
-      };
-      dejaResolu = true;
-    }
-  }
   if (!window.__GEO) {
     window.__GEO = {
       ville: '', secteur: 'le Nord', aVille: 'dans le Nord',
@@ -249,6 +230,8 @@ margin:0;padding:14px 0;list-style:none}
 
   window.__appliquerGeo = function () {
     var g = window.__GEO;
+    /* 'edge'      : le HTML est deja personnalise, ne rien retoucher.
+       'generique' : rien a personnaliser. */
     if (!g || g.source === 'edge' || g.source === 'generique') { return; }
     var cles = { 'a-ville': g.aVille, 'en-secteur': g.enSecteur, 'secteur': g.secteur };
     for (var cle in cles) {
@@ -272,9 +255,6 @@ margin:0;padding:14px 0;list-style:none}
         ' (59) — un couvreur vous rappelle sous 48 h';
     }
   };
-  if (dejaResolu) {
-    document.addEventListener('DOMContentLoaded', window.__appliquerGeo);
-  }
 })();
 </script>
 
@@ -781,10 +761,6 @@ gtag('set', 'url_passthrough', true);
   </div>
 </div>
 
-<!-- Applique la personnalisation aux elements deja analyses (repli sans
-     Edge Function). Place juste apres le hero : s'execute avant que le
-     navigateur n'ait peint le bas de page. -->
-<script>if(window.__appliquerGeo){window.__appliquerGeo();}</script>
 
 <!-- ================= COMMENT CA MARCHE ================= -->
 <section class="section section--blanc" aria-labelledby="titre-etapes">
@@ -1634,6 +1610,7 @@ gtag('set', 'url_passthrough', true);
   </div>
 </noscript>
 
+<script src="/assets/js/communes.js" defer></script>
 <script src="/assets/js/tracking.js" defer></script>
 <script src="/assets/js/form.js" defer></script>
 <script>

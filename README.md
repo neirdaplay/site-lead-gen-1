@@ -303,13 +303,24 @@ elle réécrit le HTML **avant l'envoi**, si bien que le navigateur ne voit jama
 la version générique. Elle injecte aussi `window.__GEO` et `window.__T0`
 (horodatage serveur pour le contrôle anti-robot).
 
-Un **script inline synchrone** dans le `<head>` sert de filet de sécurité quand
-l'Edge Function n'a pas tourné (aperçu local, hébergement statique nu) : il lit
-`?ville=`, résout la commune et écrit le texte avant la première peinture.
-Il ne fait rien si l'Edge Function a déjà travaillé.
+Concrètement, la commune est déjà dans le flux d'octets : un `curl` sur la page
+renvoie `<em data-geo="a-ville">à Orchies</em>` **avant qu'aucun JavaScript ne
+s'exécute**. Il n'y a donc rien à faire côté client, et rien qui puisse clignoter.
+
+En conséquence, **le navigateur ne télécharge pas la table des communes** : ni
+script bloquant dans le `<head>`, ni `communes.json`. C'est l'Edge Function qui
+a résolu, et elle passe le résultat par `window.__GEO`.
+
+Un **repli** vit dans `assets/js/communes.js`, chargé en `defer`. Il ne se
+déclenche que si l'Edge Function n'a pas tourné (aperçu local, hébergement
+statique nu) **et** qu'un paramètre `?ville=` est présent : il charge alors
+`shared/communes.json`, résout, et applique. Ce chemin-là est asynchrone — il
+sert au développement, pas à la production.
 
 Le bloc titre porte un `min-height` calé sur trois lignes en mobile et deux en
 desktop, testé avec « Villeneuve-d'Ascq », la commune la plus longue de la table.
+Sa hauteur mesurée est identique pour toutes les communes, à chaque point de
+rupture : même sur le chemin de repli, aucun décalage de mise en page.
 
 ### Où la personnalisation apparaît
 
@@ -330,16 +341,31 @@ recherche sur les sites géo-programmatiques.
 
 ### Ajouter des communes
 
-La table existe en **deux exemplaires volontairement identiques**, parce que le
-navigateur a besoin d'un script classique et Deno d'un module ESM, et qu'il n'y
-a pas d'étape de build pour les générer :
+Il n'existe **qu'une seule source de vérité** : `shared/communes.json`.
+Aucune donnée n'est dupliquée ailleurs.
 
-- `assets/js/communes.js` — version navigateur, expose `window.MCN_GEO` ;
-- `netlify/edge-functions/communes.js` — version ESM de l'Edge Function.
+| Fichier | Rôle |
+|---|---|
+| `shared/communes.json` | **La donnée.** 377 communes réparties en 8 secteurs, plus les libellés accentués. C'est le seul fichier à modifier. |
+| `netlify/lib/communes.js` | La logique de résolution, côté serveur. Importe le JSON (`with { type: "json" }`) ; esbuild l'incorpore au bundle de l'Edge Function. |
+| `assets/js/communes.js` | La même logique, côté navigateur. **Ne contient aucune donnée** : il charge le JSON, et uniquement quand il en a besoin. |
 
-**Toute commune ajoutée doit l'être dans les deux fichiers.** Les tableaux sont
-ordonnés géographiquement : les communes voisines proposées sont les entrées les
-plus proches dans le tableau du secteur.
+Les tableaux sont ordonnés géographiquement : les communes voisines proposées
+sont les entrées les plus proches dans le tableau du secteur. Ajouter une
+commune consiste donc à l'insérer **au bon endroit** dans la liste de son
+secteur, pas à la mettre en fin de tableau.
+
+Si le libellé comporte un accent, une apostrophe ou une ligature, ajoutez-le
+aussi dans `libelles`, indexé sur sa forme normalisée (minuscules, sans accent,
+sans séparateur) — par exemple `"villeneuvedascq": "Villeneuve-d'Ascq"`.
+
+### Où vivent les Edge Functions
+
+`netlify/edge-functions/` ne doit contenir **que des Edge Functions** : Netlify
+traite chaque fichier `.js` de ce dossier comme une fonction et exige un export
+par défaut appelable. Y déposer un module de données fait échouer le bundling au
+déploiement. Les modules partagés vont dans `netlify/lib/`, les données dans
+`shared/`. Un `README.md` d'une ligne rappelle la règle sur place.
 
 La résolution tolère les variantes courantes : accents, apostrophes, casse,
 « Orchies, Nord, France », et les formes abrégées non ambiguës (`Templeuve` →
@@ -429,11 +455,13 @@ rafraîchissement accidentel — jamais dans `localStorage`.
 ├── netlify.toml                    publication, en-têtes, redirections
 ├── package.json                    une seule dépendance : @netlify/blobs
 ├── .env.example                    modèle des variables d'environnement
+├── shared/
+│   └── communes.json               SOURCE UNIQUE : communes → secteur
 ├── assets/
 │   ├── css/main.css                feuille différée (sous la ligne de flottaison)
 │   ├── js/tracking.js              attribution, dataLayer, Consent Mode, cookies
 │   ├── js/form.js                  formulaire 5 étapes, disqualification
-│   ├── js/communes.js              table communes → secteur (navigateur)
+│   ├── js/communes.js              logique de résolution, sans donnée (repli)
 │   ├── fonts/                      Inter auto-hébergée, woff2, 4 graisses
 │   └── img/
 │       ├── SHOTLIST.md             visuels à produire, spécifications complètes
@@ -441,10 +469,14 @@ rafraîchissement accidentel — jamais dans `localStorage`.
 │       └── placeholder/            gabarits gris aux dimensions exactes
 └── netlify/
     ├── functions/submit-lead.js    réception, validation, stockage, Telegram
+    ├── lib/communes.js             logique de résolution, côté serveur
     └── edge-functions/
-        ├── geo.js                  réécriture du HTML avant envoi
-        └── communes.js             table communes → secteur (ESM, copie)
+        ├── README.md               la règle du dossier, en une ligne
+        └── geo.js                  réécriture du HTML avant envoi
 ```
+
+`netlify/edge-functions/` ne contient qu'un seul fichier `.js`, et c'est
+volontaire : voir « Où vivent les Edge Functions » plus haut.
 
 Le CSS critique est **inline dans le `<head>`** de chaque page ; `main.css` est
 chargé en différé (`rel=preload` + bascule `rel=stylesheet`, avec repli
@@ -466,6 +498,9 @@ chargé en différé (`rel=preload` + bascule `rel=stylesheet`, avec repli
 - `width` et `height` explicites sur toutes les images.
 - Cache long et immuable sur les polices, une semaine sur CSS/JS, aucun cache
   partagé sur le HTML (il est personnalisé par commune).
+- **Aucun script bloquant dans le `<head>`** : la table des communes n'est pas
+  expédiée au navigateur en production, l'Edge Function ayant déjà résolu la
+  commune côté serveur.
 - Aucune bibliothèque tierce, aucune animation au défilement,
   `prefers-reduced-motion` respecté.
 
