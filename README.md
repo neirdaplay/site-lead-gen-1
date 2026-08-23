@@ -3,7 +3,8 @@
 Page unique de captation de demandes de devis en toiture, alimentée par Google
 Ads Search. **Tout le site tient dans `index.html`** : le HTML, le CSS dans une
 balise `<style>`, le JavaScript dans une balise `<script>`. Aucun framework,
-aucune dépendance, aucune étape de build, **aucune requête réseau externe**.
+aucune dépendance, aucune étape de build. Le **seul** domaine tiers appelé
+est celui de la balise Google Ads, et uniquement sur le site en ligne.
 
 `index.html` s'ouvre et fonctionne en double-cliquant dessus en local. Seul
 l'envoi final du formulaire nécessite le site en ligne — c'est indiqué à
@@ -409,11 +410,58 @@ injectées dans les champs cachés au moment de l'envoi.
 
 Le script pousse par ailleurs des événements dans `window.dataLayer`
 (`form_start`, `form_step`, `lead_submit`, `lead_disqualified`, `phone_click`,
-`cta_formulaire`). **Aucune requête n'est faite** : c'est un simple tableau en
-mémoire. Si vous ajoutez un jour un conteneur GTM, branchez la conversion
-Google Ads sur **`lead_submit` et sur lui seul** — jamais sur
-`lead_disqualified`, sans quoi l'algorithme apprendrait à acheter des locataires
-et des demandes hors zone.
+`cta_formulaire`, `consentement_pub`). Le push lui-même ne fait aucune requête :
+c'est un tableau en mémoire, que la balise Google lit.
+
+### Balise Google Ads
+
+`AW-18335177160`, posée en clair dans le `<head>` de `index.html`. Un
+identifiant de conversion **n'est pas un secret** : il figure dans le HTML de
+tout site qui mesure ses conversions, et n'a rien à faire en variable
+d'environnement.
+
+> **À faire une fois, sinon Google Ads ne comptera aucun lead.**
+> La conversion est branchée mais l'étiquette manque. Dans Google Ads :
+> **Objectifs → Conversions →** votre action de conversion **→ Balise Google**,
+> copiez la valeur `send_to` complète (de la forme
+> `AW-18335177160/AbC-D_efGhIjKlMnOp`) et collez-la dans la constante
+> `CONVERSION_LEAD` de `index.html`. Tant qu'elle est vide, la console affiche
+> un avertissement à chaque envoi et aucune conversion ne part.
+
+La conversion se déclenche sur **`lead_submit` et sur lui seul** — c'est-à-dire
+après un enregistrement confirmé par le serveur. Ni l'ouverture du formulaire,
+ni un clic sur le téléphone, ni `lead_disqualified` ne comptent : sans quoi
+l'algorithme apprendrait à acheter des locataires et des demandes hors zone.
+
+**Aucune donnée du formulaire n'est transmise à Google** : ni nom, ni adresse
+électronique, ni téléphone, ni code postal. Les « conversions améliorées » ne
+sont pas activées.
+
+### Consentement (Consent Mode v2)
+
+Les quatre signaux — `ad_storage`, `ad_user_data`, `ad_personalization`,
+`analytics_storage` — sont à `denied` au chargement, **avant** la commande
+`config`. Sans action du visiteur, Google ne dépose aucun cookie et ne reçoit
+qu'un signal anonyme, dont il tire une modélisation des conversions.
+
+Un bandeau demande le choix à la première visite. Refuser et accepter ont la
+même taille et le même poids visuel, comme l'exige la CNIL. La réponse est
+gardée six mois dans le cookie first-party `consentement_pub` ; la supprimer
+fait réapparaître le bandeau. Le bandeau masque la barre mobile tant qu'il est
+affiché, pour ne pas empiler deux barres en bas de l'écran.
+
+**En aperçu local (`file://`), le script Google n'est pas injecté et le bandeau
+ne s'affiche pas** : le double-clic sur `index.html` reste sans aucune requête
+sortante.
+
+### Si la balise ne se déclenche pas
+
+Le CSP de `netlify.toml` est en liste blanche stricte. Il autorise
+nommément `www.googletagmanager.com`, `www.googleadservices.com`,
+`googleads.g.doubleclick.net`, `td.doubleclick.net`, `www.google.com`,
+`www.google.fr` et `pagead2.googlesyndication.com`. Si vous ajoutez un autre
+outil Google, il faudra l'y déclarer, sinon le navigateur le bloquera
+silencieusement — la console indique alors « Refused to load ».
 
 ---
 
@@ -445,16 +493,17 @@ Ces absences sont des décisions, pas des oublis :
 - **Aucun faux avis, aucune fausse note, aucun compteur de chantiers inventé.**
   Le bloc « avis » existe, est stylé, et reste `hidden` tant qu'il n'y a pas de
   vrais avis Google. Le commentaire dans `index.html` indique où les brancher.
-  Attention : un widget chargé depuis un domaine tiers casserait la règle
-  « zéro requête réseau externe » — préférez une recopie manuelle depuis la
+  Attention : un widget chargé depuis un domaine tiers serait à la fois une
+  requête de plus et une ligne de plus au CSP — préférez une recopie manuelle depuis la
   fiche, avec le lien public vers celle-ci pour vérification.
 - **Aucun flux d'activité en direct, aucun compte à rebours, aucune rareté
   artificielle, aucune promesse de résultat non vérifiable.**
 - **Aucune affirmation d'implantation locale.** « Intervention à », jamais
   « Basé à ».
 - **Aucune police externe** : pile système. **Aucun CDN, aucune bibliothèque
-  d'icônes, aucun outil de mesure d'audience.** L'onglet Network doit rester
-  vide de tout domaine tiers.
+  d'icônes, aucun outil de mesure d'audience.** Le seul domaine tiers toléré
+  dans l'onglet Network est celui de la balise Google Ads ; tout autre est une
+  régression.
 - **Aucun service en dehors des trois proposés.** Ni gouttières, ni zinguerie,
   ni toit plat, ni isolation, ni étanchéité, ni réparation d'urgence comme
   prestation distincte.
@@ -467,7 +516,10 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 ## 12. Checklist de vérification
 
 - [ ] `index.html` s'ouvre et fonctionne en double-cliquant dessus, hors serveur
-- [ ] Onglet Network : aucune requête vers un domaine tiers
+- [ ] Onglet Network : aucune requête tierce hors domaines Google Ads
+- [ ] `CONVERSION_LEAD` renseignée dans `index.html`, conversion visible dans Google Ads
+- [ ] Bandeau de consentement : « Refuser » puis « Accepter » testés, choix mémorisé
+- [ ] Aucun « Refused to load » dans la console (CSP)
 - [ ] Le build Netlify passe sans erreur
 - [ ] **Form detection activée** dans Forms → Usage and configuration, puis site redéployé
 - [ ] Le formulaire `lead` apparaît dans **Forms** après le premier déploiement

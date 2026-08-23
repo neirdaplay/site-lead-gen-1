@@ -124,10 +124,18 @@ font-size:13px;line-height:1.65;color:var(--note)}
 
       <h2>2. Données collectées</h2>
       <p>
-        <b>Aucune donnée n’est collectée par la simple consultation de la page.</b>
-        Le site ne charge aucun script tiers, aucune police externe, aucun outil
-        de mesure d’audience et aucun réseau publicitaire : il n’effectue
-        <b>aucune requête vers un serveur autre que le sien</b>.
+        Le site ne charge <b>ni police externe, ni CDN, ni bibliothèque tierce,
+        ni outil de mesure d’audience</b>. Un seul script tiers est présent : la
+        balise Google Ads, qui sert à savoir quelle annonce a mené à une demande
+        de devis.
+      </p>
+      <p>
+        Cette balise est régie par votre choix. <b>Tant que vous n’avez pas
+        accepté, elle ne dépose aucun cookie et ne transmet aucun identifiant</b> :
+        elle se limite à un signal anonyme, dont Google tire une estimation
+        statistique du nombre de demandes. Si vous acceptez, elle dépose les
+        cookies décrits à l’article 7. Le détail figure à l’article 7, et vous
+        pouvez revenir sur votre choix à tout moment.
       </p>
 
       <h3>2.1 Données que vous saisissez dans le formulaire</h3>
@@ -236,6 +244,15 @@ font-size:13px;line-height:1.65;color:var(--note)}
         </li>
       </ul>
       <p>
+        <b>Google n’en fait pas partie.</b> Si vous avez accepté la balise
+        publicitaire (article 7), Google reçoit uniquement le signal
+        « une demande de devis a été envoyée », rattaché au clic publicitaire.
+        <b>Aucun champ du formulaire ne lui est transmis</b> : ni votre nom, ni
+        votre adresse électronique, ni votre numéro de téléphone, ni votre code
+        postal. La fonctionnalité de « conversions améliorées », qui enverrait
+        vos coordonnées sous forme chiffrée, n’est pas activée.
+      </p>
+      <p>
         Vos données peuvent enfin être communiquées à une autorité judiciaire ou
         administrative, sur réquisition régulière.
       </p>
@@ -289,12 +306,16 @@ font-size:13px;line-height:1.65;color:var(--note)}
 
       <h2>7. Cookies</h2>
       <p>
-        Le site ne dépose <b>qu’un seul cookie</b>, et il n’est déposé qu’à des
-        fins de rattachement de votre demande à la campagne dont elle provient.
-        <b>Aucun cookie publicitaire, aucun cookie de mesure d’audience et aucun
-        traceur tiers</b> n’est utilisé, puisque le site ne charge aucun script
-        externe.
+        Le site distingue deux catégories. La première est déposée sans votre
+        accord parce qu’elle est strictement nécessaire au service que vous
+        demandez ; la seconde ne l’est <b>qu’après votre acceptation</b> du
+        bandeau affiché à votre première visite.
       </p>
+      <p>
+        <b>Aucun cookie de mesure d’audience</b> n’est utilisé : le site n’a ni
+        Google Analytics, ni équivalent.
+      </p>
+      <h3>7.1 Cookies nécessaires, déposés sans consentement</h3>
       <div class="tableau">
         <table>
           <thead>
@@ -312,13 +333,62 @@ font-size:13px;line-height:1.65;color:var(--note)}
               </td>
               <td>90 jours</td>
             </tr>
+            <tr>
+              <th scope="row"><code>consentement_pub</code></th>
+              <td>
+                Cookie <b>first-party</b>. Il retient votre réponse au bandeau —
+                accepté ou refusé — pour ne pas vous reposer la question à
+                chaque visite. Il ne contient que ce choix.
+              </td>
+              <td>6 mois</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>7.2 Cookie publicitaire, déposé seulement si vous l’acceptez</h3>
+      <div class="tableau">
+        <table>
+          <thead>
+            <tr><th scope="col">Cookie</th><th scope="col">Finalité</th><th scope="col">Durée</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>_gcl_*</code> (Google)</th>
+              <td>
+                Déposés par la <b>balise Google Ads</b> une fois que vous avez
+                accepté. Ils permettent de rattacher votre demande de devis à
+                l’annonce sur laquelle vous avez cliqué, afin de savoir quelles
+                annonces sont utiles. <b>Ils ne servent ni à vous afficher de la
+                publicité ciblée sur d’autres sites, ni à constituer un profil
+                publicitaire</b> : aucune campagne de reciblage n’est active.
+              </td>
+              <td>90 jours au plus</td>
+            </tr>
           </tbody>
         </table>
       </div>
       <p>
-        Vous pouvez le supprimer à tout moment depuis les réglages de votre
-        navigateur, ou refuser tous les cookies : le formulaire continuera de
-        fonctionner normalement.
+        Le responsable de ces cookies est <b>Google Ireland Limited</b>, Gordon
+        House, Barrow Street, Dublin 4, Irlande. Les données correspondantes
+        peuvent être transférées à Google LLC aux États-Unis, sur la base de la
+        <b>décision d’adéquation</b> de la Commission européenne du 10 juillet
+        2023 relative au cadre de protection des données UE — États-Unis, dont
+        Google est certifié. Les règles de Google sont détaillées sur
+        <a href="https://policies.google.com/privacy" rel="noopener nofollow" target="_blank">policies.google.com/privacy</a>.
+      </p>
+
+      <h3>7.3 Revenir sur votre choix</h3>
+      <p>
+        Supprimez le cookie <code>consentement_pub</code> depuis les réglages de
+        votre navigateur : le bandeau réapparaîtra à la visite suivante et vous
+        pourrez répondre à nouveau. Vous pouvez aussi supprimer l’ensemble des
+        cookies, ou les refuser globalement dans votre navigateur.
+      </p>
+      <p>
+        Dans tous les cas, <b>refuser ne dégrade rien</b> : le formulaire, la
+        détection de votre commune et le rappel sous 24 à 48 heures fonctionnent
+        à l’identique.
       </p>
 
       <h2>8. Vos droits</h2>

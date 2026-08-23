@@ -15,8 +15,11 @@
 
 # ------------------------------------------------------------------
 # En-tetes
-# La politique de securite est stricte parce que la page ne fait
-# AUCUNE requete reseau sortante : ni police, ni CDN, ni bibliotheque.
+# La politique reste en liste blanche stricte. Les seuls domaines tiers
+# autorises sont ceux de la balise Google Ads (mesure des conversions) :
+# le chargeur gtag, les points de collecte de conversion et l'iframe du
+# conversion linker. Tout le reste — polices, CDN, bibliotheques — reste
+# interdit, et la page n'en charge aucun.
 # 'unsafe-inline' est necessaire pour le CSS et le JS inline, qui sont
 # la contrainte du fichier unique.
 # ------------------------------------------------------------------
@@ -28,7 +31,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), interest-cohort=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com https://www.google.fr; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com https://www.google.fr https://pagead2.googlesyndication.com; frame-src https://td.doubleclick.net https://www.googletagmanager.com; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests"
 
 # Le HTML porte la personnalisation par commune : pas de cache partage.
 [[headers]]

@@ -18,6 +18,60 @@
 <meta property="og:image:height" content="630">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
+<!-- ==================================================================
+     Balise Google (gtag.js) — Google Ads AW-18335177160.
+     L'identifiant de conversion est public : il figure en clair dans le
+     HTML de tout site qui mesure ses conversions. Ce n'est pas un secret,
+     et il n'a rien a faire en variable d'environnement.
+
+     Consent Mode v2 : tout est refuse au chargement. Sans action du
+     visiteur, Google ne depose aucun cookie ; il ne recoit que des pings
+     sans identifiant, dont il tire une modelisation des conversions.
+     Les defauts doivent imperativement preceder la commande config.
+     ================================================================== -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+gtag('consent', 'default', {
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  analytics_storage: 'denied'
+});
+gtag('set', 'ads_data_redaction', true);
+gtag('set', 'url_passthrough', true);
+
+/* Un choix deja exprime est rejoue ici, de facon synchrone, pour que
+   l'etat de consentement soit exact des la premiere mesure. */
+(function () {
+  try {
+    var m = document.cookie.match(/(?:^|; )consentement_pub=([^;]*)/);
+    if (m && decodeURIComponent(m[1]) === 'accepte') {
+      gtag('consent', 'update', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted'
+      });
+    }
+  } catch (e) {}
+}());
+
+gtag('js', new Date());
+gtag('config', 'AW-18335177160');
+
+/* Le script Google n'est charge que sur un site en ligne. L'apercu local
+   par double-clic (file://) reste ainsi sans aucune requete sortante. */
+(function () {
+  if (window.location.protocol.indexOf('http') !== 0) { return; }
+  var b = document.createElement('script');
+  b.async = true;
+  b.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18335177160';
+  document.head.appendChild(b);
+}());
+</script>
+
 <style>
 /* ==================================================================
    Mon Couvreur Nord — feuille unique, inline.
@@ -391,6 +445,28 @@ border-radius:1px;background:currentColor;transform:translate(-50%,-50%);transit
 .pied a{color:var(--texte)}
 .pied__statut{margin:24px 0 0;padding-top:20px;border-top:1px solid var(--bord);font-size:12.5px;color:var(--note)}
 .pied__mention{margin:12px 0 0;font-size:12.5px}
+/* --- Bandeau de consentement publicitaire ---
+   Il masque la barre mobile tant qu'il est affiche : deux barres
+   collees en bas de l'ecran se marcheraient dessus. */
+.bandeau-cookies{position:fixed;left:0;right:0;bottom:0;z-index:70;
+background:var(--blanc);border-top:1px solid var(--bord);
+box-shadow:0 -4px 18px rgba(15,39,69,.13);
+padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
+.bandeau-cookies[hidden]{display:none}
+.bandeau-cookies__interne{display:flex;flex-direction:column;gap:12px}
+.bandeau-cookies__titre{margin:0 0 4px;font-size:15px;font-weight:700;color:var(--titre)}
+.bandeau-cookies__texte{margin:0;font-size:13.5px;line-height:1.5;color:var(--texte)}
+.bandeau-cookies__texte a{color:var(--bleu-clair)}
+/* Refuser et accepter ont la meme taille et le meme poids visuel :
+   refuser doit etre aussi simple qu'accepter. */
+.bandeau-cookies__actions{display:flex;gap:10px}
+.bandeau-cookies__actions .bouton{flex:1 1 50%;min-height:46px;padding:11px 14px;font-size:15px}
+body.a-bandeau .barre-mobile{display:none}
+@media (min-width:760px){
+.bandeau-cookies__interne{flex-direction:row;align-items:center;justify-content:space-between;gap:24px}
+.bandeau-cookies__actions{flex:0 0 auto}
+.bandeau-cookies__actions .bouton{flex:0 0 auto;min-width:132px}
+}
 .barre-mobile{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:10px;
 padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--blanc);
 border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
@@ -2098,6 +2174,30 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </footer>
 
 <!-- ================= BARRE COLLANTE MOBILE ================= -->
+<!-- ==================================================================
+     Consentement publicitaire. Affiche uniquement si aucun choix n'a
+     encore ete enregistre. Refuser n'empeche ni le formulaire ni le
+     cookie d'attribution first-party, qui n'est pas publicitaire.
+     ================================================================== -->
+<div class="bandeau-cookies" id="bandeau-cookies" role="region"
+     aria-labelledby="bandeau-titre" hidden>
+  <div class="container bandeau-cookies__interne">
+    <div>
+      <p class="bandeau-cookies__titre" id="bandeau-titre">Mesure de nos annonces</p>
+      <p class="bandeau-cookies__texte">
+        Nous aimerions déposer un cookie Google Ads pour savoir quelle annonce
+        a mené à votre demande. Il n’est déposé que si vous l’acceptez, et
+        refuser ne change rien au fonctionnement du formulaire.
+        <a href="confidentialite.html">En savoir plus</a>.
+      </p>
+    </div>
+    <div class="bandeau-cookies__actions">
+      <button type="button" class="bouton bouton--fantome" id="refuser-cookies">Refuser</button>
+      <button type="button" class="bouton bouton--vert" id="accepter-cookies">Accepter</button>
+    </div>
+  </div>
+</div>
+
 <div class="barre-mobile">
   <a class="bouton bouton--fantome" href="tel:+33786505580">
     <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-tel"></use></svg>
@@ -2150,10 +2250,10 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   var COOKIE_ATTR = 'attr';
   var DUREE_ATTR = 90;      /* jours */
 
-  /* Evenements pousses dans window.dataLayer. Aucune requete n'est faite :
-     c'est un simple tableau en memoire. Si un conteneur GTM est ajoute un
-     jour, il retrouvera l'historique et pourra brancher la conversion
-     Google Ads sur « lead_submit », et sur lui seul. */
+  /* Evenements pousses dans window.dataLayer. Le push lui-meme ne fait
+     aucune requete : c'est un tableau en memoire, que la balise Google
+     lit. La conversion Google Ads est declenchee separement, sur le seul
+     « lead_submit », par signalerConversion() ci-dessous. */
   window.dataLayer = window.dataLayer || [];
   function tracer(evenement, donnees) {
     var charge = { event: evenement };
@@ -2165,6 +2265,67 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  /* ================================================================
+     0. Google Ads — conversion et consentement
+     ================================================================ */
+
+  /* A RENSEIGNER. Google Ads > Objectifs > Conversions > votre action de
+     conversion > « Balise Google » : copier la valeur send_to complete,
+     de la forme AW-18335177160/AbC-D_efGhIjKlMnOp. Tant que la chaine
+     est vide, aucune conversion n'est envoyee — la balise de base
+     continue de fonctionner, mais Google Ads ne comptera aucun lead. */
+  var CONVERSION_LEAD = '';
+
+  function signalerConversion() {
+    if (!CONVERSION_LEAD) {
+      if (window.console && console.warn) {
+        console.warn('Google Ads : aucune conversion envoyee, CONVERSION_LEAD ' +
+          'est vide. Renseigner la valeur send_to dans index.html.');
+      }
+      return;
+    }
+    try { window.gtag('event', 'conversion', { send_to: CONVERSION_LEAD }); }
+    catch (e) {}
+  }
+
+  /* Le choix du visiteur vit dans un cookie first-party de six mois,
+     la duree recommandee par la CNIL avant de reposer la question. */
+  var COOKIE_CONSENT = 'consentement_pub';
+
+  function appliquerConsentement(accepte) {
+    ecrireCookie(COOKIE_CONSENT, accepte ? 'accepte' : 'refuse', 182);
+    var etat = accepte ? 'granted' : 'denied';
+    try {
+      window.gtag('consent', 'update', {
+        ad_storage: etat,
+        ad_user_data: etat,
+        ad_personalization: etat,
+        analytics_storage: etat
+      });
+    } catch (e) {}
+    tracer('consentement_pub', { choix: accepte ? 'accepte' : 'refuse' });
+  }
+
+  function preparerBandeau() {
+    var bandeau = $('#bandeau-cookies');
+    if (!bandeau) { return; }
+    /* Deja repondu, ou apercu local : on ne demande rien. */
+    if (lireCookie(COOKIE_CONSENT) ||
+        window.location.protocol.indexOf('http') !== 0) { return; }
+
+    bandeau.hidden = false;
+    document.body.classList.add('a-bandeau');
+
+    function repondre(accepte) {
+      appliquerConsentement(accepte);
+      bandeau.hidden = true;
+      document.body.classList.remove('a-bandeau');
+    }
+    var oui = $('#accepter-cookies'), non = $('#refuser-cookies');
+    if (oui) { oui.addEventListener('click', function () { repondre(true); }); }
+    if (non) { non.addEventListener('click', function () { repondre(false); }); }
+  }
 
   /* ================================================================
      1. Attribution — cookie first-party de 90 jours
@@ -2566,6 +2727,10 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         surface: ($('#h-surface') || {}).value || '',
         code_postal: (champCP || {}).value || ''
       });
+      /* Une conversion, et une seule : la demande est enregistree cote
+         serveur. Ni l'ouverture du formulaire ni un clic sur le
+         telephone ne comptent comme telle. */
+      signalerConversion();
       afficherEcran(ecranConfirmation, 'Votre demande est enregistrée.');
     })['catch'](function (erreur) {
       if (window.console && console.error) { console.error('Envoi impossible :', erreur); }
@@ -2627,6 +2792,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   if (window.__appliquerGeo) { window.__appliquerGeo(); }
 
   afficherEtape(1, true);
+  preparerBandeau();
   tracer('page_ready', { ville_detectee: (window.__GEO && window.__GEO.ville) || '' });
 })(window, document);
 </script>
