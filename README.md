@@ -160,10 +160,14 @@ la classe `a-completer`. Pour les lister :
 grep -rn "a-completer" *.html
 ```
 
+Le site est édité par un **entrepreneur individuel** : les pages légales sont
+déjà rédigées dans cette forme (pas de capital social, dénomination « Prénom
+NOM EI », mention obligatoire de l'article R. 526-27 du code de commerce).
+
 | Élément | Où |
 |---|---|
-| Raison sociale, SIRET, forme juridique, RCS, TVA | les 3 pages légales + pieds de page |
-| Directeur de la publication | `mentions-legales.html` (« Adrien Heddebaut » à confirmer) |
+| Prénom, nom, SIRET, immatriculation, TVA | les 3 pages légales + pieds de page |
+| Directeur de la publication | `mentions-legales.html` |
 | Adresse e-mail de contact | `mentions-legales.html`, `confidentialite.html` |
 | Adresse de Netlify, Inc. | `mentions-legales.html` (à vérifier sur netlify.com) |
 | Raison sociale de l'entreprise partenaire | `confidentialite.html` § 4 |
@@ -241,12 +245,11 @@ même endroit dans le cadre.
 > `figcaption`, dans les deux `alt` et dans le sous-titre de la section. Ne
 > légendez jamais une photo avec une commune où le chantier n'a pas eu lieu.
 
-> **Le sous-titre annonce « tranquille pendant 15 ans »** alors que le tableau
-> de prix annonce « garantie 10 ans ». Les deux peuvent coexister — une durée
-> de vie constatée n'est pas une garantie contractuelle — mais un lecteur
-> attentif verra la différence, et une durabilité annoncée doit pouvoir être
-> justifiée. Harmonisez, ou assumez la distinction en la formulant
-> explicitement.
+> **Quinze ans de tenue, dix ans de garantie.** La distinction est assumée et
+> écrite noir sur blanc : dans le sous-titre de la section Avant / Après, sous
+> le tableau de prix, et sur la carte « Reprotection de toiture ». Une durée de
+> vie constatée n'est pas une garantie contractuelle — mais une durabilité
+> annoncée doit pouvoir être justifiée. Conservez de quoi l'étayer.
 
 ### Chiffres affichés
 
@@ -311,8 +314,12 @@ Dans les deux cas les réponses restent dans le navigateur et rien ne part.
 
 Case **non pré-cochée et obligatoire**. Le texte affiché est :
 
-> J'accepte d'être recontacté par des professionnels pour mon projet. Voir notre
+> J'accepte d'être recontacté par un professionnel pour mon projet. Voir notre
 > politique de confidentialité.
+
+Le **singulier** est délibéré : la page promet « un seul technicien vous
+contacte ». Un consentement au pluriel autoriserait plus que ce qui est promis,
+et la contradiction se verrait sur la même page.
 
 Il est recopié **intégralement** dans le champ `consent_text` au moment de
 l'envoi, avec l'horodatage ISO 8601 dans `consent_timestamp` : c'est la pièce

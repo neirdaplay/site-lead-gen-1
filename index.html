@@ -953,11 +953,15 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
                recopie tel quel dans le champ cache consent_text, avec
                l'horodatage ISO 8601 dans consent_timestamp : c'est la
                piece justificative en cas de contestation.
+               Le singulier n'est pas un detail de style : la page promet
+               « un seul technicien vous contacte ». Un consentement au
+               pluriel autoriserait plus que ce qui est promis, et la
+               contradiction se verrait.
                Toute modification de ce texte doit etre repercutee dans
-               confidentialite.html. -->
+               confidentialite.html section 2.2. -->
           <div class="consentement">
             <input type="checkbox" id="consentement" name="consentement" value="Oui">
-            <label for="consentement" id="texte-consentement">J’accepte d’être recontacté par des professionnels pour mon projet. <a href="confidentialite.html">Voir notre politique de confidentialité</a>.</label>
+            <label for="consentement" id="texte-consentement">J’accepte d’être recontacté par un professionnel pour mon projet. <a href="confidentialite.html">Voir notre politique de confidentialité</a>.</label>
           </div>
           <p class="champ__erreur" id="erreur-consentement" role="alert"></p>
 
@@ -1156,7 +1160,8 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
     <h2 class="section__titre" id="titre-avant-apres">Avant / Après : la reprotection d’une toiture en images</h2>
     <p class="section__sous-titre">
       Une toiture en tuile béton sur la commune de Hazebrouck. Même maison,
-      même angle. Reprotégée et tranquille pendant 15 ans.
+      même angle. Tranquille pour une quinzaine d’années, dont dix sous
+      garantie.
     </p>
 
     <div class="diptyque">
@@ -1412,7 +1417,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
           referme la porosité de la tuile et rétablit l’écoulement de l’eau.
         </p>
         <span class="presta__duree">10 ans</span>
-        <span class="presta__unite">De garantie</span>
+        <span class="presta__unite">De garantie, ~15 ans de tenue</span>
       </article>
 
       <article class="presta">
@@ -1480,6 +1485,14 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
       Fourchettes indicatives, variables selon l’état du support,
       l’accessibilité, la pente et l’exposition. Le prix définitif est établi
       après visite gratuite.
+      <!-- DURABILITE ANNONCEE : « une quinzaine d'années » est une durée de vie
+           constatée, distincte de la garantie contractuelle de dix ans. Les
+           deux sont volontairement distinguées ici et dans le sous-titre de la
+           section Avant / Après. Une durabilité annoncée doit pouvoir être
+           justifiée : conservez de quoi l'étayer. -->
+      Une reprotection tient couramment <b>une quinzaine d’années</b> ; la
+      <b>garantie</b> accordée par l’entreprise, elle, court sur <b>dix ans</b>.
+      Ce sont deux choses différentes, et nous préférons l’écrire.
     </p>
 
     <p class="section__note">
@@ -2025,8 +2038,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
     </p>
 
     <p class="pied__mention">
-      Éditeur : <span class="a-completer">RAISON SOCIALE à compléter</span> —
-      SIRET <span class="a-completer">à compléter</span> —
+      Éditeur : Adrien Heddebaut (EI) — SIRET 841 547 300 00019 —
       80 rue du Docteur Legay, 59110 La Madeleine —
       Tél. <a href="tel:+33786505580">07 86 50 55 80</a> —
       <span class="a-completer">e-mail à compléter après achat du domaine</span>
