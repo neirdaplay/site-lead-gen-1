@@ -134,10 +134,14 @@ il n'y a aucune dépendance à installer.
 > **À faire une fois, sinon aucun lead n'arrive.**
 > La détection des formulaires est **désactivée par défaut** sur les sites
 > Netlify récents. Ouvrez
-> **Site configuration → Forms → Form detection → Enable form detection**,
-> puis **redéployez** (Deploys → Trigger deploy → Deploy site). La détection
-> se fait au moment du déploiement : activer l'option ne suffit pas, il faut
-> un déploiement postérieur à l'activation.
+> Netlify a basculé ce réglage sur « off » pour tous les sites créés depuis
+> avril 2023, afin d'accélérer les builds.
+>
+> Ouvrez l'onglet **Forms → Usage and configuration → Form detection →
+> Enable form detection**, puis **redéployez**
+> (Deploys → Trigger deploy → Deploy site). La détection se fait à
+> l'analyse du déploiement : activer l'option ne suffit pas, il faut un
+> déploiement **postérieur** à l'activation.
 >
 > Tant que ce n'est pas fait, le `POST` du formulaire répond `404` et la page
 > affiche « L'envoi n'a pas abouti… (réf. 404) ».
@@ -164,7 +168,7 @@ Le message d'erreur affiche une référence courte qui dit quoi corriger :
 
 | Référence | Cause | Correctif |
 |---|---|---|
-| `réf. 404` ou `réf. 405` | Netlify n'a pas enregistré le formulaire | Activer la détection des formulaires (ci-dessus), **puis redéployer** |
+| `réf. 404` ou `réf. 405` | Netlify n'a pas enregistré le formulaire | Forms → Usage and configuration → Form detection → Enable, **puis redéployer** |
 | `réf. 403` | Soumission bloquée (filtre anti-spam, honeypot rempli) | Vérifier **Forms → lead → Spam submissions** |
 | `réf. reseau` | La requête n'a pas abouti (hors ligne, blocage) | Vérifier la connexion ; la console du navigateur donne le détail |
 | `réf. 5xx` | Incident côté Netlify | Réessayer ; consulter status.netlify.com |
@@ -465,7 +469,7 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] `index.html` s'ouvre et fonctionne en double-cliquant dessus, hors serveur
 - [ ] Onglet Network : aucune requête vers un domaine tiers
 - [ ] Le build Netlify passe sans erreur
-- [ ] **Form detection activée** dans Site configuration → Forms, puis site redéployé
+- [ ] **Form detection activée** dans Forms → Usage and configuration, puis site redéployé
 - [ ] Le formulaire `lead` apparaît dans **Forms** après le premier déploiement
 - [ ] Un envoi de test réel arrive dans **Forms → lead** *et* sur Telegram
 - [ ] `?ville=Orchies` affiche la ville dans le titre, sans flash
