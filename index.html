@@ -48,6 +48,9 @@ table{border-collapse:collapse}
    seule teinte a 3:1 sur blanc (3,15) comme sur le bleu nuit (4,77). */
 :focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:4px}
 :focus:not(:focus-visible){outline:none}
+/* Gouttiere laterale unique de tout le site. Les classes qui
+   s'ajoutent a .container ne doivent regler que padding-block :
+   la forme courte « padding » remettrait ces 20px a zero. */
 .container{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .evitement{position:absolute;left:-9999px;top:0;z-index:100;padding:12px 18px;background:var(--blanc);color:var(--titre);font-weight:700;border-radius:0 0 8px 0}
@@ -69,7 +72,7 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
 .cta-court{display:none}
 @media (max-width:520px){.cta-long{display:none}.cta-court{display:inline}
 .bouton--vert{font-size:14.5px;padding:11px 14px}}
-@media (max-width:400px){.container{padding:0 16px}
+@media (max-width:400px){.container{padding:0 18px}
 .bouton--vert{font-size:14px;padding:10px 12px}}
 
 /* --- En-tete --- */
@@ -98,7 +101,7 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
 background-image:url('assets/img/hero-couvreur.jpg');
 background-size:cover;background-position:60% 38%}
 .hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.45)}
-.hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding:20px 0 30px}
+.hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding-block:20px 30px}
 .hero__badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
 background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.26);
 font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#fff}
@@ -107,7 +110,7 @@ font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#fff}
 letter-spacing:-.02em;color:#fff;min-height:calc(3 * 1.16em)}
 .hero__titre em{font-style:normal;color:var(--vert)}
 .hero__sous-titre{margin:11px 0 0;max-width:520px;font-size:15.5px;line-height:1.5;color:#C9D8E9}
-.hero__puces{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px}
+.hero__puces{list-style:none;margin:0;padding:0;display:grid;gap:9px}
 .hero__puces li{display:flex;gap:9px;align-items:flex-start;font-size:14.5px;line-height:1.4;color:#E4EDF7}
 .hero__puces svg{flex:0 0 auto;width:18px;height:18px;margin-top:1px;color:var(--vert)}
 
@@ -368,11 +371,11 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 
 /* --- Points de rupture --- */
 @media (max-height:700px) and (max-width:600px){
-.hero__interne{padding:14px 0 24px;gap:16px}
+.hero__interne{padding-block:14px 24px;gap:16px}
 .hero__badge{display:none}
 .hero__titre{margin:0;font-size:26px}
 .hero__sous-titre{margin-top:9px;font-size:14.5px}
-.hero__puces{margin-top:12px;gap:7px}
+.hero__puces{gap:7px}
 .hero__puces li{font-size:13.5px}
 .formulaire__accroche{display:none}
 .formulaire{padding:14px 14px 16px}
@@ -387,7 +390,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 .final__actions{flex-direction:row;justify-content:center}
 }
 @media (min-width:700px){
-.hero__interne{padding:42px 0 50px}
+.hero__interne{padding-block:42px 50px}
 .hero__titre{font-size:36px;min-height:calc(3 * 1.16em)}
 }
 @media (min-width:900px){
@@ -406,7 +409,12 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 .barre-mobile{display:none}
 }
 @media (min-width:1000px){
-.hero__interne{grid-template-columns:1.05fr 400px;align-items:center;gap:40px;padding:56px 0 64px}
+.hero__interne{grid-template-columns:1.05fr 400px;
+grid-template-areas:'texte formulaire' 'puces formulaire';
+align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
+.hero__colonne--texte{grid-area:texte}
+.hero__colonne--form{grid-area:formulaire;align-self:center}
+.hero__puces{grid-area:puces;margin-top:20px}
 .hero__fond{opacity:.24}
 .hero__voile{background:rgba(15,39,69,.35)}
 .hero__titre{font-size:38px;min-height:calc(3 * 1.16em)}
@@ -415,7 +423,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 .entete__interne{min-height:72px}
 }
 @media (min-width:1120px){
-.hero__interne{grid-template-columns:1.08fr 420px;gap:48px}
+.hero__interne{grid-template-columns:1.08fr 420px;column-gap:48px}
 .hero__titre{font-size:43px}
 }
 @media (min-width:1280px){.hero__titre{font-size:46px}}
@@ -719,14 +727,14 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
   <div class="hero__voile" aria-hidden="true"></div>
   <div class="container hero__interne">
 
-    <div class="hero__colonne">
+    <div class="hero__colonne hero__colonne--texte">
       <span class="hero__badge">
         <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1 2.5 4.4v5c0 4.4 3.2 8.5 7.5 9.6 4.3-1.1 7.5-5.2 7.5-9.6v-5L10 1Zm3.9 6.6-4.6 5.1a.9.9 0 0 1-1.3.05L5.9 10.7a.9.9 0 1 1 1.2-1.3l1.4 1.3 4-4.4a.9.9 0 1 1 1.4 1.2Z"/></svg>
         Un seul professionnel vous rappelle
       </span>
 
       <h1 class="hero__titre">
-        Devis toiture <em data-geo="a-ville">dans le Nord</em> :
+        Devis toiture <em data-geo="a-ville">dans le Nord</em>&nbsp;:
         un couvreur vous rappelle sous 48 h
       </h1>
 
@@ -735,24 +743,15 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         décennale, vous rappelle pour convenir d’une visite et d’un devis chiffré.
       </p>
 
-      <ul class="hero__puces">
-        <li>
-          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
-          <span>Intervention dans tout le Nord (59) — rappel sous 24 à 48 h ouvrées</span>
-        </li>
-        <li>
-          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
-          <span>Un seul technicien vous contacte</span>
-        </li>
-        <li>
-          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
-          <span>Gratuit, sans engagement, artisan assuré en décennale</span>
-        </li>
-      </ul>
     </div>
 
     <!-- ============ FORMULAIRE — 7 etapes, Netlify Forms ============ -->
-    <div class="hero__colonne" id="devis">
+    <!-- Sur mobile le formulaire vient AVANT les puces, pour que la
+         premiere question soit visible sans defiler. Les puces sont
+         donc sorties de la colonne de texte et placees apres, en
+         enfant direct de la grille ; le bi-colonnes de bureau les
+         remet a gauche via grid-template-areas. -->
+    <div class="hero__colonne hero__colonne--form" id="devis">
       <form class="formulaire" id="formulaire-devis" name="lead" method="POST"
             data-netlify="true" netlify-honeypot="bot-field" novalidate
             aria-labelledby="formulaire-titre">
@@ -1066,6 +1065,21 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         </div>
       </form>
     </div>
+
+    <ul class="hero__puces">
+      <li>
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
+        <span>Intervention dans tout le Nord (59) — rappel sous 24 à 48 h ouvrées</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
+        <span>Un seul technicien vous contacte</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
+        <span>Gratuit, sans engagement, artisan assuré en décennale</span>
+      </li>
+    </ul>
   </div>
 </section>
 
