@@ -150,6 +150,7 @@ background:none;border:0;font:inherit;font-size:14px;font-weight:600;color:var(-
 .retour[hidden]{display:none}
 .formulaire__securite{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--note)}
 .formulaire__securite svg{width:14px;height:14px;color:var(--vert-fonce)}
+.alerte__ref{opacity:.65;font-size:.85em;white-space:nowrap}
 .pot-de-miel{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
 .alerte{display:none;margin-top:14px;padding:12px 14px;border-radius:var(--rayon-s);
 background:#FDECEA;border:1px solid #F0B7B0;font-size:14px;line-height:1.5;color:#8A1F14}
@@ -700,7 +701,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M12 27v-6.5h8V27" stroke="#12B76A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
+      <span><b>Mon Couvreur Nord</b><small>Toiture · Nord (59)</small></span>
     </a>
     <button type="button" class="bouton bouton--vert entete__cta"
             data-action="aller-au-formulaire" data-emplacement="entete">
@@ -1042,7 +1043,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
           <div class="ecran__rappel">
             <p style="margin:0 0 8px"><b>Ce qui se passe maintenant :</b></p>
             <p style="margin:0">
-              <b>Un seul technicien vous contacte sous 24 à 48 h ouvrées</b> pour
+              <b>Adrien Heddebaut vous appelle sous 24 à 48 h ouvrées</b> pour
               comprendre votre projet et convenir d’une visite gratuite. Si vous
               ne décrochez pas, il laisse un message.
             </p>
@@ -1462,7 +1463,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
           <!-- ==============================================================
                RAPPEL POUR PLUS TARD — mention « garantie 10 ans »
                Cette formulation n'est valable que tant que les travaux sont
-               exécutés ET garantis par l'entreprise partenaire actuelle.
+               exécutés ET garantis par Technitoit.
                En cas de revente des leads à des artisans tiers, dont on ne
                maîtrise ni l'exécution ni les garanties, remplacer par :
                « protection durable, 10 ans et plus selon exposition ».
@@ -1863,11 +1864,12 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         </h3>
         <div class="faq__reponse" id="faq-1">
           <p>
-            Oui, la demande, la visite et le devis sont gratuits, et vous n’avez
-            rien à payer au site. Le modèle est simple et nous préférons l’écrire
-            noir sur blanc : le professionnel partenaire nous rémunère pour la
-            mise en relation. Cela ne change rien au prix de votre chantier, qui
-            est fixé par lui, sur son devis, après visite.
+            Oui. La demande, le déplacement, la visite et le devis sont
+            gratuits, et vous n’avez rien à payer tant que vous ne signez pas.
+            Le modèle est simple et nous préférons l’écrire noir sur blanc :
+            nous sommes rémunérés sur les chantiers effectivement réalisés, pas
+            sur les demandes. C’est aussi pourquoi nous n’avons aucun intérêt à
+            déplacer quelqu’un pour rien.
           </p>
         </div>
       </div>
@@ -1880,9 +1882,10 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         </h3>
         <div class="faq__reponse" id="faq-2">
           <p>
-            <b>Un technicien de l’entreprise partenaire</b> qui couvre votre
-            secteur. Pas un centre d’appels, pas un standard anonyme, pas un
-            numéro masqué. Un seul interlocuteur, identifié.
+            <b>Adrien Heddebaut</b>, qui édite ce site. C’est lui qui vous
+            appelle, et lui qui vient constater sur place. Pas un centre
+            d’appels, pas un standard anonyme, pas un numéro masqué. Un seul
+            interlocuteur, identifié, du premier appel à la fin du chantier.
           </p>
         </div>
       </div>
@@ -1895,10 +1898,11 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         </h3>
         <div class="faq__reponse" id="faq-3">
           <p>
-            Non. <b>Un seul technicien vous contacte</b>. C’est l’inverse des
-            plateformes qui promettent « 3 devis en 24 h » : sur celles-ci, votre
-            numéro part chez plusieurs entreprises à la fois, ce qui explique la
-            salve d’appels qui suit.
+            Non, et pour une raison structurelle : <b>vos coordonnées ne
+            sortent pas d’ici</b>. C’est l’inverse des plateformes qui
+            promettent « 3 devis en 24 h » : sur celles-ci, votre numéro est
+            vendu à plusieurs entreprises à la fois, ce qui explique la salve
+            d’appels qui suit.
           </p>
           <p>
             Si l’échange ne vous convient pas, vous n’avez rien de plus à faire.
@@ -1953,9 +1957,10 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         </h3>
         <div class="faq__reponse" id="faq-6">
           <p>
-            Elles servent uniquement à cette mise en relation et sont transmises
-            au professionnel qui vous contacte. Elles sont conservées trois ans à
-            compter du dernier contact, puis supprimées.
+            Elles ne vont nulle part. <b>Adrien Heddebaut est le seul à y avoir
+            accès</b> et le seul à vous appeler : elles ne sont ni revendues, ni
+            louées, ni diffusées à un réseau d’entreprises. Elles sont
+            conservées trois ans à compter du dernier contact, puis supprimées.
           </p>
           <p>
             Vous pouvez à tout moment demander à les consulter, les corriger ou
@@ -2019,7 +2024,7 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
           <path d="M5.5 17.5V27h21v-9.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M12 27v-6.5h8V27" stroke="#12B76A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span><b>Mon Couvreur Nord</b><small>Mise en relation · Nord (59)</small></span>
+        <span><b>Mon Couvreur Nord</b><small>Toiture · Nord (59)</small></span>
       </a>
       <ul class="pied__liens">
         <li><a href="mentions-legales.html">Mentions légales</a></li>
@@ -2029,19 +2034,21 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
     </div>
 
     <p class="pied__statut">
-      <b>Mon Couvreur Nord est un service de mise en relation.</b>
-      Le site n’exécute aucun travaux de toiture, n’établit aucun devis et n’est
-      pas partie au contrat conclu entre vous et l’entreprise. Les travaux sont
-      réalisés par l’entreprise partenaire, seule responsable de leur exécution,
-      de leurs garanties et de ses assurances professionnelles. Les prix
-      affichés sont indicatifs et sans valeur contractuelle.
+      <b>Ce site est édité à titre indépendant par Adrien Heddebaut.</b>
+      Il recueille les demandes de devis et Adrien Heddebaut les traite
+      lui-même : c’est lui qui vous rappelle et qui vient constater sur place.
+      Les travaux de toiture sont réalisés par l’entreprise <b>Technitoit</b>,
+      qui en assure l’exécution, les garanties et les assurances
+      professionnelles, dont la responsabilité civile décennale. Ce site
+      n’appartient pas à Technitoit. Les prix affichés sont indicatifs et sans
+      valeur contractuelle.
     </p>
 
     <p class="pied__mention">
       Éditeur : Adrien Heddebaut (EI) — SIRET 841 547 300 00019 —
       80 rue du Docteur Legay, 59110 La Madeleine —
       Tél. <a href="tel:+33786505580">07 86 50 55 80</a> —
-      <span class="a-completer">e-mail à compléter après achat du domaine</span>
+      <a href="mailto:adrienheddebaut.pro@gmail.com">adrienheddebaut.pro@gmail.com</a>
     </p>
 
     <p class="pied__mention">© <span id="annee">2026</span> Mon Couvreur Nord. Tous droits réservés.</p>
@@ -2061,28 +2068,21 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 </div>
 
 <!-- ==================================================================
-     Formulaire caché en doublon.
-     Netlify analyse le HTML au déploiement pour détecter les formulaires
-     et enregistrer leurs champs. Ce doublon garantit que TOUS les noms de
-     champs sont connus, y compris ceux remplis par le script.
-     Ne pas supprimer, ne pas renommer : le name doit rester "lead".
+     Pas de formulaire caché en doublon : c'est volontaire.
+
+     Netlify analyse index.html au déploiement pour détecter les
+     formulaires. Le formulaire visible #formulaire-devis porte
+     data-netlify="true" et contient déjà la totalité des 25 champs
+     en dur dans le HTML (y compris les <input type="hidden"> que le
+     script remplit). Le doublon serait donc redondant, et deux
+     <form name="lead"> sur la même page rendaient la détection
+     Netlify indéterminée : c'est ce qui faisait échouer l'envoi.
+
+     Rappel : la détection des formulaires doit être ACTIVÉE dans
+     l'interface Netlify (Site configuration > Forms > Form detection).
+     Elle est désactivée par défaut sur les nouveaux sites, et sans
+     elle le POST sur / répond 404. Voir README.md.
      ================================================================== -->
-<form name="lead" data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input type="hidden" name="form-name" value="lead">
-  <input type="text" name="bot-field">
-  <input type="text" name="projet"><input type="text" name="statut">
-  <input type="text" name="tuiles"><input type="text" name="surface">
-  <input type="text" name="delai"><input type="text" name="code_postal">
-  <input type="text" name="prenom"><input type="text" name="nom">
-  <input type="email" name="email"><input type="tel" name="telephone">
-  <input type="text" name="consentement">
-  <input type="text" name="gclid"><input type="text" name="gbraid"><input type="text" name="wbraid">
-  <input type="text" name="utm_source"><input type="text" name="utm_medium">
-  <input type="text" name="utm_campaign"><input type="text" name="utm_content">
-  <input type="text" name="utm_term"><input type="text" name="page_url">
-  <input type="text" name="consent_text"><input type="text" name="consent_timestamp">
-  <input type="text" name="user_agent"><input type="text" name="ville_detectee">
-</form>
 
 <noscript>
   <div class="container" style="padding:20px 20px 90px">
@@ -2456,7 +2456,10 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
     boutonEnvoi.disabled = true;
     boutonEnvoi.textContent = 'Envoi en cours…';
 
-    function echec(message) {
+    /* En cas d'echec, on affiche une reference courte (ex. « ref. 404 »).
+       Elle ne veut rien dire pour le visiteur, mais elle permet de
+       diagnostiquer a distance sans avoir a ouvrir la console. */
+    function echec(message, reference) {
       envoiEnCours = false;
       boutonEnvoi.disabled = false;
       boutonEnvoi.textContent = libelle;
@@ -2464,12 +2467,18 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         blocErreur.textContent = message ||
           'L’envoi n’a pas abouti. Vérifiez votre connexion et réessayez, ' +
           'ou appelez-nous au 07 86 50 55 80.';
+        if (reference) {
+          var ref = document.createElement('small');
+          ref.className = 'alerte__ref';
+          ref.textContent = ' (réf. ' + reference + ')';
+          blocErreur.appendChild(ref);
+        }
         blocErreur.classList.add('est-visible');
       }
-      tracer('form_error', { etape: 7 });
+      tracer('form_error', { etape: 7, reference: reference || 'inconnue' });
     }
 
-    /* Netlify Forms : POST url-encode sur la racine du site. */
+    /* Corps url-encode : tous les champs nommes du formulaire. */
     var corps;
     try {
       corps = new URLSearchParams(new FormData(formulaire)).toString();
@@ -2481,12 +2490,29 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
       return;
     }
 
-    fetch('/', {
+    /* Netlify Forms attend le POST sur l'URL de la page qui porte le
+       formulaire, pas sur une route dediee. On vise donc le chemin
+       courant, ce qui reste juste meme si la page est servie ailleurs
+       qu'a la racine. */
+    var cible = window.location.pathname || '/';
+
+    fetch(cible, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: corps
     }).then(function (reponse) {
-      if (!reponse.ok) { throw new Error('HTTP ' + reponse.status); }
+      if (!reponse.ok) {
+        /* 404 ou 405 = Netlify n'a pas enregistre le formulaire :
+           detection des formulaires desactivee dans l'interface, ou
+           deploiement anterieur a l'ajout de data-netlify. */
+        if (window.console && console.error) {
+          console.error('Envoi refuse par le serveur : HTTP ' + reponse.status +
+            ' sur ' + cible + '. Si 404 ou 405, activer Site configuration > ' +
+            'Forms > Form detection dans Netlify, puis redeployer.');
+        }
+        echec(null, reponse.status);
+        return;
+      }
       envoiEnCours = false;
       boutonEnvoi.disabled = false;
       boutonEnvoi.textContent = libelle;
@@ -2497,7 +2523,10 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         code_postal: (champCP || {}).value || ''
       });
       afficherEcran(ecranConfirmation, 'Votre demande est enregistrée.');
-    })['catch'](function () { echec(); });
+    })['catch'](function (erreur) {
+      if (window.console && console.error) { console.error('Envoi impossible :', erreur); }
+      echec(null, 'reseau');
+    });
   });
 
   /* ================================================================

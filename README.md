@@ -131,16 +131,46 @@ il n'y a aucune dépendance à installer.
 
 ### Détection du formulaire
 
-Netlify analyse le HTML au déploiement pour détecter les formulaires. Deux
-éléments le garantissent :
+> **À faire une fois, sinon aucun lead n'arrive.**
+> La détection des formulaires est **désactivée par défaut** sur les sites
+> Netlify récents. Ouvrez
+> **Site configuration → Forms → Form detection → Enable form detection**,
+> puis **redéployez** (Deploys → Trigger deploy → Deploy site). La détection
+> se fait au moment du déploiement : activer l'option ne suffit pas, il faut
+> un déploiement postérieur à l'activation.
+>
+> Tant que ce n'est pas fait, le `POST` du formulaire répond `404` et la page
+> affiche « L'envoi n'a pas abouti… (réf. 404) ».
 
-- le formulaire visible porte `name="lead"`, `data-netlify="true"`,
-  `netlify-honeypot="bot-field"` et un champ caché `form-name` ;
-- un **formulaire caché en doublon**, en bas de `index.html`, déclare tous les
-  noms de champs, y compris ceux que le script remplit.
+Côté HTML, un seul élément est nécessaire, et il est déjà en place : le
+formulaire visible `#formulaire-devis` porte `name="lead"`,
+`data-netlify="true"`, `netlify-honeypot="bot-field"`, un champ caché
+`form-name`, et **la totalité des 25 champs en dur dans le HTML** — y compris
+les `<input type="hidden">` que le script remplit (`projet`, `gclid`,
+`consent_text`…).
 
-Ne supprimez ni ne renommez ce doublon. Après le premier déploiement,
-vérifiez que le formulaire `lead` apparaît bien dans **Forms**.
+Il n'y a volontairement **pas** de formulaire caché en doublon. Le doublon
+n'apporte rien ici — tous les champs sont déjà dans le HTML statique — et deux
+`<form name="lead">` sur la même page rendent la détection Netlify
+indéterminée. Ne le réintroduisez pas.
+
+Après le premier déploiement, vérifiez que le formulaire `lead` apparaît bien
+dans **Forms**. S'il n'y est pas, c'est la détection qui est en cause, pas le
+HTML.
+
+### Si l'envoi échoue
+
+Le message d'erreur affiche une référence courte qui dit quoi corriger :
+
+| Référence | Cause | Correctif |
+|---|---|---|
+| `réf. 404` ou `réf. 405` | Netlify n'a pas enregistré le formulaire | Activer la détection des formulaires (ci-dessus), **puis redéployer** |
+| `réf. 403` | Soumission bloquée (filtre anti-spam, honeypot rempli) | Vérifier **Forms → lead → Spam submissions** |
+| `réf. reseau` | La requête n'a pas abouti (hors ligne, blocage) | Vérifier la connexion ; la console du navigateur donne le détail |
+| `réf. 5xx` | Incident côté Netlify | Réessayer ; consulter status.netlify.com |
+
+La console du navigateur (F12 → Console) journalise dans tous les cas le
+statut HTTP exact et l'URL visée.
 
 ### Aperçu local
 
@@ -435,7 +465,9 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] `index.html` s'ouvre et fonctionne en double-cliquant dessus, hors serveur
 - [ ] Onglet Network : aucune requête vers un domaine tiers
 - [ ] Le build Netlify passe sans erreur
+- [ ] **Form detection activée** dans Site configuration → Forms, puis site redéployé
 - [ ] Le formulaire `lead` apparaît dans **Forms** après le premier déploiement
+- [ ] Un envoi de test réel arrive dans **Forms → lead** *et* sur Telegram
 - [ ] `?ville=Orchies` affiche la ville dans le titre, sans flash
 - [ ] Sans paramètre, le titre affiche « dans le Nord »
 - [ ] Les 7 étapes s'enchaînent, le bouton retour fonctionne
