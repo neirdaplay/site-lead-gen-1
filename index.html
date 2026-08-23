@@ -28,6 +28,20 @@
 --gris:#F5F7FA;--bord:#E4E9F0;--vert:#12B76A;--vert-fonce:#0A7A46;
 --vert-pale:#ECFBF3;--orange:#F26522;--orange-fonce:#D9541A;
 --texte:#4A5568;--titre:#0F2745;--note:#667085;
+/* Teintes des tuiles d'icone du formulaire. Chacune est choisie pour
+   son sens : cyan pour l'eau, terre cuite pour la tuile, rouge pour
+   l'urgence, ambre pour l'hesitation. Le trait tient au minimum 5:1
+   sur sa tuile, sur le blanc de l'etat choisi et sur le vert pale du
+   survol — trois fois le 3:1 exige pour un objet graphique.
+   L'orange de marque n'y figure pas : il reste au seul appel a l'action. */
+--tuile-vert:#DFF5EA;--trait-vert:#07713F;
+--tuile-cyan:#DEF1F8;--trait-cyan:#0B6E86;
+--tuile-bleu:#E4EDFA;--trait-bleu:#1B4C87;
+--tuile-indigo:#E9E9F9;--trait-indigo:#3F3BAE;
+--tuile-terre:#FAEAE2;--trait-terre:#A8452A;
+--tuile-ambre:#FBF0D8;--trait-ambre:#8A5B06;
+--tuile-rouge:#FBE7E4;--trait-rouge:#AE2D1E;
+--tuile-ardoise:#EAEEF4;--trait-ardoise:#41506A;
 --rayon:10px;--rayon-s:8px;--max:1120px;--ombre:0 1px 2px rgba(15,39,69,.04)}
 
 *,*::before,*::after{box-sizing:border-box}
@@ -140,8 +154,22 @@ cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
 .option.est-choisie{border-color:var(--vert-fonce);background:var(--vert-pale);
 box-shadow:inset 0 0 0 1px var(--vert-fonce)}
 .option__icone{flex:0 0 auto;display:flex;align-items:center;justify-content:center;
-width:44px;height:44px;border-radius:10px;background:var(--gris);color:var(--bleu)}
+width:44px;height:44px;border-radius:10px;background:var(--gris);color:var(--bleu);
+transition:background-color .12s ease}
+/* Chaque reponse porte sa teinte via data-teinte. Le gris ci-dessus
+   reste le repli si l'attribut manque. */
+.option[data-teinte="vert"] .option__icone{background:var(--tuile-vert);color:var(--trait-vert)}
+.option[data-teinte="cyan"] .option__icone{background:var(--tuile-cyan);color:var(--trait-cyan)}
+.option[data-teinte="bleu"] .option__icone{background:var(--tuile-bleu);color:var(--trait-bleu)}
+.option[data-teinte="indigo"] .option__icone{background:var(--tuile-indigo);color:var(--trait-indigo)}
+.option[data-teinte="terre"] .option__icone{background:var(--tuile-terre);color:var(--trait-terre)}
+.option[data-teinte="ambre"] .option__icone{background:var(--tuile-ambre);color:var(--trait-ambre)}
+.option[data-teinte="rouge"] .option__icone{background:var(--tuile-rouge);color:var(--trait-rouge)}
+.option[data-teinte="ardoise"] .option__icone{background:var(--tuile-ardoise);color:var(--trait-ardoise)}
+/* Choisie : la tuile passe au blanc, le trait garde sa couleur. La
+   reponse retenue se detache ainsi du vert pale de la carte. */
 .option.est-choisie .option__icone{background:#fff}
+@media (prefers-reduced-motion:reduce){.option__icone{transition:none}}
 .option__icone svg{width:24px;height:24px}
 .option__texte{flex:1 1 auto}
 @media (prefers-reduced-motion:reduce){.option{transition:none}}
@@ -779,15 +807,15 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <h3 class="etape__titre">Votre projet de toiture concerne :</h3>
           <p class="etape__aide">Choisissez la prestation la plus proche.</p>
           <div class="options">
-            <button type="button" class="option" data-champ="projet" data-valeur="Nettoyage / Démoussage" aria-pressed="false">
+            <button type="button" class="option" data-champ="projet" data-valeur="Nettoyage / Démoussage" data-teinte="cyan" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-jet"></use></svg></span>
               <span class="option__texte">Nettoyage / Démoussage</span>
             </button>
-            <button type="button" class="option" data-champ="projet" data-valeur="Reprotection de toiture" aria-pressed="false">
+            <button type="button" class="option" data-champ="projet" data-valeur="Reprotection de toiture" data-teinte="vert" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-bouclier"></use></svg></span>
               <span class="option__texte">Reprotection de toiture</span>
             </button>
-            <button type="button" class="option" data-champ="projet" data-valeur="Couverture neuve" aria-pressed="false">
+            <button type="button" class="option" data-champ="projet" data-valeur="Couverture neuve" data-teinte="indigo" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-maison-neuve"></use></svg></span>
               <span class="option__texte">Couverture neuve</span>
             </button>
@@ -800,11 +828,11 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <h3 class="etape__titre">Vous êtes :</h3>
           <p class="etape__aide">Les travaux de toiture engagent le propriétaire du logement.</p>
           <div class="options">
-            <button type="button" class="option" data-champ="statut" data-valeur="Propriétaire du logement" aria-pressed="false">
+            <button type="button" class="option" data-champ="statut" data-valeur="Propriétaire du logement" data-teinte="vert" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-maison-cle"></use></svg></span>
               <span class="option__texte">Propriétaire du logement</span>
             </button>
-            <button type="button" class="option" data-champ="statut" data-valeur="Locataire" aria-pressed="false">
+            <button type="button" class="option" data-champ="statut" data-valeur="Locataire" data-teinte="ardoise" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-cles"></use></svg></span>
               <span class="option__texte">Locataire</span>
             </button>
@@ -817,19 +845,19 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <h3 class="etape__titre">Quel type de tuiles ?</h3>
           <p class="etape__aide">Si vous hésitez, le technicien identifiera sur place.</p>
           <div class="options">
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Tuiles béton" aria-pressed="false">
+            <button type="button" class="option" data-champ="tuiles" data-valeur="Tuiles béton" data-teinte="ardoise" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-tuiles-plates"></use></svg></span>
               <span class="option__texte">Tuiles béton</span>
             </button>
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Tuiles terre cuite" aria-pressed="false">
+            <button type="button" class="option" data-champ="tuiles" data-valeur="Tuiles terre cuite" data-teinte="terre" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-tuiles-ondulees"></use></svg></span>
               <span class="option__texte">Tuiles terre cuite</span>
             </button>
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Ardoise" aria-pressed="false">
+            <button type="button" class="option" data-champ="tuiles" data-valeur="Ardoise" data-teinte="bleu" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-ardoise"></use></svg></span>
               <span class="option__texte">Ardoise</span>
             </button>
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Je ne sais pas" aria-pressed="false">
+            <button type="button" class="option" data-champ="tuiles" data-valeur="Je ne sais pas" data-teinte="ambre" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-question"></use></svg></span>
               <span class="option__texte">Je ne sais pas</span>
             </button>
@@ -842,19 +870,19 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <h3 class="etape__titre">Surface approximative de la toiture</h3>
           <p class="etape__aide">Une estimation suffit, la mesure se fait sur place.</p>
           <div class="options">
-            <button type="button" class="option" data-champ="surface" data-valeur="Moins de 50 m²" aria-pressed="false">
+            <button type="button" class="option" data-champ="surface" data-valeur="Moins de 50 m²" data-teinte="cyan" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-carre-petit"></use></svg></span>
               <span class="option__texte">Moins de 50 m²</span>
             </button>
-            <button type="button" class="option" data-champ="surface" data-valeur="50 à 100 m²" aria-pressed="false">
+            <button type="button" class="option" data-champ="surface" data-valeur="50 à 100 m²" data-teinte="bleu" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-carre-moyen"></use></svg></span>
               <span class="option__texte">50 à 100 m²</span>
             </button>
-            <button type="button" class="option" data-champ="surface" data-valeur="100 à 150 m²" aria-pressed="false">
+            <button type="button" class="option" data-champ="surface" data-valeur="100 à 150 m²" data-teinte="indigo" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-carre-grand"></use></svg></span>
               <span class="option__texte">100 à 150 m²</span>
             </button>
-            <button type="button" class="option" data-champ="surface" data-valeur="Je ne sais pas" aria-pressed="false">
+            <button type="button" class="option" data-champ="surface" data-valeur="Je ne sais pas" data-teinte="ambre" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-question"></use></svg></span>
               <span class="option__texte">Je ne sais pas</span>
             </button>
@@ -867,27 +895,27 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <h3 class="etape__titre">Pour quand ?</h3>
           <p class="etape__aide">Cela détermine l’ordre de rappel.</p>
           <div class="options">
-            <button type="button" class="option" data-champ="delai" data-valeur="Urgent (fuite en cours)" aria-pressed="false">
+            <button type="button" class="option" data-champ="delai" data-valeur="Urgent (fuite en cours)" data-teinte="rouge" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-goutte-alerte"></use></svg></span>
               <span class="option__texte">Urgent (fuite en cours)</span>
             </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Dans 3 mois" aria-pressed="false">
+            <button type="button" class="option" data-champ="delai" data-valeur="Dans 3 mois" data-teinte="ambre" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-calendrier"></use></svg></span>
               <span class="option__texte">Dans 3 mois</span>
             </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Dans 3 à 6 mois" aria-pressed="false">
+            <button type="button" class="option" data-champ="delai" data-valeur="Dans 3 à 6 mois" data-teinte="vert" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-calendrier"></use></svg></span>
               <span class="option__texte">Dans 3 à 6 mois</span>
             </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Dans 6 à 12 mois" aria-pressed="false">
+            <button type="button" class="option" data-champ="delai" data-valeur="Dans 6 à 12 mois" data-teinte="cyan" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-horloge"></use></svg></span>
               <span class="option__texte">Dans 6 à 12 mois</span>
             </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="L’année prochaine" aria-pressed="false">
+            <button type="button" class="option" data-champ="delai" data-valeur="L’année prochaine" data-teinte="bleu" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-horloge"></use></svg></span>
               <span class="option__texte">L’année prochaine</span>
             </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Je me renseigne" aria-pressed="false">
+            <button type="button" class="option" data-champ="delai" data-valeur="Je me renseigne" data-teinte="ardoise" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-loupe"></use></svg></span>
               <span class="option__texte">Je me renseigne</span>
             </button>
