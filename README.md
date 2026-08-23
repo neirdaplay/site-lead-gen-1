@@ -178,11 +178,17 @@ page est déjà juste, déposer une photo ne déplacera rien.
 
 Trois fichiers à déposer, **exactement sous ces noms** :
 
-| Fichier | Emplacement sur la page | Format | État |
+| Fichier | Emplacement sur la page | Format | Poids |
 |---|---|---|---|
-| `assets/img/hero-couvreur.jpg` | Fond du hero, en faible opacité sous le voile bleu nuit | Paysage, 1600 px de large | **en place** |
-| `assets/img/avant-hazebrouck.jpg` | Vignette « Avant » | 16/9, 1600 × 900 px | à déposer |
-| `assets/img/apres-hazebrouck.jpg` | Vignette « Après » | 16/9, 1600 × 900 px | à déposer |
+| `assets/img/hero-couvreur.jpg` | Fond du hero, en faible opacité sous le voile bleu nuit | 1600 × 1067 | 157 Ko |
+| `assets/img/avant-hazebrouck.jpg` | Vignette « Avant » | 1600 × 900 | 178 Ko |
+| `assets/img/apres-hazebrouck.jpg` | Vignette « Après » | 1600 × 900 | 221 Ko |
+| `assets/img/og-partage.jpg` | Aperçu lors d'un partage (Facebook, LinkedIn, WhatsApp) | 1200 × 630 | 104 Ko |
+| `assets/img/favicon.svg` | Icône d'onglet | — | 0,4 Ko |
+
+**Les quatre visuels sont en place.** Les gabarits gris ont été supprimés, ainsi
+que les replis (`onerror` sur les vignettes, seconde couche de fond sur le
+hero) qui n'avaient plus de raison d'être.
 
 > **Compressez avant de déposer.** La photo du hero est arrivée en
 > 2560 × 1707 pour 545 Ko ; elle a été ramenée à 1600 px et 157 Ko, soit
@@ -194,16 +200,15 @@ Trois fichiers à déposer, **exactement sous ces noms** :
 > `.jpg` a été supprimé. Le nom attendu est celui du tableau ci-dessus, à la
 > lettre près.
 
-**Il n'y a rien d'autre à modifier dans le code** : les trois chemins sont déjà
-en place.
+Pour remplacer une photo, écrasez le fichier en gardant le même nom : il n'y a
+aucun chemin à modifier dans le code. Gardez le format 1600 × 900 pour les
+vignettes — les attributs `width` et `height` du HTML valent 1600 et 900, et
+c'est ce qui garantit qu'aucun décalage de mise en page ne se produit au
+chargement.
 
-- Le hero est un `background-image` à deux valeurs : le navigateur prend le
-  `.jpg` s'il existe, sinon le gabarit `.svg`, sinon il reste sur le bleu nuit.
-  Jamais d'image cassée.
-- Les deux vignettes portent un attribut `onerror` qui bascule sur le gabarit
-  tant que le `.jpg` est absent. **Retirez ces deux `onerror`** une fois les
-  vraies photos déposées : le repli n'a plus de raison d'être, et une image
-  réellement manquante doit se voir.
+`og-partage.jpg` est un recadrage de la photo du hero en 1200 × 630. C'est un
+JPEG et non un SVG : les réseaux sociaux ne savent pas afficher un SVG en
+aperçu de partage.
 
 #### Réglage du hero
 

@@ -13,7 +13,9 @@
 <meta property="og:site_name" content="Mon Couvreur Nord">
 <meta property="og:title" content="Devis toiture dans le Nord (59) — un couvreur vous rappelle sous 48 h">
 <meta property="og:description" content="Décrivez votre projet en 2 minutes. Un seul technicien vous contacte sous 24 à 48 h. Gratuit, sans engagement.">
-<meta property="og:image" content="assets/img/og-partage.svg">
+<meta property="og:image" content="https://www.mon-couvreur-nord.fr/assets/img/og-partage.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
 <style>
@@ -87,13 +89,13 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
    voile passe encore par-dessus. Deux reglages seulement :
      .hero__fond opacity  -> combien de photo on laisse passer
      .hero__voile alpha   -> intensite du bleu par-dessus
-   Le navigateur prend le premier fichier trouve ; si aucun n'existe, il
-   ne reste que le bleu nuit — jamais d'image cassee.
+   Si le fichier venait a manquer, il ne resterait que le bleu nuit du
+   .hero : jamais d'image cassee.
    background-position 60% : sans effet sur desktop (la photo fait
    exactement la largeur du bloc), mais sur mobile le cadrage est bien plus
    haut que large et 60% garde le couvreur dans le champ. */
 .hero__fond{position:absolute;inset:0;opacity:.18;
-background-image:url('assets/img/hero-couvreur.jpg'),url('assets/img/hero-couvreur.svg');
+background-image:url('assets/img/hero-couvreur.jpg');
 background-size:cover;background-position:60% 38%}
 .hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.45)}
 .hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding:20px 0 30px}
@@ -1143,12 +1145,12 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 </section>
 
 <!-- ================= AVANT / APRES =================
-     PHOTOS À DÉPOSER (voir README.md) :
-       assets/img/avant-hazebrouck.jpg   toiture chargée, avant intervention
-       assets/img/apres-hazebrouck.jpg   même toiture, même angle, après reprotection
-     Tant qu'un fichier .jpg est absent, l'attribut onerror bascule sur le
-     gabarit .svg : la page n'affiche jamais d'image cassée. Retirer les deux
-     attributs onerror une fois les vraies photos en place. -->
+     Photos réelles du même chantier, prises sous le même angle :
+       assets/img/avant-hazebrouck.jpg
+       assets/img/apres-hazebrouck.jpg
+     1600 x 900 chacune, width/height explicites : aucun décalage de mise en
+     page au chargement. Si vous changez de chantier, changez aussi la commune
+     et le matériau dans les deux figcaption, les deux alt et le sous-titre. -->
 <section class="section section--gris" id="avant-apres" aria-labelledby="titre-avant-apres">
   <div class="container">
     <h2 class="section__titre" id="titre-avant-apres">Avant / Après : la reprotection d’une toiture en images</h2>
@@ -1162,12 +1164,11 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         <span class="vue__etiquette">Avant</span>
         <img src="assets/img/avant-hazebrouck.jpg" width="1600" height="900"
              loading="lazy" decoding="async"
-             onerror="this.onerror=null;this.src='assets/img/avant.svg'"
-             alt="Maison en briques à Hazebrouck, toiture en tuiles béton encrassée et ternie, bâches de protection déployées au sol avant l’intervention">
+             alt="Toiture en tuiles béton vue depuis le toit avant intervention : teinte délavée et irrégulière, surface mate, velux et lucarnes visibles">
         <figcaption>
           <b>Avant</b>
-          Tuiles béton ternies et poreuses, teinte devenue irrégulière. Bâches
-          posées et abords protégés avant le démoussage.
+          Tuiles béton délavées, teinte partie par plaques et surface devenue
+          mate : la couche appliquée en usine a disparu, la tuile est poreuse.
         </figcaption>
       </figure>
 
@@ -1175,12 +1176,11 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
         <span class="vue__etiquette">Après</span>
         <img src="assets/img/apres-hazebrouck.jpg" width="1600" height="900"
              loading="lazy" decoding="async"
-             onerror="this.onerror=null;this.src='assets/img/apres.svg'"
-             alt="La même maison après nettoyage et application d’une résine hydrofuge colorée : la toiture a retrouvé une teinte uniforme">
+             alt="La même toiture, sous le même angle, après nettoyage et application d’une résine hydrofuge colorée : la teinte est redevenue profonde et uniforme">
         <figcaption>
           <b>Après</b>
-          Toiture nettoyée puis reprotégée à la résine hydrofuge colorée.
-          Teinte uniforme, porosité comblée.
+          Même toit, même angle. Nettoyage, traitement, puis résine hydrofuge
+          colorée jusqu’à saturation : teinte uniforme, porosité comblée.
         </figcaption>
       </figure>
     </div>
