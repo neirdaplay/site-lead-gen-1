@@ -2270,23 +2270,35 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      0. Google Ads — conversion et consentement
      ================================================================ */
 
-  /* A RENSEIGNER. Google Ads > Objectifs > Conversions > votre action de
-     conversion > « Balise Google » : copier la valeur send_to complete,
-     de la forme AW-18335177160/AbC-D_efGhIjKlMnOp. Tant que la chaine
-     est vide, aucune conversion n'est envoyee — la balise de base
-     continue de fonctionner, mais Google Ads ne comptera aucun lead. */
-  var CONVERSION_LEAD = '';
+  /* Action de conversion « Envoi de formulaire de lead » (Google Ads).
+     Valeur et devise reprises telles quelles de l'extrait genere. */
+  var CONVERSION_LEAD = 'AW-18335177160/RwVzCJ6r-OYcEMiz8qZE';
+  var CONVERSION_VALEUR = 1.0;
+  var CONVERSION_DEVISE = 'EUR';
 
+  /* Google propose deux declencheurs, et l'extrait genere ici est celui
+     du mode « Clic » : une fonction gtag_report_conversion() appelee au
+     clic sur le bouton d'envoi. Nous ne l'utilisons pas, et c'est
+     deliberé — un clic n'est pas un lead. Le formulaire peut echouer
+     apres le clic : refus du serveur, coupure reseau, formulaire non
+     detecte par Netlify. Compter le clic reviendrait a declarer des
+     conversions fantomes, sur lesquelles les encheres automatiques
+     apprendraient.
+
+     signalerConversion() est donc appelee un cran plus loin, quand
+     Netlify a repondu que la demande est enregistree. Une conversion
+     comptee = un lead reellement recu. L'event_callback de l'extrait,
+     qui sert a differer une navigation, n'a pas lieu d'etre : la page
+     ne quitte pas, elle affiche l'ecran de confirmation. */
   function signalerConversion() {
-    if (!CONVERSION_LEAD) {
-      if (window.console && console.warn) {
-        console.warn('Google Ads : aucune conversion envoyee, CONVERSION_LEAD ' +
-          'est vide. Renseigner la valeur send_to dans index.html.');
-      }
-      return;
-    }
-    try { window.gtag('event', 'conversion', { send_to: CONVERSION_LEAD }); }
-    catch (e) {}
+    if (!CONVERSION_LEAD) { return; }
+    try {
+      window.gtag('event', 'conversion', {
+        send_to: CONVERSION_LEAD,
+        value: CONVERSION_VALEUR,
+        currency: CONVERSION_DEVISE
+      });
+    } catch (e) {}
   }
 
   /* Le choix du visiteur vit dans un cookie first-party de six mois,

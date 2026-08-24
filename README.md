@@ -420,18 +420,33 @@ identifiant de conversion **n'est pas un secret** : il figure dans le HTML de
 tout site qui mesure ses conversions, et n'a rien à faire en variable
 d'environnement.
 
-> **À faire une fois, sinon Google Ads ne comptera aucun lead.**
-> La conversion est branchée mais l'étiquette manque. Dans Google Ads :
-> **Objectifs → Conversions →** votre action de conversion **→ Balise Google**,
-> copiez la valeur `send_to` complète (de la forme
-> `AW-18335177160/AbC-D_efGhIjKlMnOp`) et collez-la dans la constante
-> `CONVERSION_LEAD` de `index.html`. Tant qu'elle est vide, la console affiche
-> un avertissement à chaque envoi et aucune conversion ne part.
+Action de conversion **« Envoi de formulaire de lead »** :
+`AW-18335177160/RwVzCJ6r-OYcEMiz8qZE`, valeur `1.0 EUR`. Les trois constantes
+`CONVERSION_LEAD`, `CONVERSION_VALEUR` et `CONVERSION_DEVISE` sont en haut du
+script de `index.html`.
 
-La conversion se déclenche sur **`lead_submit` et sur lui seul** — c'est-à-dire
-après un enregistrement confirmé par le serveur. Ni l'ouverture du formulaire,
-ni un clic sur le téléphone, ni `lead_disqualified` ne comptent : sans quoi
-l'algorithme apprendrait à acheter des locataires et des demandes hors zone.
+**Le déclencheur diffère volontairement de l'extrait fourni par Google.**
+L'interface propose « Chargement de page » ou « Clic » ; l'extrait généré en
+mode « Clic » expose une fonction `gtag_report_conversion()` à appeler sur le
+bouton d'envoi. Elle n'est pas utilisée, parce qu'**un clic n'est pas un
+lead** : l'envoi peut échouer après le clic — refus du serveur, coupure
+réseau, formulaire non détecté par Netlify — et compter le clic déclarerait
+des conversions fantômes, sur lesquelles les enchères automatiques
+apprendraient.
+
+La conversion part donc un cran plus loin, sur **`lead_submit` et lui seul**,
+quand Netlify a répondu que la demande est enregistrée. Une conversion comptée
+= un lead réellement reçu. Ni l'ouverture du formulaire, ni un clic sur le
+téléphone, ni `lead_disqualified` ne comptent : sans quoi l'algorithme
+apprendrait à acheter des locataires et des demandes hors zone.
+
+L'`event_callback` de l'extrait, qui sert à différer une navigation, n'a pas
+lieu d'être : la page ne quitte pas, elle affiche l'écran de confirmation.
+
+> **La valeur `1.0 EUR` est un repère, pas une estimation.** Si vous passez un
+> jour aux enchères sur la valeur de conversion, remplacez-la par ce que vaut
+> réellement un lead pour vous (marge moyenne d'un chantier × taux de
+> transformation) — l'algorithme optimisera sur ce chiffre.
 
 **Aucune donnée du formulaire n'est transmise à Google** : ni nom, ni adresse
 électronique, ni téléphone, ni code postal. Les « conversions améliorées » ne
@@ -517,7 +532,7 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 
 - [ ] `index.html` s'ouvre et fonctionne en double-cliquant dessus, hors serveur
 - [ ] Onglet Network : aucune requête tierce hors domaines Google Ads
-- [ ] `CONVERSION_LEAD` renseignée dans `index.html`, conversion visible dans Google Ads
+- [ ] Un envoi de test réel remonte dans Google Ads sous « Envoi de formulaire de lead »
 - [ ] Bandeau de consentement : « Refuser » puis « Accepter » testés, choix mémorisé
 - [ ] Aucun « Refused to load » dans la console (CSP)
 - [ ] Le build Netlify passe sans erreur
