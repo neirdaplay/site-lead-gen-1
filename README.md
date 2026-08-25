@@ -350,9 +350,12 @@ Le carrousel placé après le hero est alimenté par le tableau `AVIS`, en tête
 script. **Pour publier de vrais avis, il n'y a que ce tableau à modifier** :
 prénom, commune, note, texte, date. Retirez `exemple: true` au passage.
 
-Tant qu'une entrée porte ce drapeau, un bandeau jaune le signale sur la page et
-un avertissement apparaît dans la console. Les deux disparaissent d'eux-mêmes
-une fois les vrais avis en place. **Ne publiez que des avis réellement reçus,
+> **Le garde-fou visible a été retiré à la demande.** Il ne reste qu'un
+> avertissement dans la console du navigateur : tant qu'il s'affiche, des avis
+> d'exemple sont en ligne. Rien ne le signale plus au visiteur — ni à vous, si
+> vous n'ouvrez pas la console.
+
+**Ne publiez que des avis réellement reçus,
 recopiés mot pour mot** : inventer des avis est une pratique commerciale
 trompeuse. Aucune note moyenne, aucun compteur et aucun logo Google ne sont
 affichés — ils ne le seront que s'ils proviennent d'une fiche publique

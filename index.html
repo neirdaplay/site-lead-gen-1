@@ -268,6 +268,20 @@ background:none;border:0;font:inherit;font-size:14px;font-weight:600;color:var(-
 .retour[hidden]{display:none}
 .formulaire__securite{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--note)}
 .formulaire__securite svg{width:14px;height:14px;color:var(--vert-fonce)}
+/* Signature du formulaire : un visage plutot qu'un cadenas. Une photo
+   vaut mieux qu'une promesse ecrite, et elle ne coute que 36 px. */
+.formulaire__signature{display:flex;align-items:center;gap:9px;
+font-size:12.5px;line-height:1.35;color:var(--texte);text-align:left}
+.formulaire__visage{flex:0 0 auto;width:36px;height:36px;border-radius:50%;
+object-fit:cover;background:#E3E8EF;border:2px solid var(--blanc);
+box-shadow:0 1px 5px rgba(15,39,69,.18)}
+.formulaire__signature b{color:var(--titre)}
+.formulaire__signature-note{display:block;color:var(--note)}
+/* Sur l'ecran de confirmation, le visage precede la coche verte : le
+   visiteur vient de laisser son numero, il voit qui va s'en servir. */
+.ecran__visage{display:block;width:72px;height:72px;margin:0 auto 12px;
+border-radius:50%;object-fit:cover;background:#E3E8EF;
+border:3px solid var(--blanc);box-shadow:0 3px 12px rgba(15,39,69,.2)}
 .alerte__ref{opacity:.65;font-size:.85em;white-space:nowrap}
 .pot-de-miel{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
 .alerte{display:none;margin-top:14px;padding:12px 14px;border-radius:var(--rayon-s);
@@ -933,10 +947,6 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   <symbol id="i-chevron-droit" viewBox="0 0 24 24" fill="none" stroke="currentColor"
           stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M9 5l7 7-7 7"/></symbol>
-  <symbol id="i-cadenas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="4.6" y="10.4" width="14.8" height="10.2" rx="2"/>
-    <path d="M8.2 10.4V7.6a3.8 3.8 0 0 1 7.6 0v2.8"/>
-  </symbol>
 </svg>
 
 <!-- ================= EN-TETE ================= -->
@@ -1249,6 +1259,9 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
         <!-- ---------- Confirmation ---------- -->
         <div class="ecran" id="ecran-confirmation" hidden>
+          <img class="ecran__visage" src="assets/img/interlocuteur.jpg"
+               width="72" height="72" loading="lazy" decoding="async"
+               alt="Adrien Heddebaut, conseiller toiture">
           <div class="ecran__marque" aria-hidden="true">
             <svg viewBox="0 0 28 28" width="30" height="30" fill="none">
               <path d="M4 14.5 11 21 24 7" stroke="currentColor" stroke-width="3.2"
@@ -1276,9 +1289,19 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
             <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><use href="#i-chevron-gauche"></use></svg>
             Retour
           </button>
-          <span class="formulaire__securite">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cadenas"></use></svg>
-            Un seul technicien vous contacte
+          <!-- Le visage est en pied de carte, et non en tete : place plus
+               haut, il repousserait la premiere question sous la ligne de
+               flottaison sur mobile. Ici il ne coute rien, et il se trouve
+               juste au-dessus du bouton d'envoi a la derniere etape,
+               c'est-a-dire au moment ou la confiance compte le plus. -->
+          <span class="formulaire__signature">
+            <img class="formulaire__visage" src="assets/img/interlocuteur.jpg"
+                 width="36" height="36" loading="lazy" decoding="async"
+                 alt="Adrien Heddebaut, conseiller toiture">
+            <span>
+              <b>Adrien</b> vous rappelle
+              <span class="formulaire__signature-note">sous 24 à 48 h ouvrées</span>
+            </span>
           </span>
         </div>
       </form>
@@ -1316,8 +1339,9 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 <section class="section section--blanc" id="avis" aria-labelledby="titre-avis">
   <div class="container">
     <h2 class="section__titre" id="titre-avis" style="text-align:center">Ils nous ont fait confiance</h2>
-    <p id="avis-alerte" style="text-align:center;margin-top:10px" hidden>
-      <span class="a-completer">Avis d’exemple — à remplacer avant la mise en ligne</span>
+    <p class="section__sous-titre">
+      Ils nous ont fait confiance et n’ont pas eu de surprise !
+      Traitement de votre demande dans les 48 h maximum.
     </p>
 
     <div class="carrousel carrousel--avis" id="carrousel-avis">
@@ -2129,7 +2153,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
     <div>
       <!-- À VALIDER -->
       <p class="interlocuteur__nom" id="titre-interlocuteur">Adrien Heddebaut</p>
-      <p class="interlocuteur__role">Votre interlocuteur</p>
+      <p class="interlocuteur__role">Votre conseiller toiture</p>
       <p class="interlocuteur__texte">
         C’est moi qui vous rappelle après votre demande, et c’est moi que vous
         rappelez ensuite. On fait le point sur votre toiture au téléphone, puis
@@ -2445,7 +2469,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   var AVIS = [
     // PLACEHOLDER — a remplacer
     { prenom: 'Michel', commune: 'Armentières', note: 5, exemple: true,
-      texte: 'Toiture nettoyee et reprotégée en deux jours. Le technicien a pris le temps de tout m\u2019expliquer avant de commencer, et les abords étaient propres en partant.',
+      texte: 'Toiture nettoyée et reprotégée en deux jours. Le technicien a pris le temps de tout m\u2019expliquer avant de commencer, et les abords étaient propres en partant.',
       date: 'Mars 2026' },
     // PLACEHOLDER — a remplacer
     { prenom: 'Nicole', commune: 'Orchies', note: 5, exemple: true,
@@ -3112,11 +3136,10 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
     }
     piste.innerHTML = html;
 
-    /* Le bandeau ne s'affiche que tant qu'il reste un avis d'exemple.
-       Il s'efface de lui-meme, sans intervention. */
-    var alerte = $('#avis-alerte');
+    /* Le bandeau visible a ete retire a la demande. Il ne reste que cet
+       avertissement en console : tant qu'il s'affiche, des avis
+       d'exemple sont en ligne. */
     var reste = AVIS.some(function (a) { return a.exemple; });
-    if (alerte) { alerte.hidden = !reste; }
     if (reste && window.console && console.warn) {
       console.warn('Avis d\u2019exemple encore en place : remplacer le tableau AVIS ' +
         'dans index.html avant la mise en ligne.');
