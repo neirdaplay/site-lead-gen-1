@@ -201,14 +201,22 @@ NOM EI », mention obligatoire de l'article R. 526-27 du code de commerce).
 
 | Élément | Où |
 |---|---|
-| Prénom, nom, SIRET, immatriculation, TVA | les 3 pages légales + pieds de page |
-| Directeur de la publication | `mentions-legales.html` |
-| Adresse e-mail de contact | `mentions-legales.html`, `confidentialite.html` |
 | Adresse de Netlify, Inc. | `mentions-legales.html` (à vérifier sur netlify.com) |
-| Raison sociale de l'entreprise partenaire | `confidentialite.html` § 4 |
-| Dates de mise à jour | les 3 pages légales |
-| Communes des photos avant / après | `index.html`, section « Avant / après » |
-| Nom de domaine | `<link rel="canonical">` et balises `og:` de chaque page |
+
+Le reste est renseigné : identité et SIRET, adresse de contact, communes des
+photos, dates de mise à jour, et le nom de domaine (voir ci-dessous).
+
+### Nom de domaine
+
+Le site est servi à l'apex, **sans `www`** : `https://devis-toiture-nord.fr/`.
+C'est cette forme qui figure dans le `<link rel="canonical">`, dans `og:url` et
+dans `og:image` des quatre pages, ainsi que dans le corps des pages légales.
+
+Une seule adresse doit répondre. Dans Netlify, **Domain management → Primary
+domain**, désignez `devis-toiture-nord.fr` : la variante `www` est alors
+redirigée en 301 vers l'apex. Si vous changez un jour de forme canonique, il
+faut modifier les deux en même temps — le réglage Netlify **et** les balises des
+quatre pages — sinon Google reçoit deux signaux contradictoires.
 
 ### Photos
 
