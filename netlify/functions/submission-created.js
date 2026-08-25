@@ -66,7 +66,7 @@ exports.handler = async function (evenement) {
     '📞 ' + (tel
       ? '<a href="tel:' + echapper(tel) + '">' + echapper(donnees.telephone) + '</a>'
       : '—'),
-    '✉️ ' + echapper(donnees.email),
+    '✉️ ' + (donnees.email ? echapper(donnees.email) : 'non renseigné'),
     '',
     'Source : ' + (source ? echapper(source) : 'directe')
   ];

@@ -330,7 +330,42 @@ avancer automatiquement. Aucun bouton « suivant » sur les questions à choix.
 | 3 | Surface approximative | `surface` |
 | 4 | Pour quand | `delai` |
 | 5 | Votre code postal | `code_postal` |
-| 6 | Vos coordonnées | `prenom`, `nom`, `email`, `telephone`, `consentement` |
+| 6 | Vos coordonnées | `prenom`, `nom`, `telephone`, `email` *(facultatif)*, `consentement` |
+
+**L'e-mail n'est pas obligatoire.** Le rappel se fait par téléphone : exiger
+une adresse coûtait des demandes sans rien apporter. S'il est saisi, il doit
+être valide ; s'il est laissé vide, le lead part normalement et la notification
+Telegram affiche « non renseigné ».
+
+**La case de consentement n'est pas pré-cochée, et ne doit jamais l'être** : un
+consentement pré-coché est nul (RGPD art. 4-11, arrêt Planet49 de la CJUE).
+Seule son ergonomie a été travaillée — toute la surface du bloc répond au clic,
+la case fait 24 px, et le bouton d'envoi s'affiche en retrait tant qu'elle est
+vide. Le bouton reste cliquable : c'est son clic qui affiche « Merci de cocher
+la case pour continuer », plutôt qu'un bouton mort qui n'explique rien.
+
+### Avis
+
+Le carrousel placé après le hero est alimenté par le tableau `AVIS`, en tête du
+script. **Pour publier de vrais avis, il n'y a que ce tableau à modifier** :
+prénom, commune, note, texte, date. Retirez `exemple: true` au passage.
+
+Tant qu'une entrée porte ce drapeau, un bandeau jaune le signale sur la page et
+un avertissement apparaît dans la console. Les deux disparaissent d'eux-mêmes
+une fois les vrais avis en place. **Ne publiez que des avis réellement reçus,
+recopiés mot pour mot** : inventer des avis est une pratique commerciale
+trompeuse. Aucune note moyenne, aucun compteur et aucun logo Google ne sont
+affichés — ils ne le seront que s'ils proviennent d'une fiche publique
+vérifiable.
+
+### Carrousels
+
+Un seul mécanisme sert aux avis et aux avant/après. Le défilement est **natif**
+— `scroll-snap` fait le swipe, l'inertie et l'alignement — et le script ne gère
+que les flèches, les points et l'état courant. La piste reste utilisable si le
+script casse. Aucune bibliothèque, et **aucun défilement automatique** : cette
+audience a souvent passé 65 ans, un carrousel qui bouge seul lui fait perdre le
+fil.
 
 Le nombre d'étapes est piloté par `NB_ETAPES` et par les attributs
 `data-etape` : la barre de progression, le compteur et les annonces vocales

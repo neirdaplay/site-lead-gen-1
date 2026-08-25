@@ -286,11 +286,103 @@ border-radius:var(--rayon-s);transition:border-color .15s ease,box-shadow .15s e
 .champ__erreur.est-visible{display:block}
 .champ--duo{display:grid;gap:12px;grid-template-columns:1fr}
 @media (min-width:420px){.champ--duo{grid-template-columns:1fr 1fr}}
+
+/* ==================================================================
+   Carrousel — un seul mecanisme pour les avis et les avant/apres.
+   Le defilement est natif : scroll-snap fait tout le travail, y compris
+   le swipe tactile et l'inertie. Le script ne sert qu'aux fleches et
+   aux points, et la piste reste utilisable sans lui.
+   Aucun defilement automatique : l'audience de cette page a souvent
+   passe 65 ans, un carrousel qui bouge seul lui fait perdre le fil.
+   ================================================================== */
+.carrousel{position:relative;margin-top:28px}
+.carrousel__piste{display:grid;grid-auto-flow:column;gap:16px;
+grid-auto-columns:calc(100% - 8px);
+overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+padding:4px;margin:-4px;-webkit-overflow-scrolling:touch;
+scrollbar-width:none}
+.carrousel__piste::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){.carrousel__piste{scroll-behavior:auto}}
+.carrousel__element{scroll-snap-align:center;min-width:0}
+/* Les fleches ne s'affichent qu'a partir du bureau : au doigt, on
+   fait glisser. */
+.carrousel__fleche{display:none}
+.carrousel__points{display:flex;justify-content:center;gap:4px;margin-top:16px}
+.carrousel__point{width:44px;height:44px;padding:0;border:0;background:none;
+cursor:pointer;display:grid;place-items:center}
+.carrousel__point::before{content:"";width:9px;height:9px;border-radius:50%;
+background:#C7D0DC;transition:background-color .15s ease,transform .15s ease}
+.carrousel__point[aria-current="true"]::before{background:var(--vert-fonce);transform:scale(1.25)}
+@media (prefers-reduced-motion:reduce){.carrousel__point::before{transition:none}}
+
+/* ==================================================================
+   Avis. Le contenu vient du tableau AVIS, en tete de script.
+   ================================================================== */
+.avis-carte{height:100%;display:flex;flex-direction:column;
+background:var(--blanc);border:1px solid var(--bord);border-radius:var(--rayon);
+padding:22px;box-shadow:var(--ombre)}
+.avis-carte__haut{display:flex;align-items:center;gap:12px}
+.avis-carte__rond{flex:0 0 auto;display:grid;place-items:center;width:44px;height:44px;
+border-radius:50%;background:var(--vert-pale);color:var(--vert-fonce);
+font-size:18px;font-weight:800}
+.avis-carte__qui{display:block;font-size:15.5px;font-weight:700;color:var(--titre);line-height:1.3}
+.avis-carte__ou{display:block;font-size:13.5px;color:var(--note)}
+.avis-carte__etoiles{display:flex;gap:2px;margin-top:14px;color:var(--vert)}
+.avis-carte__etoiles svg{width:17px;height:17px}
+.avis-carte__texte{margin-top:10px;font-size:14.5px;line-height:1.6;color:var(--texte)}
+.avis-carte__date{margin-top:auto;padding-top:14px;font-size:12px;color:var(--note)}
+
+/* ==================================================================
+   Avant / apres — trois chantiers, deux vues par chantier.
+   Le ratio est force a 4/3 des deux cotes : deux photos de cadrages
+   differents restent comparables, et la hauteur est connue avant le
+   chargement, donc rien ne saute.
+   ================================================================== */
+.paire{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.paire__vue{position:relative;margin:0;border-radius:var(--rayon-s);overflow:hidden;
+background:#E3E8EF;border:1px solid var(--bord)}
+.paire__vue img{display:block;width:100%;height:auto;aspect-ratio:4/3;
+object-fit:cover;background:#E3E8EF}
+.paire__badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:999px;
+font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+color:var(--blanc);background:#667085}
+.paire__vue--apres .paire__badge{background:var(--vert)}
+.paire__legende{margin-top:12px;font-size:14.5px;line-height:1.5;color:var(--texte);text-align:center}
+.paire__legende b{color:var(--titre)}
+
+/* ==================================================================
+   Interlocuteur
+   ================================================================== */
+.interlocuteur{background:var(--gris);border-top:1px solid var(--bord)}
+.interlocuteur__interne{display:grid;gap:24px;justify-items:center;text-align:center}
+.interlocuteur__photo{flex:0 0 auto;width:160px;height:160px;border-radius:50%;
+border:4px solid var(--blanc);box-shadow:0 6px 20px rgba(15,39,69,.13);
+object-fit:cover;background:#E3E8EF}
+.interlocuteur__nom{font-size:22px;font-weight:800;color:var(--bleu);letter-spacing:-.015em}
+.interlocuteur__role{margin-top:2px;font-size:15px;font-weight:700;color:var(--vert-fonce)}
+.interlocuteur__texte{margin-top:14px;font-size:16px;line-height:1.62;color:var(--texte);max-width:560px}
+.interlocuteur__tel{display:inline-flex;align-items:center;gap:9px;min-height:44px;
+margin-top:18px;font-size:18px;font-weight:800;color:var(--bleu);text-decoration:none}
+.interlocuteur__tel svg{width:19px;height:19px;color:var(--vert-fonce)}
+.interlocuteur__tel:hover{text-decoration:underline}
+
+/* ==================================================================
+   Consentement — cible unique, toute la surface est cliquable.
+   ================================================================== */
+.champ__option{font-weight:400;color:var(--note)}
 .consentement{display:flex;gap:12px;align-items:flex-start;margin-top:6px;padding:16px;
 background:var(--gris);border:1px solid var(--bord);border-radius:var(--rayon-s)}
-.consentement input[type="checkbox"]{flex:0 0 auto;width:22px;height:22px;margin-top:2px;accent-color:var(--vert-fonce)}
-.consentement label{font-size:14.5px;line-height:1.55;color:var(--texte)}
+.consentement input[type="checkbox"]{flex:0 0 auto;width:24px;height:24px;margin:0;
+accent-color:var(--vert);cursor:pointer}
+.consentement label{font-size:15px;line-height:1.55;color:var(--texte);cursor:pointer}
 .consentement a{color:var(--bleu-clair)}
+/* Le <label> couvre deja le texte ; ce survol signale que le bloc
+   entier repond, y compris la marge autour. */
+.consentement:hover{border-color:var(--vert-fonce)}
+.consentement.est-cochee{border-color:var(--vert-fonce);background:var(--vert-pale)}
+/* Le bouton reste cliquable quand la case ne l'est pas : c'est le clic
+   qui doit expliquer ce qui manque, pas un bouton mort. */
+.bouton.est-en-attente{opacity:.55}
 
 /* --- Ecrans de sortie et confirmation --- */
 .ecran{text-align:center;padding:8px 0 4px}
@@ -529,6 +621,25 @@ border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
 @media (min-width:700px){
 .hero__interne{padding-block:42px 50px}
 .hero__titre{font-size:36px;min-height:calc(3 * 1.16em)}
+}
+@media (min-width:760px){
+/* Trois avis de front, et les fleches prennent le relais du doigt. */
+.carrousel--avis .carrousel__piste{grid-auto-columns:calc((100% - 32px) / 3)}
+.carrousel--avis .carrousel__element{scroll-snap-align:start}
+.carrousel__fleche{position:absolute;top:calc(50% - 22px);z-index:3;
+display:grid;place-items:center;width:44px;height:44px;padding:0;
+border:1px solid var(--bord);border-radius:50%;background:var(--blanc);
+color:var(--titre);cursor:pointer;box-shadow:0 2px 10px rgba(15,39,69,.12);
+transition:border-color .15s ease,opacity .15s ease}
+.carrousel__fleche:hover{border-color:var(--bleu)}
+.carrousel__fleche svg{width:17px;height:17px}
+.carrousel__fleche--avant{left:-14px}
+.carrousel__fleche--apres{right:-14px}
+.carrousel__fleche[disabled]{opacity:.32;cursor:default;box-shadow:none}
+@media (prefers-reduced-motion:reduce){.carrousel__fleche{transition:none}}
+.interlocuteur__interne{grid-template-columns:160px 1fr;gap:38px;
+justify-items:start;text-align:left;align-items:center}
+.interlocuteur__texte{margin-inline:0}
 }
 @media (min-width:900px){
 .procede{grid-template-columns:repeat(3,1fr)}
@@ -817,6 +928,11 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   <symbol id="i-chevron-gauche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M14.5 5 8 12l6.5 7"/>
   </symbol>
+  <symbol id="i-etoile" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2.4l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.25 6.2 20.3l1.1-6.45L2.6 9.25l6.5-.95L12 2.4Z"/></symbol>
+  <symbol id="i-chevron-droit" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 5l7 7-7 7"/></symbol>
   <symbol id="i-cadenas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <rect x="4.6" y="10.4" width="14.8" height="10.2" rx="2"/>
     <path d="M8.2 10.4V7.6a3.8 3.8 0 0 1 7.6 0v2.8"/>
@@ -1031,19 +1147,24 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           </div>
 
           <div class="champ">
-            <label class="champ__label" for="email">E-mail</label>
-            <input class="champ__saisie" data-clarity-mask="true" id="email" name="email" type="email"
-                   inputmode="email" autocomplete="email" placeholder="prenom.nom@exemple.fr"
-                   aria-describedby="erreur-email">
-            <p class="champ__erreur" id="erreur-email" role="alert"></p>
-          </div>
-
-          <div class="champ">
             <label class="champ__label" for="telephone">Téléphone</label>
             <input class="champ__saisie" data-clarity-mask="true" id="telephone" name="telephone" type="tel"
                    inputmode="tel" autocomplete="tel" placeholder="06 12 34 56 78"
                    aria-describedby="erreur-telephone">
             <p class="champ__erreur" id="erreur-telephone" role="alert"></p>
+          </div>
+
+          <!-- L'e-mail n'est plus obligatoire : le rappel se fait par
+               telephone, et exiger une adresse coutait des demandes sans
+               rien apporter. Il reste valide s'il est saisi. -->
+          <div class="champ">
+            <label class="champ__label" for="email">
+              E-mail <span class="champ__option">(facultatif)</span>
+            </label>
+            <input class="champ__saisie" data-clarity-mask="true" id="email" name="email" type="email"
+                   inputmode="email" autocomplete="email" placeholder="prenom.nom@exemple.fr"
+                   aria-describedby="erreur-email">
+            <p class="champ__erreur" id="erreur-email" role="alert"></p>
           </div>
 
           <!-- ====== CONSENTEMENT ======
@@ -1057,16 +1178,16 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
                contradiction se verrait.
                Toute modification de ce texte doit etre repercutee dans
                confidentialite.html section 2.2. -->
-          <div class="consentement">
+          <div class="consentement" id="bloc-consentement">
             <input type="checkbox" id="consentement" name="consentement" value="Oui">
-            <label for="consentement" id="texte-consentement">J’accepte d’être recontacté par un professionnel pour mon projet. <a href="confidentialite.html">Voir notre politique de confidentialité</a>.</label>
+            <label for="consentement" id="texte-consentement">J’accepte d’être recontacté par un professionnel pour mon projet. <a href="confidentialite.html">Voir notre politique de confidentialité</a></label>
           </div>
-          <p class="champ__erreur" id="erreur-consentement" role="alert"></p>
-
-          <button type="submit" class="bouton bouton--orange bouton--large" id="envoyer"
+          <button type="submit" class="bouton bouton--orange bouton--large est-en-attente" id="envoyer"
                   style="margin-top:18px">
             Recevoir mon devis gratuit
           </button>
+          <p class="champ__erreur" id="erreur-consentement" role="alert"
+             style="margin-top:10px;text-align:center"></p>
           <p class="alerte" id="erreur-envoi" role="alert"></p>
         </fieldset>
 
@@ -1185,6 +1306,36 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      peigne son contenu. -->
 <script>if(window.__appliquerGeo){window.__appliquerGeo();}</script>
 
+<!-- ================= AVIS =================
+     Le contenu vient du tableau AVIS, en tete de script : pour publier
+     de vrais avis, il n'y a que ce tableau a modifier, jamais ce HTML.
+     Tant qu'une entree porte « exemple: true », un bandeau jaune le
+     signale et disparait de lui-meme une fois les vrais avis colles.
+     Aucune note moyenne, aucun compteur, aucun logo Google : rien de
+     tout cela ne sera affiche sans source verifiable. -->
+<section class="section section--blanc" id="avis" aria-labelledby="titre-avis">
+  <div class="container">
+    <h2 class="section__titre" id="titre-avis" style="text-align:center">Ils nous ont fait confiance</h2>
+    <p id="avis-alerte" style="text-align:center;margin-top:10px" hidden>
+      <span class="a-completer">Avis d’exemple — à remplacer avant la mise en ligne</span>
+    </p>
+
+    <div class="carrousel carrousel--avis" id="carrousel-avis">
+      <button type="button" class="carrousel__fleche carrousel__fleche--avant"
+              data-sens="-1" aria-label="Avis précédents">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron-gauche"></use></svg>
+      </button>
+      <ul class="carrousel__piste" id="piste-avis" tabindex="0"
+          aria-label="Avis de propriétaires"></ul>
+      <button type="button" class="carrousel__fleche carrousel__fleche--apres"
+              data-sens="1" aria-label="Avis suivants">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron-droit"></use></svg>
+      </button>
+      <div class="carrousel__points" role="tablist" aria-label="Choisir un avis"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= LISERE DE REASSURANCE ================= -->
 <div class="confiance">
   <div class="container">
@@ -1271,35 +1422,68 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   <div class="container">
     <h2 class="section__titre" id="titre-avant-apres">Avant / Après : la reprotection d’une toiture en images</h2>
     <p class="section__sous-titre">
-      Une toiture en tuile béton sur la commune de Hazebrouck. Même maison,
-      même angle. Tranquille pour une quinzaine d’années, dont dix sous
-      garantie.
+      Trois chantiers, deux vues chacun. Même maison, même angle, même
+      cadrage. Tranquille pour une quinzaine d’années, dont dix sous garantie.
     </p>
 
-    <div class="diptyque">
-      <figure class="vue vue--avant">
-        <span class="vue__etiquette">Avant</span>
-        <img src="assets/img/avant-hazebrouck.jpg" width="1600" height="900"
-             loading="lazy" decoding="async"
-             alt="Toiture en tuiles béton vue depuis le toit avant intervention : teinte délavée et irrégulière, surface mate, velux et lucarnes visibles">
-        <figcaption>
-          <b>Avant</b>
-          Tuiles béton délavées, teinte partie par plaques et surface devenue
-          mate : la couche appliquée en usine a disparu, la tuile est poreuse.
-        </figcaption>
-      </figure>
-
-      <figure class="vue vue--apres">
-        <span class="vue__etiquette">Après</span>
-        <img src="assets/img/apres-hazebrouck.jpg" width="1600" height="900"
-             loading="lazy" decoding="async"
-             alt="La même toiture, sous le même angle, après nettoyage et application d’une résine hydrofuge colorée : la teinte est redevenue profonde et uniforme">
-        <figcaption>
-          <b>Après</b>
-          Même toit, même angle. Nettoyage, traitement, puis résine hydrofuge
-          colorée jusqu’à saturation : teinte uniforme, porosité comblée.
-        </figcaption>
-      </figure>
+    <div class="carrousel carrousel--paires" id="carrousel-paires">
+      <button type="button" class="carrousel__fleche carrousel__fleche--avant"
+              data-sens="-1" aria-label="Chantier précédent">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron-gauche"></use></svg>
+      </button>
+      <ul class="carrousel__piste" id="piste-paires" tabindex="0"
+          aria-label="Chantiers avant et après">
+        <li class="carrousel__element">
+          <div class="paire">
+            <figure class="paire__vue paire__vue--avant">
+              <span class="paire__badge">Avant</span>
+              <img src="assets/img/avant-1.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Toiture en tuiles béton vue depuis le toit avant intervention : teinte délavée et irrégulière, surface mate">
+            </figure>
+            <figure class="paire__vue paire__vue--apres">
+              <span class="paire__badge">Après</span>
+              <img src="assets/img/apres-1.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="La même toiture, sous le même angle, après nettoyage et application d’une résine hydrofuge colorée : teinte profonde et uniforme">
+            </figure>
+          </div>
+          <p class="paire__legende"><b>Reprotection de toiture</b> — Hazebrouck</p>
+        </li>
+        <li class="carrousel__element">
+          <div class="paire">
+            <figure class="paire__vue paire__vue--avant">
+              <span class="paire__badge">Avant</span>
+              <img src="assets/img/avant-2.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo avant du deuxième chantier">
+            </figure>
+            <figure class="paire__vue paire__vue--apres">
+              <span class="paire__badge">Après</span>
+              <img src="assets/img/apres-2.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo après du deuxième chantier">
+            </figure>
+          </div>
+          <p class="paire__legende"><b>Nettoyage / démoussage</b> — commune <span class="a-completer">à compléter</span></p>
+        </li>
+        <li class="carrousel__element">
+          <div class="paire">
+            <figure class="paire__vue paire__vue--avant">
+              <span class="paire__badge">Avant</span>
+              <img src="assets/img/avant-3.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo avant du troisième chantier">
+            </figure>
+            <figure class="paire__vue paire__vue--apres">
+              <span class="paire__badge">Après</span>
+              <img src="assets/img/apres-3.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo après du troisième chantier">
+            </figure>
+          </div>
+          <p class="paire__legende"><b>Prestation</b> — commune <span class="a-completer">à compléter</span></p>
+        </li>
+      </ul>
+      <button type="button" class="carrousel__fleche carrousel__fleche--apres"
+              data-sens="1" aria-label="Chantier suivant">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chevron-droit"></use></svg>
+      </button>
+      <div class="carrousel__points" role="tablist" aria-label="Choisir un chantier"></div>
     </div>
 
     <h3 class="section__titre" style="font-size:22px;margin-top:48px">Ce que le technicien fait, dans l’ordre</h3>
@@ -1929,31 +2113,37 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   </div>
 </section>
 
-<!-- ================= AVIS =================
-     BLOC PRÉPARÉ, VOLONTAIREMENT MASQUÉ.
-     Il reste masqué (attribut hidden ci-dessous) tant qu'il n'y a pas de
-     VRAIS avis Google. N'écrivez jamais d'avis, de note moyenne ni de nombre
-     d'avis en dur : c'est une pratique commerciale trompeuse.
-
-     POUR L'ACTIVER, une fois la fiche Google Business Profile créée et les
-     premiers avis authentiques obtenus :
-       1. retirer l'attribut hidden de la balise <section> ;
-       2. remplacer le contenu de .avis-vide par les avis réels, recopiés
-          depuis la fiche, avec le lien public vers celle-ci pour que
-          n'importe qui puisse vérifier ;
-       3. n'afficher la note moyenne QUE si elle provient de la fiche réelle.
-     Attention : un widget Google chargé depuis un domaine tiers casserait la
-     règle « zéro requête réseau externe ». Préférer une recopie manuelle
-     mise à jour périodiquement, ou un rendu côté serveur. -->
-<section class="section section--blanc" id="avis" aria-labelledby="titre-avis" hidden>
-  <div class="container">
-    <h2 class="section__titre" id="titre-avis">Ce qu’en disent les propriétaires</h2>
-    <p class="section__sous-titre">
-      Avis publiés sur la fiche Google du professionnel, sans sélection ni retouche.
-    </p>
-    <div class="avis-vide bloc">
-      <!-- EMPLACEMENT DES AVIS GOOGLE BUSINESS PROFILE -->
-      Aucun avis vérifié n’est encore publié.
+<!-- ================= INTERLOCUTEUR =================
+     Photo attendue : assets/img/interlocuteur.jpg, 480 x 480, cadrage
+     serre sur le visage. Un gabarit gris rond occupe la place en
+     attendant : les dimensions etant deja les bonnes, deposer la vraie
+     photo ne deplacera rien.
+     Le texte parle de l'interlocuteur et du suivi, jamais de
+     l'execution des travaux ni d'une qualification technique : ce
+     serait faux, et les pages legales disent l'inverse. -->
+<section class="section interlocuteur" aria-labelledby="titre-interlocuteur">
+  <div class="container interlocuteur__interne">
+    <img class="interlocuteur__photo" src="assets/img/interlocuteur.jpg"
+         width="160" height="160" loading="lazy" decoding="async"
+         alt="Portrait d’Adrien Heddebaut">
+    <div>
+      <!-- À VALIDER -->
+      <p class="interlocuteur__nom" id="titre-interlocuteur">Adrien Heddebaut</p>
+      <p class="interlocuteur__role">Votre interlocuteur</p>
+      <p class="interlocuteur__texte">
+        C’est moi qui vous rappelle après votre demande, et c’est moi que vous
+        rappelez ensuite. On fait le point sur votre toiture au téléphone, puis
+        je conviens avec vous d’une visite sur place pour un devis chiffré.
+      </p>
+      <p class="interlocuteur__texte">
+        Je suis basé dans le Nord et j’interviens sur l’ensemble du département,
+        de la métropole lilloise au Dunkerquois. Vous avez un seul numéro à
+        retenir, et une seule personne à qui parler du début à la fin.
+      </p>
+      <a class="interlocuteur__tel" href="tel:+33786505580">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"></use></svg>
+        07 86 50 55 80
+      </a>
     </div>
   </div>
 </section>
@@ -2239,6 +2429,45 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
    ================================================================== */
 (function (window, document) {
   'use strict';
+
+  /* ================================================================
+     Avis affiches dans le carrousel, apres le hero.
+
+     POUR PUBLIER DE VRAIS AVIS : remplacer les entrees ci-dessous, et
+     retirer « exemple: true ». Rien d'autre a toucher, ni dans le HTML
+     ni dans le CSS. Tant qu'une entree porte ce drapeau, un bandeau
+     jaune le signale sur la page ; il disparait tout seul ensuite.
+
+     Ne recopiez que des avis reellement recus, mot pour mot. Une note
+     moyenne ou un nombre d'avis ne s'affichent pas ici : ils ne seront
+     ajoutes que s'ils proviennent d'une fiche publique verifiable.
+     ================================================================ */
+  var AVIS = [
+    // PLACEHOLDER — a remplacer
+    { prenom: 'Michel', commune: 'Armentières', note: 5, exemple: true,
+      texte: 'Toiture nettoyee et reprotégée en deux jours. Le technicien a pris le temps de tout m\u2019expliquer avant de commencer, et les abords étaient propres en partant.',
+      date: 'Mars 2026' },
+    // PLACEHOLDER — a remplacer
+    { prenom: 'Nicole', commune: 'Orchies', note: 5, exemple: true,
+      texte: 'J\u2019avais des mousses depuis des années et je ne savais pas à qui m\u2019adresser. Un seul interlocuteur, un devis clair, pas de mauvaise surprise sur la facture.',
+      date: 'Février 2026' },
+    // PLACEHOLDER — a remplacer
+    { prenom: 'Jean-Pierre', commune: 'Bailleul', note: 5, exemple: true,
+      texte: 'Rappel le lendemain de ma demande, visite dans la semaine. Le devis correspondait à ce qui avait été annoncé au téléphone.',
+      date: 'Février 2026' },
+    // PLACEHOLDER — a remplacer
+    { prenom: 'Christiane', commune: 'Douai', note: 5, exemple: true,
+      texte: 'Travail soigné et équipe polie. On m\u2019a montré les photos avant et après depuis le toit, ce que je n\u2019aurais pas pu voir moi-même.',
+      date: 'Janvier 2026' },
+    // PLACEHOLDER — a remplacer
+    { prenom: 'Gérard', commune: 'Hazebrouck', note: 5, exemple: true,
+      texte: 'Une tuile poreuse sur toute la façade sud. La difference se voit depuis la rue, et je n\u2019ai plus d\u2019humidité dans les combles.',
+      date: 'Janvier 2026' },
+    // PLACEHOLDER — a remplacer
+    { prenom: 'Monique', commune: 'Valenciennes', note: 5, exemple: true,
+      texte: 'On m\u2019avait proposé bien plus cher ailleurs pour la même chose. Ici le prix annoncé est celui que j\u2019ai payé.',
+      date: 'Décembre 2025' }
+  ];
 
   var NB_ETAPES = 6;
   /* Les deux dernieres etapes sont designees par leur role, jamais par
@@ -2605,6 +2834,33 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   var champEmail = $('#email'), champTel = $('#telephone');
   var caseConsentement = $('#consentement');
   var erreurConsentement = $('#erreur-consentement');
+  var blocConsentement = $('#bloc-consentement');
+
+  /* La case reste NON pre-cochee : un consentement pre-coche est nul
+     (RGPD art. 4-11, CJUE Planet49). Ce qui suit ne touche pas a cela,
+     seulement a la facilite de cocher : toute la surface du bloc
+     repond, pas le seul carre de 24 px. */
+  if (blocConsentement && caseConsentement) {
+    blocConsentement.addEventListener('click', function (evenement) {
+      /* Le label et la case font deja le travail ; on ne s'occupe que
+         des clics sur le fond, sans quoi on inverserait deux fois. */
+      var cible = evenement.target;
+      if (cible.closest('a') || cible.closest('label') || cible === caseConsentement) { return; }
+      caseConsentement.checked = !caseConsentement.checked;
+      caseConsentement.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    function refletConsentement() {
+      var coche = caseConsentement.checked;
+      blocConsentement.classList.toggle('est-cochee', coche);
+      /* Le bouton reste cliquable : c'est son clic qui doit dire ce
+         qui manque. Seul son aspect change. */
+      if (boutonEnvoi) { boutonEnvoi.classList.toggle('est-en-attente', !coche); }
+      if (coche) { erreurConsentement.classList.remove('est-visible'); }
+    }
+    caseConsentement.addEventListener('change', refletConsentement);
+    refletConsentement();
+  }
   var boutonEnvoi = $('#envoyer');
 
   var RE_TEL = /^(?:(?:\+|00)33[\s.-]?(?:\(0\)[\s.-]?)?|0)[1-9](?:[\s.-]?[0-9]{2}){4}$/;
@@ -2624,9 +2880,11 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
       ok = false;
     } else { erreur(champNom, $('#erreur-nom'), ''); }
 
-    if (!RE_EMAIL.test(champEmail.value.trim())) {
-      if (ok) { erreur(champEmail, $('#erreur-email'), 'Merci d’indiquer une adresse e-mail valide.'); }
-      else { $('#erreur-email').textContent = 'Merci d’indiquer une adresse e-mail valide.';
+    /* L'e-mail est facultatif : il n'est controle que s'il est saisi. */
+    var email = champEmail.value.trim();
+    if (email && !RE_EMAIL.test(email)) {
+      if (ok) { erreur(champEmail, $('#erreur-email'), 'Cette adresse e-mail semble incomplète.'); }
+      else { $('#erreur-email').textContent = 'Cette adresse e-mail semble incomplète.';
              $('#erreur-email').classList.add('est-visible'); }
       ok = false;
     } else { erreur(champEmail, $('#erreur-email'), ''); }
@@ -2641,8 +2899,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
     } else { erreur(champTel, $('#erreur-telephone'), ''); }
 
     if (!caseConsentement.checked) {
-      erreurConsentement.textContent =
-        'Votre accord est nécessaire pour que le professionnel puisse vous contacter.';
+      erreurConsentement.textContent = 'Merci de cocher la case pour continuer';
       erreurConsentement.classList.add('est-visible');
       if (ok) { try { caseConsentement.focus(); } catch (e) {} }
       ok = false;
@@ -2752,6 +3009,128 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   });
 
   /* ================================================================
+     2 bis. Carrousels
+     Le defilement est natif : scroll-snap fait le swipe, l'inertie et
+     l'alignement. Ce qui suit ne gere que les fleches, les points et
+     l'etat courant — et la piste reste utilisable si le script casse.
+     ================================================================ */
+  function monterCarrousel(racine) {
+    if (!racine) { return; }
+    var piste = $('.carrousel__piste', racine);
+    var points = $('.carrousel__points', racine);
+    var fleches = $$('.carrousel__fleche', racine);
+    var elements = $$('.carrousel__element', piste);
+    if (!piste || elements.length < 2) {
+      if (points) { points.hidden = true; }
+      fleches.forEach(function (f) { f.hidden = true; });
+      return;
+    }
+
+    /* Index courant : l'element dont le bord gauche est le plus proche
+       de celui de la piste. Plus fiable qu'un compteur maison, qui
+       decrocherait au premier swipe. */
+    function courant() {
+      var ref = piste.scrollLeft, meilleur = 0, ecart = Infinity;
+      for (var i = 0; i < elements.length; i++) {
+        var d = Math.abs(elements[i].offsetLeft - piste.offsetLeft - ref);
+        if (d < ecart) { ecart = d; meilleur = i; }
+      }
+      return meilleur;
+    }
+
+    function versElement(i) {
+      i = Math.max(0, Math.min(elements.length - 1, i));
+      piste.scrollTo({ left: elements[i].offsetLeft - piste.offsetLeft,
+        behavior: mouvementReduit() ? 'auto' : 'smooth' });
+    }
+
+    if (points) {
+      points.innerHTML = '';
+      elements.forEach(function (el, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'carrousel__point';
+        b.setAttribute('role', 'tab');
+        b.setAttribute('aria-label', 'Voir l\u2019element ' + (i + 1) + ' sur ' + elements.length);
+        b.addEventListener('click', function () { versElement(i); });
+        points.appendChild(b);
+      });
+    }
+
+    fleches.forEach(function (f) {
+      f.addEventListener('click', function () {
+        versElement(courant() + parseInt(f.getAttribute('data-sens'), 10));
+      });
+    });
+
+    function rafraichir() {
+      var i = courant();
+      if (points) {
+        $$('.carrousel__point', points).forEach(function (b, j) {
+          b.setAttribute('aria-current', j === i ? 'true' : 'false');
+        });
+      }
+      /* Une fleche desactivee vaut mieux qu'une fleche sans effet. */
+      var fin = piste.scrollWidth - piste.clientWidth - 2;
+      fleches.forEach(function (f) {
+        var sens = parseInt(f.getAttribute('data-sens'), 10);
+        f.disabled = sens < 0 ? piste.scrollLeft <= 2 : piste.scrollLeft >= fin;
+      });
+    }
+
+    var attente;
+    piste.addEventListener('scroll', function () {
+      window.clearTimeout(attente);
+      attente = window.setTimeout(rafraichir, 90);
+    });
+    window.addEventListener('resize', rafraichir);
+    rafraichir();
+  }
+
+  /* --- Avis : le HTML est produit depuis le tableau AVIS --- */
+  function monterAvis() {
+    var piste = $('#piste-avis');
+    if (!piste) { return; }
+    var html = '';
+    for (var i = 0; i < AVIS.length; i++) {
+      var a = AVIS[i];
+      var etoiles = '';
+      for (var e = 0; e < Math.max(0, Math.min(5, a.note || 0)); e++) {
+        etoiles += '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-etoile"></use></svg>';
+      }
+      html += '<li class="carrousel__element"><article class="avis-carte">' +
+        '<div class="avis-carte__haut">' +
+          '<span class="avis-carte__rond" aria-hidden="true">' + echapper(a.prenom.charAt(0)) + '</span>' +
+          '<span><span class="avis-carte__qui">' + echapper(a.prenom) + '</span>' +
+          '<span class="avis-carte__ou">' + echapper(a.commune) + '</span></span>' +
+        '</div>' +
+        '<div class="avis-carte__etoiles" role="img" aria-label="' +
+          echapper(String(a.note)) + ' \u00e9toiles sur 5">' + etoiles + '</div>' +
+        '<p class="avis-carte__texte">' + echapper(a.texte) + '</p>' +
+        '<p class="avis-carte__date">' + echapper(a.date) + '</p>' +
+      '</article></li>';
+    }
+    piste.innerHTML = html;
+
+    /* Le bandeau ne s'affiche que tant qu'il reste un avis d'exemple.
+       Il s'efface de lui-meme, sans intervention. */
+    var alerte = $('#avis-alerte');
+    var reste = AVIS.some(function (a) { return a.exemple; });
+    if (alerte) { alerte.hidden = !reste; }
+    if (reste && window.console && console.warn) {
+      console.warn('Avis d\u2019exemple encore en place : remplacer le tableau AVIS ' +
+        'dans index.html avant la mise en ligne.');
+    }
+  }
+
+  /* Les avis viennent d'un tableau edite a la main : on echappe. */
+  function echapper(t) {
+    return String(t == null ? '' : t)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* ================================================================
      3. Ancres vers le formulaire
      ================================================================ */
   $$('[data-action="aller-au-formulaire"]').forEach(function (element) {
@@ -2805,6 +3184,9 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   if (window.__appliquerGeo) { window.__appliquerGeo(); }
 
   afficherEtape(1, true);
+  monterAvis();
+  monterCarrousel($('#carrousel-avis'));
+  monterCarrousel($('#carrousel-paires'));
   preparerBandeau();
   tracer('page_ready', { ville_detectee: (window.__GEO && window.__GEO.ville) || '' });
 })(window, document);
