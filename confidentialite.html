@@ -124,18 +124,43 @@ font-size:13px;line-height:1.65;color:var(--note)}
 
       <h2>2. Données collectées</h2>
       <p>
-        Le site ne charge <b>ni police externe, ni CDN, ni bibliothèque tierce,
-        ni outil de mesure d’audience</b>. Un seul script tiers est présent : la
-        balise Google Ads, qui sert à savoir quelle annonce a mené à une demande
-        de devis.
+        Le site ne charge <b>ni police externe, ni CDN, ni bibliothèque
+        tierce</b>. Deux scripts tiers sont présents, et deux seulement :
+      </p>
+      <ul>
+        <li>
+          <b>Google Ads</b> — pour savoir quelle annonce a mené à une demande
+          de devis.
+        </li>
+        <li>
+          <b>Microsoft Clarity</b> — pour comprendre comment cette page est
+          utilisée : où l’on s’arrête, où l’on hésite, où l’on abandonne le
+          formulaire. Cet outil <b>enregistre le déroulé de votre visite</b>
+          sur cette page : mouvements de souris, clics, défilement, taille
+          d’écran, pages vues.
+        </li>
+      </ul>
+      <p>
+        Les deux sont régis par votre choix, mais pas de la même manière, et
+        la différence mérite d’être dite.
       </p>
       <p>
-        Cette balise est régie par votre choix. <b>Tant que vous n’avez pas
-        accepté, elle ne dépose aucun cookie et ne transmet aucun identifiant</b> :
-        elle se limite à un signal anonyme, dont Google tire une estimation
-        statistique du nombre de demandes. Si vous acceptez, elle dépose les
-        cookies décrits à l’article 7. Le détail figure à l’article 7, et vous
-        pouvez revenir sur votre choix à tout moment.
+        <b>Clarity n’est pas chargée du tout tant que vous n’avez pas
+        accepté.</b> Aucun enregistrement n’est réalisé, aucun cookie n’est
+        déposé, et son serveur n’est même pas contacté. Si vous refusez, ou si
+        vous ne répondez pas au bandeau, l’outil n’existe pas pour vous.
+      </p>
+      <p>
+        La balise Google, elle, est chargée mais <b>bridée</b> : tant que vous
+        n’avez pas accepté, elle ne dépose aucun cookie et ne transmet aucun
+        identifiant. Elle se limite à un signal anonyme, dont Google tire une
+        estimation statistique du nombre de demandes.
+      </p>
+      <p>
+        <b>Ce que Clarity ne voit pas.</b> Les champs du formulaire — nom,
+        prénom, adresse électronique, téléphone, code postal — sont
+        explicitement masqués dans le code de la page. L’enregistrement montre
+        que vous remplissez un champ, jamais ce que vous y écrivez.
       </p>
 
       <h3>2.1 Données que vous saisissez dans le formulaire</h3>
@@ -244,6 +269,13 @@ font-size:13px;line-height:1.65;color:var(--note)}
         </li>
       </ul>
       <p>
+        <b>Microsoft Corporation</b> intervient également, en qualité de
+        sous-traitant, pour l’hébergement et le traitement des enregistrements
+        de navigation réalisés par Clarity — <b>et seulement si vous avez
+        accepté</b>. Ces enregistrements ne contiennent aucune donnée du
+        formulaire.
+      </p>
+      <p>
         <b>Google n’en fait pas partie.</b> Si vous avez accepté la balise
         publicitaire (article 7), Google reçoit uniquement le signal
         « une demande de devis a été envoyée », rattaché au clic publicitaire.
@@ -312,8 +344,9 @@ font-size:13px;line-height:1.65;color:var(--note)}
         bandeau affiché à votre première visite.
       </p>
       <p>
-        <b>Aucun cookie de mesure d’audience</b> n’est utilisé : le site n’a ni
-        Google Analytics, ni équivalent.
+        <b>Le site n’utilise pas Google Analytics</b>, ni aucun équivalent
+        publicitaire. La mesure d’audience se limite à Microsoft Clarity, décrit
+        au 7.2, qui ne se déclenche qu’avec votre accord.
       </p>
       <h3>7.1 Cookies nécessaires, déposés sans consentement</h3>
       <div class="tableau">
@@ -365,11 +398,32 @@ font-size:13px;line-height:1.65;color:var(--note)}
               </td>
               <td>90 jours au plus</td>
             </tr>
+            <tr>
+              <th scope="row"><code>_clck</code>, <code>_clsk</code> (Microsoft)</th>
+              <td>
+                Déposés par <b>Microsoft Clarity</b> une fois que vous avez
+                accepté. Ils permettent de rattacher les pages d’une même visite
+                et de reconnaître un visiteur qui revient, afin de mesurer
+                l’usage de la page. <b>Ils ne servent pas à vous adresser de la
+                publicité.</b>
+              </td>
+              <td>1 an et 1 jour</td>
+            </tr>
           </tbody>
         </table>
       </div>
       <p>
-        Le responsable de ces cookies est <b>Google Ireland Limited</b>, Gordon
+        Le responsable des cookies Clarity est <b>Microsoft Corporation</b>, One
+        Microsoft Way, Redmond, WA 98052, États-Unis. Les données peuvent être
+        transférées aux États-Unis sur la base de la <b>décision d’adéquation</b>
+        de la Commission européenne du 10 juillet 2023 relative au cadre de
+        protection des données UE — États-Unis, dont Microsoft est certifié. Les
+        règles de Microsoft sont détaillées sur
+        <a href="https://privacy.microsoft.com/fr-fr/privacystatement" rel="noopener nofollow" target="_blank">privacy.microsoft.com</a>.
+        Microsoft indique conserver les données Clarity <b>un an</b>.
+      </p>
+      <p>
+        Le responsable des cookies publicitaires est <b>Google Ireland Limited</b>, Gordon
         House, Barrow Street, Dublin 4, Irlande. Les données correspondantes
         peuvent être transférées à Google LLC aux États-Unis, sur la base de la
         <b>décision d’adéquation</b> de la Commission européenne du 10 juillet

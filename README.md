@@ -452,12 +452,39 @@ lieu d'être : la page ne quitte pas, elle affiche l'écran de confirmation.
 électronique, ni téléphone, ni code postal. Les « conversions améliorées » ne
 sont pas activées.
 
+### Microsoft Clarity
+
+Projet `y7tr5kz2g8`. Mesure d'audience et **enregistrement de session** :
+mouvements, clics, défilement, cartes de chaleur.
+
+> **Clarity n'est pas chargée tant que le visiteur n'a pas accepté.**
+> C'est délibéré et ça la distingue de la balise Google. Google offre le
+> Consent Mode, qui laisse la balise utile en mode refusé — elle envoie un
+> signal sans identifiant. Clarity n'a pas d'équivalent : elle enregistre ou
+> elle n'enregistre pas. La seule façon de ne rien enregistrer sans accord est
+> donc de ne pas charger le script du tout, et c'est ce que fait
+> `window.__chargerClarity()`, appelée soit au clic sur « Accepter », soit au
+> chargement si le choix est déjà enregistré.
+
+**Les champs du formulaire sont masqués côté page.** Les cinq champs personnels
+— prénom, nom, e-mail, téléphone, code postal — portent
+`data-clarity-mask="true"`. Clarity masque déjà les saisies dans son réglage par
+défaut, mais ce réglage se change depuis son interface : l'attribut le fige dans
+le code, où il ne peut pas être désactivé par mégarde. **Ne le retirez pas.**
+
+Clarity répartit sa charge sur `a.clarity.ms` à `z.clarity.ms`, d'où le joker
+`https://*.clarity.ms` dans le CSP, plus `c.bing.com` pour sa synchronisation.
+
 ### Consentement (Consent Mode v2)
 
 Les quatre signaux — `ad_storage`, `ad_user_data`, `ad_personalization`,
 `analytics_storage` — sont à `denied` au chargement, **avant** la commande
 `config`. Sans action du visiteur, Google ne dépose aucun cookie et ne reçoit
 qu'un signal anonyme, dont il tire une modélisation des conversions.
+
+Le bandeau couvre **les deux outils**. Son texte le dit explicitement : mesure
+des annonces d'un côté, enregistrement de la navigation de l'autre. Refuser
+bloque les deux.
 
 Un bandeau demande le choix à la première visite. Refuser et accepter ont la
 même taille et le même poids visuel, comme l'exige la CNIL. La réponse est
@@ -472,11 +499,13 @@ sortante.
 ### Si la balise ne se déclenche pas
 
 Le CSP de `netlify.toml` est en liste blanche stricte. Il autorise
-nommément `www.googletagmanager.com`, `www.googleadservices.com`,
-`googleads.g.doubleclick.net`, `td.doubleclick.net`, `www.google.com`,
-`www.google.fr` et `pagead2.googlesyndication.com`. Si vous ajoutez un autre
-outil Google, il faudra l'y déclarer, sinon le navigateur le bloquera
-silencieusement — la console indique alors « Refused to load ».
+nommément les domaines de Google Ads (`www.googletagmanager.com`,
+`www.googleadservices.com`, `googleads.g.doubleclick.net`,
+`td.doubleclick.net`, `www.google.com`, `www.google.fr`,
+`pagead2.googlesyndication.com`) et ceux de Clarity (`https://*.clarity.ms`,
+`c.bing.com`). Si vous ajoutez un autre outil, il faudra l'y déclarer, sinon le
+navigateur le bloquera silencieusement — la console indique alors
+« Refused to load ».
 
 ---
 
@@ -534,6 +563,8 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] Onglet Network : aucune requête tierce hors domaines Google Ads
 - [ ] Un envoi de test réel remonte dans Google Ads sous « Envoi de formulaire de lead »
 - [ ] Bandeau de consentement : « Refuser » puis « Accepter » testés, choix mémorisé
+- [ ] Onglet Network : **aucune requête `clarity.ms` avant d'avoir accepté**
+- [ ] Une session de test apparaît dans Clarity, et les champs du formulaire y sont masqués
 - [ ] Aucun « Refused to load » dans la console (CSP)
 - [ ] Le build Netlify passe sans erreur
 - [ ] **Form detection activée** dans Forms → Usage and configuration, puis site redéployé

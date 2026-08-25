@@ -70,6 +70,40 @@ gtag('config', 'AW-18335177160');
   b.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18335177160';
   document.head.appendChild(b);
 }());
+
+/* ==================================================================
+   Microsoft Clarity — y7tr5kz2g8.
+
+   Contrairement a la balise Google, Clarity n'est PAS chargee tant que
+   le visiteur n'a pas accepte. Ce n'est pas de la prudence excessive :
+   Clarity enregistre la session — mouvements, clics, defilement — et se
+   synchronise avec Bing. Le Consent Mode, qui permet a Google de rester
+   utile en mode refuse, n'a pas d'equivalent ici : la seule facon de ne
+   rien enregistrer sans accord est de ne pas charger le script.
+
+   Le chargeur est donc expose et appele soit au chargement si le choix
+   est deja « accepte », soit au clic sur « Accepter ».
+   ================================================================== */
+window.__chargerClarity = (function () {
+  var faite = false;
+  return function () {
+    if (faite) { return; }
+    if (window.location.protocol.indexOf('http') !== 0) { return; }
+    faite = true;
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', 'y7tr5kz2g8');
+  };
+}());
+
+(function () {
+  try {
+    var m = document.cookie.match(/(?:^|; )consentement_pub=([^;]*)/);
+    if (m && decodeURIComponent(m[1]) === 'accepte') { window.__chargerClarity(); }
+  } catch (e) {}
+}());
 </script>
 
 <style>
@@ -1005,7 +1039,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <p class="etape__aide">Nous intervenons uniquement dans le département du Nord (59).</p>
           <div class="champ">
             <label class="champ__label" for="code-postal">Code postal</label>
-            <input class="champ__saisie" id="code-postal" name="code_postal" type="text"
+            <input class="champ__saisie" data-clarity-mask="true" id="code-postal" name="code_postal" type="text"
                    inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code"
                    placeholder="59000" aria-describedby="erreur-code-postal">
             <p class="champ__erreur" id="erreur-code-postal" role="alert"></p>
@@ -1024,13 +1058,13 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <div class="champ champ--duo">
             <div>
               <label class="champ__label" for="prenom">Prénom</label>
-              <input class="champ__saisie" id="prenom" name="prenom" type="text"
+              <input class="champ__saisie" data-clarity-mask="true" id="prenom" name="prenom" type="text"
                      autocomplete="given-name" aria-describedby="erreur-prenom">
               <p class="champ__erreur" id="erreur-prenom" role="alert"></p>
             </div>
             <div>
               <label class="champ__label" for="nom">Nom</label>
-              <input class="champ__saisie" id="nom" name="nom" type="text"
+              <input class="champ__saisie" data-clarity-mask="true" id="nom" name="nom" type="text"
                      autocomplete="family-name" aria-describedby="erreur-nom">
               <p class="champ__erreur" id="erreur-nom" role="alert"></p>
             </div>
@@ -1038,7 +1072,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
           <div class="champ">
             <label class="champ__label" for="email">E-mail</label>
-            <input class="champ__saisie" id="email" name="email" type="email"
+            <input class="champ__saisie" data-clarity-mask="true" id="email" name="email" type="email"
                    inputmode="email" autocomplete="email" placeholder="prenom.nom@exemple.fr"
                    aria-describedby="erreur-email">
             <p class="champ__erreur" id="erreur-email" role="alert"></p>
@@ -1046,7 +1080,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
           <div class="champ">
             <label class="champ__label" for="telephone">Téléphone</label>
-            <input class="champ__saisie" id="telephone" name="telephone" type="tel"
+            <input class="champ__saisie" data-clarity-mask="true" id="telephone" name="telephone" type="tel"
                    inputmode="tel" autocomplete="tel" placeholder="06 12 34 56 78"
                    aria-describedby="erreur-telephone">
             <p class="champ__erreur" id="erreur-telephone" role="alert"></p>
@@ -2183,11 +2217,13 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      aria-labelledby="bandeau-titre" hidden>
   <div class="container bandeau-cookies__interne">
     <div>
-      <p class="bandeau-cookies__titre" id="bandeau-titre">Mesure de nos annonces</p>
+      <p class="bandeau-cookies__titre" id="bandeau-titre">Mesure d’audience et de nos annonces</p>
       <p class="bandeau-cookies__texte">
-        Nous aimerions déposer un cookie Google Ads pour savoir quelle annonce
-        a mené à votre demande. Il n’est déposé que si vous l’acceptez, et
-        refuser ne change rien au fonctionnement du formulaire.
+        Nous aimerions mesurer deux choses : quelle annonce a mené à votre
+        demande, et comment cette page est utilisée, afin de la corriger là où
+        elle bloque. Cela suppose des cookies et l’enregistrement anonyme de
+        votre navigation sur cette page. <b>Rien n’est déposé ni enregistré si
+        vous refusez</b>, et le formulaire fonctionne à l’identique.
         <a href="confidentialite.html">En savoir plus</a>.
       </p>
     </div>
@@ -2316,6 +2352,8 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         analytics_storage: etat
       });
     } catch (e) {}
+    /* Clarity ne demarre qu'ici, et jamais en cas de refus. */
+    if (accepte && window.__chargerClarity) { window.__chargerClarity(); }
     tracer('consentement_pub', { choix: accepte ? 'accepte' : 'refuse' });
   }
 
