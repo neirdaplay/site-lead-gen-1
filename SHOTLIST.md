@@ -19,21 +19,27 @@ tient en deux photos du **même toit, sous le même angle**.
 | `avant-3.jpg` / `apres-3.jpg` | **Dunkerque** — ouvre le carrousel | ✅ fournies |
 | `avant-1.jpg` / `apres-1.jpg` | Hazebrouck | ✅ fournies |
 | `avant-2.jpg` / `apres-2.jpg` | Orchies | ✅ fournies |
-| `avant-4.jpg` / `apres-4.jpg` | Sainghin-en-Weppes | ⬜ gabarit gris |
-| `avant-5.jpg` / `apres-5.jpg` | Valenciennes | ⬜ gabarit gris |
+| `avant-4.jpg` / `apres-4.jpg` | Sainghin-en-Weppes | ✅ fournies |
+| `avant-5.jpg` / `apres-5.jpg` | Valenciennes | ✅ fournies |
 
 L'ordre d'affichage n'est pas l'ordre des fichiers : **Dunkerque ouvre le
 carrousel** parce que c'est la comparaison la plus démonstrative. L'ordre est
 défini dans `index.html`, dans la liste `#piste-paires`.
 
-Les trois chantiers fournis portent la même étiquette : **Nettoyage +
-reprotection en résine hydrofuge colorée**. Les deux emplacements restants
-gardent une étiquette générique tant que les photos ne sont pas là — la
-prestation dépendra du chantier.
+Les cinq chantiers portent la même étiquette : **Nettoyage + reprotection en
+résine hydrofuge colorée**.
 
-Les fichiers déposés en `.JPG` majuscules ont été renommés en minuscules :
-Netlify distingue la casse, et l'ancienne écriture aurait renvoyé une 404 en
-ligne. Ils ont aussi été ramenés de 318 Ko à 1 Mo vers 96 à 264 Ko.
+Les paires 4 et 5 ont été livrées en **portrait** (3:4). Comme l'affichage
+impose le 4/3 paysage, elles ont été recadrées sur une bande prise un peu
+au-dessus du centre : sur une photo de maison la toiture est toujours en haut,
+et un recadrage centré l'aurait coupée.
+
+**Attention à l'extension.** Plusieurs fichiers ont été déposés en `.JPG`
+majuscules. Netlify distingue la casse, contrairement à Windows : ces images
+s'affichaient en local et auraient renvoyé une **404 en ligne**. Elles ont été
+renommées en minuscules. Vérifiez ce point à chaque nouvel envoi.
+
+Toutes ont été ramenées de 318 Ko – 1 Mo à **96 – 264 Ko**.
 
 **Format : 1200 × 900 px (4/3), JPEG, moins de 250 Ko.**
 
