@@ -14,11 +14,25 @@ déplacera rien, et le score de stabilité visuelle reste intact.
 Le carrousel de la section « Avant / Après » affiche trois paires. Chaque paire
 tient en deux photos du **même toit, sous le même angle**.
 
-| Fichier | Sujet | État |
+| Fichier | Chantier | État |
 |---|---|---|
-| `avant-1.jpg` / `apres-1.jpg` | Reprotection, Hazebrouck | ✅ fournies |
-| `avant-2.jpg` / `apres-2.jpg` | Deuxième chantier | ⬜ gabarit gris |
-| `avant-3.jpg` / `apres-3.jpg` | Troisième chantier | ⬜ gabarit gris |
+| `avant-3.jpg` / `apres-3.jpg` | **Dunkerque** — ouvre le carrousel | ✅ fournies |
+| `avant-1.jpg` / `apres-1.jpg` | Hazebrouck | ✅ fournies |
+| `avant-2.jpg` / `apres-2.jpg` | Orchies | ✅ fournies |
+| `avant-4.jpg` / `apres-4.jpg` | Sainghin-en-Weppes | ⬜ gabarit gris |
+| `avant-5.jpg` / `apres-5.jpg` | Valenciennes | ⬜ gabarit gris |
+
+L'ordre d'affichage n'est pas l'ordre des fichiers : **Dunkerque ouvre le
+carrousel** parce que c'est la comparaison la plus démonstrative. L'ordre est
+défini dans `index.html`, dans la liste `#piste-paires`.
+
+**Les prestations d'Orchies et de Dunkerque restent à confirmer** — elles
+portent un surlignage jaune dans la page. Dites lesquelles ce sont et il
+disparaît.
+
+Les fichiers déposés en `.JPG` majuscules ont été renommés en minuscules :
+Netlify distingue la casse, et l'ancienne écriture aurait renvoyé une 404 en
+ligne. Ils ont aussi été ramenés de 318 Ko à 1 Mo vers 96 à 264 Ko.
 
 **Format : 1200 × 900 px (4/3), JPEG, moins de 250 Ko.**
 

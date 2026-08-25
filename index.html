@@ -270,12 +270,32 @@ background:none;border:0;font:inherit;font-size:14px;font-weight:600;color:var(-
 .formulaire__securite svg{width:14px;height:14px;color:var(--vert-fonce)}
 /* Signature du formulaire : un visage plutot qu'un cadenas. Une photo
    vaut mieux qu'une promesse ecrite, et elle ne coute que 36 px. */
-.formulaire__signature{display:flex;align-items:center;gap:9px;
+.formulaire__signature{display:flex;align-items:center;gap:9px;min-width:0;
 font-size:12.5px;line-height:1.35;color:var(--texte);text-align:left}
-.formulaire__visage{flex:0 0 auto;width:36px;height:36px;border-radius:50%;
+.formulaire__signature > span:last-child{min-width:0}
+.formulaire__avatar{position:relative;flex:0 0 auto;display:block;width:36px;height:36px}
+.formulaire__visage{display:block;width:36px;height:36px;border-radius:50%;
 object-fit:cover;background:#E3E8EF;border:2px solid var(--blanc);
 box-shadow:0 1px 5px rgba(15,39,69,.18)}
+/* Pastille d'activite. Elle ne dit pas « en ligne » : ce serait faux a
+   trois heures du matin. Elle signale une activite en cours, et la
+   ligne qui la suit donne le delai reel. */
+.formulaire__pastille{position:absolute;right:-1px;bottom:-1px;
+width:11px;height:11px;border-radius:50%;background:var(--vert);
+border:2px solid var(--blanc);box-shadow:0 0 0 0 rgba(18,183,106,.55);
+animation:pulsation 2.4s ease-out infinite}
+@keyframes pulsation{
+  0%{box-shadow:0 0 0 0 rgba(18,183,106,.5)}
+  70%{box-shadow:0 0 0 7px rgba(18,183,106,0)}
+  100%{box-shadow:0 0 0 0 rgba(18,183,106,0)}}
+@media (prefers-reduced-motion:reduce){.formulaire__pastille{animation:none}}
 .formulaire__signature b{color:var(--titre)}
+/* La promesse tient sur une seule ligne : coupee en deux, elle se lisait
+   comme deux informations distinctes. */
+.formulaire__signature-ligne{display:block;white-space:nowrap}
+/* Deux pixels de marge a 320px, c'est trop juste pour les variations
+   de rendu des polices : on desserre sur les tres petits ecrans. */
+@media (max-width:340px){.formulaire__signature{font-size:11.5px}}
 .formulaire__signature-note{display:block;color:var(--note)}
 /* Sur l'ecran de confirmation, le visage precede la coche verte : le
    visiteur vient de laisser son numero, il voit qui va s'en servir. */
@@ -1295,12 +1315,15 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
                juste au-dessus du bouton d'envoi a la derniere etape,
                c'est-a-dire au moment ou la confiance compte le plus. -->
           <span class="formulaire__signature">
-            <img class="formulaire__visage" src="assets/img/interlocuteur.jpg"
-                 width="36" height="36" loading="lazy" decoding="async"
-                 alt="Adrien Heddebaut, conseiller toiture">
+            <span class="formulaire__avatar">
+              <img class="formulaire__visage" src="assets/img/interlocuteur.jpg"
+                   width="36" height="36" loading="lazy" decoding="async"
+                   alt="Adrien Heddebaut, conseiller toiture">
+              <span class="formulaire__pastille" aria-hidden="true"></span>
+            </span>
             <span>
-              <b>Adrien</b> vous rappelle
-              <span class="formulaire__signature-note">sous 24 à 48 h ouvrées</span>
+              <span class="formulaire__signature-ligne"><b>Adrien</b> vous rappelle sous 24 à 48 h</span>
+              <span class="formulaire__signature-note">Conseiller toiture depuis 2019</span>
             </span>
           </span>
         </div>
@@ -1329,6 +1352,19 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      peigne son contenu. -->
 <script>if(window.__appliquerGeo){window.__appliquerGeo();}</script>
 
+<!-- ================= LISERE DE REASSURANCE ================= -->
+<div class="confiance">
+  <div class="container">
+    <ul class="confiance__liste">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>100 % gratuit</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Sans engagement</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Artisan assuré décennale</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Un seul technicien vous contacte</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Intervention dans tout le Nord</li>
+    </ul>
+  </div>
+</div>
+
 <!-- ================= AVIS =================
      Le contenu vient du tableau AVIS, en tete de script : pour publier
      de vrais avis, il n'y a que ce tableau a modifier, jamais ce HTML.
@@ -1338,7 +1374,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      tout cela ne sera affiche sans source verifiable. -->
 <section class="section section--blanc" id="avis" aria-labelledby="titre-avis">
   <div class="container">
-    <h2 class="section__titre" id="titre-avis" style="text-align:center">Ils nous ont fait confiance</h2>
+    <h2 class="section__titre" id="titre-avis" style="text-align:center">Nos avis clients récents</h2>
     <p class="section__sous-titre">
       Ils nous ont fait confiance et n’ont pas eu de surprise !
       Traitement de votre demande dans les 48 h maximum.
@@ -1359,19 +1395,6 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
     </div>
   </div>
 </section>
-
-<!-- ================= LISERE DE REASSURANCE ================= -->
-<div class="confiance">
-  <div class="container">
-    <ul class="confiance__liste">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>100 % gratuit</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Sans engagement</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Artisan assuré décennale</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Un seul technicien vous contacte</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Intervention dans tout le Nord</li>
-    </ul>
-  </div>
-</div>
 
 <!-- ================= COMMENT CA MARCHE ================= -->
 <section class="section section--blanc" aria-labelledby="titre-etapes">
@@ -1446,7 +1469,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   <div class="container">
     <h2 class="section__titre" id="titre-avant-apres">Avant / Après : la reprotection d’une toiture en images</h2>
     <p class="section__sous-titre">
-      Trois chantiers, deux vues chacun. Même maison, même angle, même
+      Cinq chantiers, deux vues chacun. Même maison, même angle, même
       cadrage. Tranquille pour une quinzaine d’années, dont dix sous garantie.
     </p>
 
@@ -1461,13 +1484,28 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <div class="paire">
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
+              <img src="assets/img/avant-3.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Toiture à Dunkerque avant intervention : encrassement marqué et teinte passée">
+            </figure>
+            <figure class="paire__vue paire__vue--apres">
+              <span class="paire__badge">Après</span>
+              <img src="assets/img/apres-3.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="La même toiture à Dunkerque après traitement et reprotection : teinte uniforme et surface saine">
+            </figure>
+          </div>
+          <p class="paire__legende"><b><span class="a-completer">prestation à confirmer</span></b> — Dunkerque</p>
+        </li>
+        <li class="carrousel__element">
+          <div class="paire">
+            <figure class="paire__vue paire__vue--avant">
+              <span class="paire__badge">Avant</span>
               <img src="assets/img/avant-1.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Toiture en tuiles béton vue depuis le toit avant intervention : teinte délavée et irrégulière, surface mate">
+                   loading="lazy" decoding="async" alt="Toiture en tuiles béton à Hazebrouck avant intervention : teinte délavée et irrégulière, surface mate">
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
               <img src="assets/img/apres-1.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="La même toiture, sous le même angle, après nettoyage et application d’une résine hydrofuge colorée : teinte profonde et uniforme">
+                   loading="lazy" decoding="async" alt="La même toiture à Hazebrouck, sous le même angle, après nettoyage et résine hydrofuge colorée : teinte profonde et uniforme">
             </figure>
           </div>
           <p class="paire__legende"><b>Reprotection de toiture</b> — Hazebrouck</p>
@@ -1477,30 +1515,45 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
               <img src="assets/img/avant-2.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Emplacement de la photo avant du deuxième chantier">
+                   loading="lazy" decoding="async" alt="Toiture à Orchies avant intervention : mousses et lichens installés sur les versants">
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
               <img src="assets/img/apres-2.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Emplacement de la photo après du deuxième chantier">
+                   loading="lazy" decoding="async" alt="La même toiture à Orchies après nettoyage complet : tuiles dégagées, versants nets">
             </figure>
           </div>
-          <p class="paire__legende"><b>Nettoyage / démoussage</b> — commune <span class="a-completer">Dunkerque</span></p>
+          <p class="paire__legende"><b><span class="a-completer">prestation à confirmer</span></b> — Orchies</p>
         </li>
         <li class="carrousel__element">
           <div class="paire">
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
-              <img src="assets/img/avant-3.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Emplacement de la photo avant du troisième chantier">
+              <img src="assets/img/avant-4.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo avant du chantier de Sainghin-en-Weppes">
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
-              <img src="assets/img/apres-3.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Emplacement de la photo après du troisième chantier">
+              <img src="assets/img/apres-4.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo après du chantier de Sainghin-en-Weppes">
             </figure>
           </div>
-          <p class="paire__legende"><b>Prestation</b> — commune <span class="a-completer">Sainghin en Weppes</span></p>
+          <p class="paire__legende"><b>Prestation</b> — Sainghin-en-Weppes <span class="a-completer">photos à fournir</span></p>
+        </li>
+        <li class="carrousel__element">
+          <div class="paire">
+            <figure class="paire__vue paire__vue--avant">
+              <span class="paire__badge">Avant</span>
+              <img src="assets/img/avant-5.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo avant du chantier de Valenciennes">
+            </figure>
+            <figure class="paire__vue paire__vue--apres">
+              <span class="paire__badge">Après</span>
+              <img src="assets/img/apres-5.jpg" width="1200" height="900"
+                   loading="lazy" decoding="async" alt="Emplacement de la photo après du chantier de Valenciennes">
+            </figure>
+          </div>
+          <p class="paire__legende"><b>Prestation</b> — Valenciennes <span class="a-completer">photos à fournir</span></p>
         </li>
       </ul>
       <button type="button" class="carrousel__fleche carrousel__fleche--apres"
