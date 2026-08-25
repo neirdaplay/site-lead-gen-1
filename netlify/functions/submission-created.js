@@ -58,7 +58,6 @@ exports.handler = async function (evenement) {
     '🔔 <b>Nouveau lead toiture</b>',
     '',
     'Projet : ' + echapper(donnees.projet),
-    'Tuiles : ' + echapper(donnees.tuiles),
     'Surface : ' + echapper(donnees.surface),
     'Délai : ' + echapper(donnees.delai),
     'Code postal : ' + echapper(donnees.code_postal),

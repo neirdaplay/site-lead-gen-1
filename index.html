@@ -118,7 +118,7 @@ window.__chargerClarity = (function () {
 --vert-pale:#ECFBF3;--orange:#F26522;--orange-fonce:#D9541A;
 --texte:#4A5568;--titre:#0F2745;--note:#667085;
 /* Teintes des tuiles d'icone du formulaire. Chacune est choisie pour
-   son sens : cyan pour l'eau, terre cuite pour la tuile, rouge pour
+   son sens : cyan pour l'eau, bleu pour la surface, rouge pour
    l'urgence, ambre pour l'hesitation. Le trait tient au minimum 5:1
    sur sa tuile, sur le blanc de l'etat choisi et sur le vert pale du
    survol — trois fois le 3:1 exige pour un objet graphique.
@@ -127,7 +127,6 @@ window.__chargerClarity = (function () {
 --tuile-cyan:#DEF1F8;--trait-cyan:#0B6E86;
 --tuile-bleu:#E4EDFA;--trait-bleu:#1B4C87;
 --tuile-indigo:#E9E9F9;--trait-indigo:#3F3BAE;
---tuile-terre:#FAEAE2;--trait-terre:#A8452A;
 --tuile-ambre:#FBF0D8;--trait-ambre:#8A5B06;
 --tuile-rouge:#FBE7E4;--trait-rouge:#AE2D1E;
 --tuile-ardoise:#EAEEF4;--trait-ardoise:#41506A;
@@ -251,7 +250,6 @@ transition:background-color .12s ease}
 .option[data-teinte="cyan"] .option__icone{background:var(--tuile-cyan);color:var(--trait-cyan)}
 .option[data-teinte="bleu"] .option__icone{background:var(--tuile-bleu);color:var(--trait-bleu)}
 .option[data-teinte="indigo"] .option__icone{background:var(--tuile-indigo);color:var(--trait-indigo)}
-.option[data-teinte="terre"] .option__icone{background:var(--tuile-terre);color:var(--trait-terre)}
 .option[data-teinte="ambre"] .option__icone{background:var(--tuile-ambre);color:var(--trait-ambre)}
 .option[data-teinte="rouge"] .option__icone{background:var(--tuile-rouge);color:var(--trait-rouge)}
 .option[data-teinte="ardoise"] .option__icone{background:var(--tuile-ardoise);color:var(--trait-ardoise)}
@@ -762,24 +760,10 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   </symbol>
 
   <!-- Etape 3 : Tuiles beton -->
-  <symbol id="i-tuiles-plates" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3.2" y="5.8" width="7.6" height="5" rx="1"/>
-    <rect x="13.2" y="5.8" width="7.6" height="5" rx="1"/>
-    <rect x="8.2" y="13.2" width="7.6" height="5" rx="1"/>
-  </symbol>
 
   <!-- Etape 3 : Tuiles terre cuite -->
-  <symbol id="i-tuiles-ondulees" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M2.8 8.6c1.6-2.3 3.2-2.3 4.8 0s3.2 2.3 4.8 0 3.2-2.3 4.8 0 3.2 2.3 4.8 0"/>
-    <path d="M2.8 15.4c1.6-2.3 3.2-2.3 4.8 0s3.2 2.3 4.8 0 3.2-2.3 4.8 0 3.2 2.3 4.8 0"/>
-  </symbol>
 
   <!-- Etape 3 : Ardoise -->
-  <symbol id="i-ardoise" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 3.2 15.8 7.6 12 12 8.2 7.6 12 3.2Z"/>
-    <path d="M7 11.4 10.8 15.8 7 20.2 3.2 15.8 7 11.4Z"/>
-    <path d="M17 11.4 20.8 15.8 17 20.2 13.2 15.8 17 11.4Z"/>
-  </symbol>
 
   <!-- Etapes 3 et 4 : Je ne sais pas -->
   <symbol id="i-question" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -897,16 +881,16 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         <input type="hidden" name="form-name" value="lead">
 
         <h2 class="formulaire__titre" id="formulaire-titre">Votre demande de devis</h2>
-        <p class="formulaire__accroche">7 questions, 2 minutes. Aucun engagement.</p>
+        <p class="formulaire__accroche">6 questions, 2 minutes. Aucun engagement.</p>
 
         <div id="progression" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-             aria-valuenow="14" aria-valuetext="Étape 1 sur 7" aria-label="Progression du formulaire">
+             aria-valuenow="17" aria-valuetext="Étape 1 sur 6" aria-label="Progression du formulaire">
           <div class="progression__ligne">
-            <span class="progression__etiquette" id="prog-etiquette">Étape 1 sur 7</span>
-            <span class="progression__pourcent" id="prog-pourcent">14 %</span>
+            <span class="progression__etiquette" id="prog-etiquette">Étape 1 sur 6</span>
+            <span class="progression__pourcent" id="prog-pourcent">17 %</span>
           </div>
           <div class="progression__piste">
-            <div class="progression__barre" id="prog-barre" style="width:14%"></div>
+            <div class="progression__barre" id="prog-barre" style="width:17%"></div>
           </div>
         </div>
 
@@ -914,7 +898,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
         <!-- ---------- Etape 1 : le projet ---------- -->
         <fieldset class="etape est-active" data-etape="1">
-          <legend class="sr-only">Étape 1 sur 7 : votre projet</legend>
+          <legend class="sr-only">Étape 1 sur 6 : votre projet</legend>
           <h3 class="etape__titre">Votre projet de toiture concerne :</h3>
           <p class="etape__aide">Choisissez la prestation la plus proche.</p>
           <div class="options">
@@ -935,7 +919,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
         <!-- ---------- Etape 2 : proprietaire ou locataire ---------- -->
         <fieldset class="etape" data-etape="2" hidden>
-          <legend class="sr-only">Étape 2 sur 7 : votre situation</legend>
+          <legend class="sr-only">Étape 2 sur 6 : votre situation</legend>
           <h3 class="etape__titre">Vous êtes :</h3>
           <p class="etape__aide">Les travaux de toiture engagent le propriétaire du logement.</p>
           <div class="options">
@@ -950,34 +934,9 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           </div>
         </fieldset>
 
-        <!-- ---------- Etape 3 : type de tuiles ---------- -->
+        <!-- ---------- Etape 3 : surface ---------- -->
         <fieldset class="etape" data-etape="3" hidden>
-          <legend class="sr-only">Étape 3 sur 7 : type de tuiles</legend>
-          <h3 class="etape__titre">Quel type de tuiles ?</h3>
-          <p class="etape__aide">Si vous hésitez, le technicien identifiera sur place.</p>
-          <div class="options">
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Tuiles béton" data-teinte="ardoise" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-tuiles-plates"></use></svg></span>
-              <span class="option__texte">Tuiles béton</span>
-            </button>
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Tuiles terre cuite" data-teinte="terre" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-tuiles-ondulees"></use></svg></span>
-              <span class="option__texte">Tuiles terre cuite</span>
-            </button>
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Ardoise" data-teinte="bleu" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-ardoise"></use></svg></span>
-              <span class="option__texte">Ardoise</span>
-            </button>
-            <button type="button" class="option" data-champ="tuiles" data-valeur="Je ne sais pas" data-teinte="ambre" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-question"></use></svg></span>
-              <span class="option__texte">Je ne sais pas</span>
-            </button>
-          </div>
-        </fieldset>
-
-        <!-- ---------- Etape 4 : surface ---------- -->
-        <fieldset class="etape" data-etape="4" hidden>
-          <legend class="sr-only">Étape 4 sur 7 : surface de la toiture</legend>
+          <legend class="sr-only">Étape 3 sur 6 : surface de la toiture</legend>
           <h3 class="etape__titre">Surface approximative de la toiture</h3>
           <p class="etape__aide">Une estimation suffit, la mesure se fait sur place.</p>
           <div class="options">
@@ -1000,9 +959,9 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           </div>
         </fieldset>
 
-        <!-- ---------- Etape 5 : delai ---------- -->
-        <fieldset class="etape" data-etape="5" hidden>
-          <legend class="sr-only">Étape 5 sur 7 : délai</legend>
+        <!-- ---------- Etape 4 : delai ---------- -->
+        <fieldset class="etape" data-etape="4" hidden>
+          <legend class="sr-only">Étape 4 sur 6 : délai</legend>
           <h3 class="etape__titre">Pour quand ?</h3>
           <p class="etape__aide">Cela détermine l’ordre de rappel.</p>
           <div class="options">
@@ -1033,9 +992,9 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           </div>
         </fieldset>
 
-        <!-- ---------- Etape 6 : code postal ---------- -->
-        <fieldset class="etape" data-etape="6" hidden>
-          <legend class="sr-only">Étape 6 sur 7 : votre code postal</legend>
+        <!-- ---------- Etape 5 : code postal ---------- -->
+        <fieldset class="etape" data-etape="5" hidden>
+          <legend class="sr-only">Étape 5 sur 6 : votre code postal</legend>
           <h3 class="etape__titre">Votre code postal</h3>
           <p class="etape__aide">Nous intervenons uniquement dans le département du Nord (59).</p>
           <div class="champ">
@@ -1050,9 +1009,9 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           </button>
         </fieldset>
 
-        <!-- ---------- Etape 7 : coordonnees ---------- -->
-        <fieldset class="etape" data-etape="7" hidden>
-          <legend class="sr-only">Étape 7 sur 7 : vos coordonnées</legend>
+        <!-- ---------- Etape 6 : coordonnees ---------- -->
+        <fieldset class="etape" data-etape="6" hidden>
+          <legend class="sr-only">Étape 6 sur 6 : vos coordonnées</legend>
           <h3 class="etape__titre">Vos coordonnées</h3>
           <p class="etape__aide">Dernière étape. Un seul technicien vous contacte sous 24 à 48 h ouvrées.</p>
 
@@ -1119,7 +1078,6 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         <!-- Champs caches : attribution publicitaire et preuve de consentement -->
         <input type="hidden" name="projet" id="h-projet">
         <input type="hidden" name="statut" id="h-statut">
-        <input type="hidden" name="tuiles" id="h-tuiles">
         <input type="hidden" name="surface" id="h-surface">
         <input type="hidden" name="delai" id="h-delai">
         <input type="hidden" name="gclid" id="h-gclid">
@@ -1253,7 +1211,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         <span class="etape__pastille" aria-hidden="true">1</span>
         <h3 class="carte__titre">Vous décrivez votre projet</h3>
         <p class="carte__texte">
-          Sept questions simples : la prestation, le type de tuiles, la surface et
+          Six questions simples : la prestation, votre situation, la surface et
           le délai. Vos coordonnées ne sont demandées qu’à la dernière étape.
         </p>
         <span class="etape__delai">≈ 2 minutes</span>
@@ -2282,7 +2240,11 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 (function (window, document) {
   'use strict';
 
-  var NB_ETAPES = 7;
+  var NB_ETAPES = 6;
+  /* Les deux dernieres etapes sont designees par leur role, jamais par
+     leur numero : une renumerotation ne peut alors plus les oublier. */
+  var ETAPE_CODE_POSTAL = NB_ETAPES - 1;
+  var ETAPE_COORDONNEES = NB_ETAPES;
   var DELAI_AVANCE = 240;   /* ms : laisse voir l'etat choisi avant de passer */
   var COOKIE_ATTR = 'attr';
   var DUREE_ATTR = 90;      /* jours */
@@ -2480,8 +2442,8 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   }
 
   function nomEtape(n) {
-    return ({ 1: 'projet', 2: 'statut', 3: 'tuiles', 4: 'surface',
-              5: 'delai', 6: 'code_postal', 7: 'coordonnees' })[n] || ('etape_' + n);
+    return ({ 1: 'projet', 2: 'statut', 3: 'surface',
+              4: 'delai', 5: 'code_postal', 6: 'coordonnees' })[n] || ('etape_' + n);
   }
 
   function afficherEtape(n, silencieux) {
@@ -2616,7 +2578,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
       afficherEcran(ecranHorsZone, 'Ce code postal est en dehors de la zone couverte.');
       return;
     }
-    afficherEtape(7);
+    afficherEtape(ETAPE_COORDONNEES);
   }
 
   var boutonCP = $('#valider-cp');
@@ -2633,12 +2595,12 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   var corriger = $('#corriger-cp');
   if (corriger) {
     corriger.addEventListener('click', function () {
-      afficherEtape(6);
+      afficherEtape(ETAPE_CODE_POSTAL);
       if (champCP) { champCP.value = ''; try { champCP.focus(); } catch (e) {} }
     });
   }
 
-  /* --- Etape 7 : coordonnees --- */
+  /* --- Derniere etape : coordonnees --- */
   var champPrenom = $('#prenom'), champNom = $('#nom');
   var champEmail = $('#email'), champTel = $('#telephone');
   var caseConsentement = $('#consentement');
@@ -2648,7 +2610,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   var RE_TEL = /^(?:(?:\+|00)33[\s.-]?(?:\(0\)[\s.-]?)?|0)[1-9](?:[\s.-]?[0-9]{2}){4}$/;
   var RE_EMAIL = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
 
-  function validerEtape7() {
+  function validerEtape6() {
     var ok = true;
     if (champPrenom.value.trim().length < 2) {
       erreur(champPrenom, $('#erreur-prenom'), 'Merci d’indiquer votre prénom.');
@@ -2691,7 +2653,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
   formulaire.addEventListener('submit', function (evenement) {
     evenement.preventDefault();
-    if (envoiEnCours || !validerEtape7()) { return; }
+    if (envoiEnCours || !validerEtape6()) { return; }
 
     /* Preuve de consentement : texte integral affiche + horodatage ISO 8601. */
     var texte = $('#texte-consentement');
@@ -2730,7 +2692,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         }
         blocErreur.classList.add('est-visible');
       }
-      tracer('form_error', { etape: 7, reference: reference || 'inconnue' });
+      tracer('form_error', { etape: 6, reference: reference || 'inconnue' });
     }
 
     /* Corps url-encode : tous les champs nommes du formulaire. */

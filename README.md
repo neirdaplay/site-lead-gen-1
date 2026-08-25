@@ -86,7 +86,6 @@ notification ratée ne fait jamais perdre un lead.
 🔔 Nouveau lead toiture
 
 Projet : Reprotection de toiture
-Tuiles : Tuiles béton
 Surface : 100 à 150 m²
 Délai : Urgent (fuite en cours)
 Code postal : 59310
@@ -95,7 +94,7 @@ Jean Dupont
 📞 06 12 34 56 78          ← cliquable
 ✉️ jean.dupont@exemple.fr
 
-Source : toiture-nord / reprotection tuiles
+Source : toiture-nord / reprotection
 ```
 
 Le numéro est un lien `tel:` : un appui suffit pour rappeler depuis le
@@ -321,21 +320,29 @@ remplacez les coordonnées des `<circle>` et reformulez la légende.
 
 ## 7. Le formulaire
 
-Sept étapes, une question par écran, cartes cliquables pleine largeur qui font
+Six étapes, une question par écran, cartes cliquables pleine largeur qui font
 avancer automatiquement. Aucun bouton « suivant » sur les questions à choix.
 
 | Étape | Question | Champ |
 |---|---|---|
 | 1 | Votre projet de toiture concerne | `projet` |
 | 2 | Vous êtes | `statut` |
-| 3 | Quel type de tuiles | `tuiles` |
-| 4 | Surface approximative | `surface` |
-| 5 | Pour quand | `delai` |
-| 6 | Votre code postal | `code_postal` |
-| 7 | Vos coordonnées | `prenom`, `nom`, `email`, `telephone`, `consentement` |
+| 3 | Surface approximative | `surface` |
+| 4 | Pour quand | `delai` |
+| 5 | Votre code postal | `code_postal` |
+| 6 | Vos coordonnées | `prenom`, `nom`, `email`, `telephone`, `consentement` |
 
-Il n'y a pas de question sur le type de logement : le métier implique une
-maison.
+Le nombre d'étapes est piloté par `NB_ETAPES` et par les attributs
+`data-etape` : la barre de progression, le compteur et les annonces vocales
+s'y alignent seuls. Pour ajouter ou retirer une question, il suffit du
+`<fieldset>` et de la constante — rien d'autre n'est codé en dur.
+
+Il n'y a **pas** de question sur le type de tuiles : le technicien l'identifie
+sur place, et c'était une étape de perdue pour une information qui ne
+qualifiait rien.
+
+Il n'y a pas non plus de question sur le type de logement : le métier implique
+une maison.
 
 ### Deux sorties sans envoi
 
