@@ -9,9 +9,9 @@ déplacera rien, et le score de stabilité visuelle reste intact.
 
 ---
 
-## 1. Avant / après — trois chantiers
+## 1. Avant / après — cinq chantiers
 
-Le carrousel de la section « Avant / Après » affiche trois paires. Chaque paire
+Le carrousel de la section « Avant / Après » affiche cinq paires. Chaque paire
 tient en deux photos du **même toit, sous le même angle**.
 
 | Fichier | Chantier | État |
@@ -26,9 +26,10 @@ L'ordre d'affichage n'est pas l'ordre des fichiers : **Dunkerque ouvre le
 carrousel** parce que c'est la comparaison la plus démonstrative. L'ordre est
 défini dans `index.html`, dans la liste `#piste-paires`.
 
-**Les prestations d'Orchies et de Dunkerque restent à confirmer** — elles
-portent un surlignage jaune dans la page. Dites lesquelles ce sont et il
-disparaît.
+Les trois chantiers fournis portent la même étiquette : **Nettoyage +
+reprotection en résine hydrofuge colorée**. Les deux emplacements restants
+gardent une étiquette générique tant que les photos ne sont pas là — la
+prestation dépendra du chantier.
 
 Les fichiers déposés en `.JPG` majuscules ont été renommés en minuscules :
 Netlify distingue la casse, et l'ancienne écriture aurait renvoyé une 404 en
