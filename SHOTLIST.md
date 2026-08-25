@@ -47,14 +47,18 @@ de chaque image. Les légendes 2 et 3 portent un surlignage jaune
 
 | Fichier | Sujet | État |
 |---|---|---|
-| `interlocuteur.jpg` | Portrait | ⬜ gabarit gris |
+| `interlocuteur.jpg` | Portrait | ✅ fournie |
 
 **Format : 480 × 480 px (carré), JPEG, moins de 120 Ko.**
 
-Affiché en rond de 160 px, avec un liseré blanc. **Cadrez serré sur le
-visage** : les épaules et le haut du buste suffisent, tout le reste sera coupé
-par le cercle. Un fond neutre ou extérieur flou vaut mieux qu'un intérieur
-chargé, et une photo au téléphone en lumière du jour fait très bien l'affaire.
+L'original fourni faisait 922 × 1152 et 677 Ko, pour un affichage en rond de
+160 px et une vignette de 36 px dans le formulaire. Il a été **recadré en carré
+sur le visage et compressé à 30 Ko** — même rendu, vingt fois plus léger. Si
+vous en changez, refaites cette étape : une photo de téléphone brute pèse
+plusieurs mégaoctets et se paie en secondes de chargement sur mobile.
+
+Le même visage sert à trois endroits : le bloc interlocuteur (160 px), le pied
+du formulaire (36 px) et l'écran de confirmation (72 px).
 
 Le texte du bloc est en placeholder, marqué `<!-- À VALIDER -->` dans
 `index.html`. Il parle volontairement de l'**interlocuteur et du suivi**,
