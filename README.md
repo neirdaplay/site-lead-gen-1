@@ -322,6 +322,37 @@ remplacez les coordonnées des `<circle>` et reformulez la légende.
 
 Six étapes, une question par écran, cartes cliquables pleine largeur qui font
 avancer automatiquement. Aucun bouton « suivant » sur les questions à choix.
+Un chevron à droite de chaque carte dit qu'elle fait avancer, au lieu de la
+laisser passer pour une case à cocher ; il est dessiné en CSS pour ne pas
+ajouter un SVG à chacune des quinze réponses.
+
+**Sur mobile, la carte s'ouvre directement sur la progression, puis la
+question.** Le titre « Votre demande de devis » et son accroche sont retirés à
+l'œil sous 760 px : le `<h1>` juste au-dessus dit déjà de quoi il s'agit, et
+« Étape 1 sur 6 » suffit à annoncer un formulaire. Ce sont une cinquantaine de
+pixels rendus à la première question. Le titre reste dans le document, hors
+écran — c'est lui qui nomme le formulaire pour les lecteurs d'écran via
+`aria-labelledby`, il ne peut donc pas être supprimé.
+
+### Réassurance du hero
+
+La pastille en haut du hero porte une **médaille** et la seule promesse
+vérifiable de la page : *Artisan assuré en décennale*. Les travaux sont
+exécutés par Technitoit, dont la responsabilité civile décennale est citée dans
+les mentions légales — l'accroche et les pages légales disent donc la même
+chose.
+
+> **Aucune note, aucun classement, aucun « mieux noté ».** Un superlatif qu'on
+> ne peut pas justifier relève de la pratique commerciale trompeuse
+> (art. L. 121-2 du code de la consommation). La médaille apporte le signal
+> visuel recherché ; la garantie décennale apporte le fond.
+
+Les trois puces sous le formulaire reprennent des promesses **concrètes** —
+délai de rappel, devis chiffré après visite, coordonnées jamais revendues.
+Elles évitent volontairement les mots du bandeau de réassurance placé juste en
+dessous (*100 % gratuit*, *Sans engagement*, *Un seul technicien vous
+contacte*, *Intervention dans tout le Nord*) : répéter les mêmes termes à cent
+pixels d'écart se lit comme une erreur de relecture, pas comme une insistance.
 
 | Étape | Question | Champ |
 |---|---|---|
@@ -538,9 +569,18 @@ Clarity répartit sa charge sur `a.clarity.ms` à `z.clarity.ms`, d'où le joker
 
 ### Appel téléphonique
 
-Le numéro apparaît en **en-tête** et dans la **barre mobile**, écrit en toutes
-lettres et jamais seulement porté par le lien. Dans la barre mobile, l'appel
-prend 60 % de la largeur en vert plein, la demande 40 % en contour.
+Le numéro apparaît en **en-tête**, écrit en toutes lettres et jamais seulement
+porté par le lien.
+
+**Il n'y a plus de barre collante en bas d'écran.** Elle a été retirée : elle
+recouvrait en permanence 78 px de contenu et donnait à la page l'air comprimé.
+L'en-tête a pris le relais — elle est `position:sticky` — si bien que le bouton
+d'appel vert reste atteignable à tout moment sans rien masquer. C'est 58 px en
+haut au lieu de 78 en bas, et surtout au-dessus du contenu plutôt que dessus.
+
+Les ancres tiennent compte de cette en-tête via `scroll-padding-top:72px` sur
+`html` : sans quoi un lien vers `#devis` aurait calé le haut du formulaire
+derrière la barre.
 
 **La carte du formulaire n'en porte pas.** Un bouton d'appel y avait été ajouté
 puis retiré : il repoussait le parcours et alourdissait la carte. Le formulaire
@@ -556,7 +596,7 @@ ligne « Une urgence ? », qui est antérieure et voulue.
 > pas de texte : pastilles, étoiles, barre de progression.
 
 **Suivi.** Chaque lien `tel:` pousse un `phone_click` dans le `dataLayer` avec
-sa `position` — `hero`, `header`, `sticky`, `footer` — et émet le même
+sa `position` — `header`, `footer`, ou la section d'origine — et émet le même
 événement en gtag, pour que Google Ads puisse s'en servir sans conteneur GTM.
 
 Pour en faire une **conversion secondaire** : créez une action de conversion
@@ -578,8 +618,33 @@ bloque les deux.
 Un bandeau demande le choix à la première visite. Refuser et accepter ont la
 même taille et le même poids visuel, comme l'exige la CNIL. La réponse est
 gardée six mois dans le cookie first-party `consentement_pub` ; la supprimer
-fait réapparaître le bandeau. Le bandeau masque la barre mobile tant qu'il est
-affiché, pour ne pas empiler deux barres en bas de l'écran.
+fait réapparaître le bandeau.
+
+**Le bandeau ne s'ouvre plus à l'arrivée.** L'écran d'accueil reste net, et
+c'est lui qui décide si le visiteur commence le formulaire. Deux déclencheurs
+seulement :
+
+1. **Le hero est entièrement passé au-dessus de l'écran.** Le formulaire vit
+   dedans, donc ce seul test suffit à garantir qu'un panneau fixe en bas
+   d'écran ne recouvrira jamais une question en cours de réponse.
+2. **Une minuterie de 25 s** (`DELAI_BANDEAU`) — mais elle est annulée dès le
+   premier clic dans le formulaire. Quelqu'un qui répond aux questions ne doit
+   pas voir surgir un bandeau au milieu ; pour lui, seul le défilement compte.
+
+> Attention si vous touchez à cette logique : le bandeau est
+> `position:fixed; bottom:0` et haut de plusieurs lignes sur mobile. Une
+> première version l'ouvrait au premier clic dans le formulaire — elle
+> masquait la réponse suivante. `t-bandeau.mjs` verrouille ce comportement :
+> il répond à trois questions d'affilée sans défiler et vérifie qu'aucun
+> élément fixe ne chevauche la carte.
+
+> **Ce report ne déplace aucun stockage, seulement la question.** Rien n'a
+> jamais été déposé avant réponse : les quatre signaux Google partent à
+> `denied` et Clarity à `consentv2 denied`, dès la première ligne du `<head>`.
+> Le bandeau sert à **obtenir** un accord, pas à annoncer un dépôt déjà fait —
+> le retarder ne retarde donc rien d'autre que la sollicitation. Un visiteur
+> qui rebondit en trois secondes ne le voit jamais, et n'aurait de toute façon
+> rien apporté à mesurer.
 
 **En aperçu local (`file://`), le script Google n'est pas injecté et le bandeau
 ne s'affiche pas** : le double-clic sur `index.html` reste sans aucune requête

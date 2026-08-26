@@ -191,7 +191,7 @@ chargerApresRendu('https://www.clarity.ms/tag/y7tr5kz2g8');
 --rayon:10px;--rayon-s:8px;--max:1120px;--ombre:0 1px 2px rgba(15,39,69,.04)}
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:72px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--blanc);color:var(--texte);
 font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
@@ -275,7 +275,12 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
 .bouton--vert{font-size:14px;padding:10px 12px}}
 
 /* --- En-tete --- */
-.entete{position:relative;z-index:20;background:var(--blanc);border-bottom:1px solid var(--bord)}
+/* L'entete est collante depuis la suppression de la barre du bas : sans
+   elle, le bouton d'appel disparaissait au premier defilement, et
+   l'audience de cette page passe surtout par le telephone. Elle coute
+   58 px en haut la ou la barre en prenait 78 en bas, et surtout elle ne
+   recouvre plus le contenu. */
+.entete{position:sticky;top:0;z-index:20;background:var(--blanc);border-bottom:1px solid var(--bord)}
 .entete__interne{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px}
 .entete__cta{white-space:nowrap;gap:8px}
 .entete__cta svg{flex:0 0 auto;width:17px;height:17px}
@@ -316,39 +321,50 @@ background-image:image-set(url('assets/img/hero-couvreur-900.webp') type('image/
 url('assets/img/hero-couvreur.jpg') type('image/jpeg'));
 background-size:cover;background-position:60% 38%}
 .hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.45)}
-.hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding-block:20px 30px}
+.hero__interne{position:relative;z-index:2;display:grid;gap:22px;padding-block:22px 34px}
 .hero__badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
 background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.26);
 font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#fff}
 .hero__badge svg{width:14px;height:14px;color:var(--vert)}
+/* La medaille porte ses propres couleurs : pas de currentColor ici, et
+   un peu plus de place que les icones monochromes du meme encart. */
+.hero__badge--medaille{padding:8px 15px;font-size:13px}
+.hero__badge--medaille svg{width:21px;height:21px;margin:-2px 0 -2px -3px}
 .hero__titre{margin:12px 0 0;font-size:29px;line-height:1.16;font-weight:800;
 letter-spacing:-.02em;color:#fff;min-height:calc(3 * 1.16em)}
 .hero__titre em{font-style:normal;color:var(--vert)}
 .hero__sous-titre{margin:11px 0 0;max-width:520px;font-size:15.5px;line-height:1.5;color:#C9D8E9}
-.hero__puces{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-.hero__puces li{display:flex;gap:9px;align-items:flex-start;font-size:14.5px;line-height:1.4;color:#E4EDF7}
-.hero__puces svg{flex:0 0 auto;width:18px;height:18px;margin-top:1px;color:var(--vert)}
+.hero__sous-titre b{color:var(--blanc);font-weight:700}
+.hero__puces{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.hero__puces li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.45;color:#E4EDF7}
+/* Pastille pleine plutot qu'un simple trait : sur le bleu nuit du hero,
+   un aplat vert se lit de bien plus loin qu'une coche filaire, et c'est
+   ce qui donne a la liste son air de garanties cochees. */
+.hero__puces__coche{flex:0 0 auto;display:grid;place-items:center;
+width:21px;height:21px;margin-top:1px;border-radius:6px;
+background:var(--vert);color:#06301C}
+.hero__puces__coche svg{width:14px;height:14px}
 
 /* --- Carte formulaire --- */
 .formulaire{background:var(--blanc);color:var(--texte);border:1px solid rgba(255,255,255,.5);
-border-radius:12px;box-shadow:0 10px 30px rgba(4,15,30,.28);padding:16px 16px 18px}
+border-radius:14px;box-shadow:0 10px 30px rgba(4,15,30,.28);padding:18px 18px 20px}
 .formulaire__titre{margin:0 0 3px;font-size:18px;font-weight:800;color:var(--titre);line-height:1.25}
 .formulaire__accroche{margin:0 0 13px;font-size:13.5px;line-height:1.45;color:var(--note)}
-.progression__ligne{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
+.progression__ligne{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
 .progression__etiquette{font-size:13px;font-weight:600;color:var(--titre)}
 .progression__pourcent{font-size:13px;font-weight:800;color:var(--vert-fonce)}
 .progression__piste{height:6px;border-radius:99px;background:#E7ECF3;overflow:hidden}
 .progression__barre{height:100%;width:14%;border-radius:99px;background:var(--vert);transition:width .28s ease}
 @media (prefers-reduced-motion:reduce){.progression__barre{transition:none}}
-.etape{margin-top:15px}
+.etape{margin-top:18px}
 .etape[hidden]{display:none}
-.etape__titre{margin:0 0 3px;font-size:17px;font-weight:700;color:var(--titre);line-height:1.3}
-.etape__aide{margin:0 0 11px;font-size:13.5px;line-height:1.45;color:var(--note)}
-.options{display:grid;gap:9px}
+.etape__titre{margin:0 0 4px;font-size:17.5px;font-weight:700;color:var(--titre);line-height:1.3}
+.etape__aide{margin:0 0 13px;font-size:13.5px;line-height:1.45;color:var(--note)}
+.options{display:grid;gap:10px}
 
 /* Carte de reponse : tuile d'icone 44 px a gauche, fond gris tres clair */
-.option{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;
-padding:10px 14px;text-align:left;font:inherit;font-size:15.5px;font-weight:600;
+.option{display:flex;align-items:center;gap:12px;width:100%;min-height:68px;
+padding:12px 14px;text-align:left;font:inherit;font-size:15.5px;font-weight:600;
 color:var(--titre);background:var(--blanc);border:1px solid #CBD3DF;border-radius:var(--rayon-s);
 cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
 .option:hover{border-color:var(--vert-fonce);background:var(--vert-pale)}
@@ -372,6 +388,16 @@ transition:background-color .12s ease}
 @media (prefers-reduced-motion:reduce){.option__icone{transition:none}}
 .option__icone svg{width:24px;height:24px}
 .option__texte{flex:1 1 auto}
+/* Chevron de droite : il dit que la carte fait avancer, au lieu de
+   laisser croire a une case a cocher. Dessine en CSS pour ne pas
+   ajouter un SVG a chacune des quinze reponses. Purement decoratif —
+   la carte entiere reste la cible — mais tenu quand meme au 3:1 des
+   objets graphiques, d'ou ce gris et pas un plus clair. */
+.option::after{content:'';flex:0 0 auto;width:9px;height:9px;margin-left:2px;
+border-right:2px solid #7A8AA0;border-bottom:2px solid #7A8AA0;
+transform:rotate(-45deg);transition:border-color .12s ease}
+.option:hover::after,.option.est-choisie::after{border-color:var(--vert-fonce)}
+@media (prefers-reduced-motion:reduce){.option::after{transition:none}}
 @media (prefers-reduced-motion:reduce){.option{transition:none}}
 
 .formulaire__pied{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
@@ -733,36 +759,49 @@ padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
    refuser doit etre aussi simple qu'accepter. */
 .bandeau-cookies__actions{display:flex;gap:10px}
 .bandeau-cookies__actions .bouton{flex:1 1 50%;min-height:46px;padding:11px 14px;font-size:15px}
-body.a-bandeau .barre-mobile{display:none}
 @media (min-width:760px){
 .bandeau-cookies__interne{flex-direction:row;align-items:center;justify-content:space-between;gap:24px}
 .bandeau-cookies__actions{flex:0 0 auto}
 .bandeau-cookies__actions .bouton{flex:0 0 auto;min-width:132px}
 }
-.barre-mobile{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:10px;
-padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--blanc);
-border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
-.barre-mobile .bouton{min-height:60px;padding:12px 10px;font-size:16px}
-/* L'appel passe devant : il occupe 60 % et le vert plein, la demande
-   40 % en contour. L'ordre visuel place l'appel a droite, sous le
-   pouce, sans changer l'ordre de lecture du document. */
-.barre-mobile__demande{flex:1 1 40%;order:1}
-.barre-mobile__appel{flex:1 1 60%;order:2;gap:8px}
-.barre-mobile__appel .barre-mobile__numero{display:none}
-@media (min-width:380px){.barre-mobile__appel .barre-mobile__numero{display:inline}
-.barre-mobile__appel .barre-mobile__mot{display:none}}
 .a-completer{padding:1px 6px;border-radius:4px;background:#FFF3CD;border:1px solid #E6D28A;color:#6B5312;font-size:.95em;font-weight:600}
 
 /* --- Points de rupture --- */
+
+/* Mobile : la carte s'ouvre sur la progression, puis la question.
+   Le titre « Votre demande de devis » et son accroche disparaissent a
+   l'oeil — le <h1> juste au-dessus dit deja de quoi il s'agit, et
+   « Etape 1 sur 6 » suffit a annoncer un formulaire. Ce sont environ
+   50 px rendus a la premiere question, qui remonte d'autant au-dessus
+   de la ligne de flottaison. Le titre reste dans le document, hors
+   ecran, car c'est lui qui nomme le formulaire pour les lecteurs
+   d'ecran via aria-labelledby. */
+@media (max-width:759px){
+.formulaire__titre{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.formulaire__accroche{display:none}
+}
+
+/* Ecrans etroits : le chevron ajoute a droite coute une dizaine de
+   pixels, assez pour faire passer « Nettoyage / Démoussage » sur deux
+   lignes a 360 px. On les reprend sur la tuile d'icone et les
+   gouttieres plutot que de renoncer au chevron. */
+@media (max-width:400px){
+.formulaire{padding:16px 14px 18px}
+.option{gap:10px;padding:12px 12px;font-size:15px}
+.option__icone{width:40px;height:40px}
+.option__icone svg{width:22px;height:22px}
+}
+
+/* Ecrans courts : on resserre, mais la medaille reste — c'est la
+   reassurance principale, et elle tient sur une ligne. */
 @media (max-height:700px) and (max-width:600px){
 .hero__interne{padding-block:14px 24px;gap:16px}
-.hero__badge{display:none}
 .hero__titre{margin:0;font-size:26px}
 .hero__sous-titre{margin-top:9px;font-size:14.5px}
-.hero__puces{gap:7px}
+.hero__puces{gap:9px}
 .hero__puces li{font-size:13.5px}
-.formulaire__accroche{display:none}
-.formulaire{padding:14px 14px 16px}
+.formulaire{padding:15px 15px 17px}
 }
 @media (min-width:640px){
 .diptyque{grid-template-columns:repeat(2,1fr)}
@@ -809,7 +848,6 @@ justify-items:start;text-align:left;align-items:center}
 .final__titre{font-size:32px}
 .pied{padding:48px 0 40px}
 .pied__haut{flex-direction:row;align-items:center}
-.barre-mobile{display:none}
 }
 @media (min-width:1000px){
 .hero__interne{grid-template-columns:1.05fr 400px;
@@ -833,7 +871,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 .hero__titre{font-size:43px}
 }
 @media (min-width:1280px){.hero__titre{font-size:46px}}
-@media print{.barre-mobile,.entete__cta{display:none!important}}
+@media print{.entete{position:static}.entete__cta{display:none!important}}
 </style>
 
 <script>
@@ -1004,7 +1042,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     <path d="M20.5 6.2h.01M18.7 9h.01M21 10.6h.01"/>
   </symbol>
 
-  <!-- Etape 1 : Reprotection de toiture -->
+  <!-- Etape 1 : Reprotection hydrofuge -->
   <symbol id="i-bouclier" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 3 4.5 6v6c0 4.4 3.2 8.2 7.5 9.4 4.3-1.2 7.5-5 7.5-9.4V6L12 3Z"/>
     <path d="M9 12.2 11.1 14.3 15.3 9.8"/>
@@ -1120,9 +1158,22 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   <div class="container hero__interne">
 
     <div class="hero__colonne hero__colonne--texte">
-      <span class="hero__badge">
-        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1 2.5 4.4v5c0 4.4 3.2 8.5 7.5 9.6 4.3-1.1 7.5-5.2 7.5-9.6v-5L10 1Zm3.9 6.6-4.6 5.1a.9.9 0 0 1-1.3.05L5.9 10.7a.9.9 0 1 1 1.2-1.3l1.4 1.3 4-4.4a.9.9 0 1 1 1.4 1.2Z"/></svg>
-        Un seul professionnel vous rappelle
+      <!-- La medaille porte la seule promesse verifiable de la page :
+           les travaux sont couverts par la responsabilite civile
+           decennale de l'entreprise qui les execute, ce que disent
+           aussi les mentions legales. On evite volontairement toute
+           note ou tout classement : un « mieux note » qu'on ne peut
+           pas justifier tombe sous l'article L. 121-2 du code de la
+           consommation. -->
+      <span class="hero__badge hero__badge--medaille">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M5.5 1h4.5l3 9-4.5 1.5Z" fill="#CBD8E8"/>
+          <path d="M18.5 1H14l-3 9 4.5 1.5Z" fill="#93AAC6"/>
+          <circle cx="12" cy="15.5" r="7" fill="#F7BC55"/>
+          <circle cx="12" cy="15.5" r="5.3" fill="#DE9718"/>
+          <path d="M12 12 12.88 14.29 15.33 14.42 13.43 15.96 14.06 18.33 12 17 9.94 18.33 10.57 15.96 8.67 14.42 11.12 14.29Z" fill="#FFF7E4"/>
+        </svg>
+        Artisan assuré en décennale
       </span>
 
       <h1 class="hero__titre">
@@ -1130,9 +1181,14 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
         un couvreur vous rappelle sous 48 h
       </h1>
 
+      <!-- Deux lignes, pas quatre : la promesse d'abord, en gras, puis
+           ce qu'il faut faire. « Assure en decennale » a quitte cette
+           phrase — c'est desormais le role de la medaille juste
+           au-dessus, et le repeter a dix lignes d'ecart ne convainc
+           personne de plus. -->
       <p class="hero__sous-titre">
-        Décrivez votre toiture en 2 minutes. Un couvreur qualifié, assuré en
-        décennale, vous rappelle pour convenir d’une visite et d’un devis chiffré.
+        <b>Gratuit et sans engagement.</b> Décrivez votre toiture en 2 minutes,
+        un couvreur vous rappelle.
       </p>
 
     </div>
@@ -1175,9 +1231,9 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-jet"></use></svg></span>
               <span class="option__texte">Nettoyage / Démoussage</span>
             </button>
-            <button type="button" class="option" data-champ="projet" data-valeur="Reprotection de toiture" data-teinte="vert" aria-pressed="false">
+            <button type="button" class="option" data-champ="projet" data-valeur="Reprotection hydrofuge" data-teinte="vert" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-bouclier"></use></svg></span>
-              <span class="option__texte">Reprotection de toiture</span>
+              <span class="option__texte">Reprotection hydrofuge</span>
             </button>
             <button type="button" class="option" data-champ="projet" data-valeur="Couverture neuve" data-teinte="indigo" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-maison-neuve"></use></svg></span>
@@ -1461,16 +1517,16 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 
     <ul class="hero__puces">
       <li>
-        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
-        <span>Intervention dans tout le Nord (59) — rappel sous 24 à 48 h ouvrées</span>
+        <span class="hero__puces__coche" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" focusable="false"><path d="m3.6 8.4 2.9 2.9 5.9-6.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span>Rappel sous 24 à 48 h ouvrées</span>
       </li>
       <li>
-        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
-        <span>Un seul technicien vous contacte</span>
+        <span class="hero__puces__coche" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" focusable="false"><path d="m3.6 8.4 2.9 2.9 5.9-6.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span>Devis chiffré après visite sur place</span>
       </li>
       <li>
-        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 .8a9.2 9.2 0 1 0 0 18.4A9.2 9.2 0 0 0 10 .8Zm4.6 6.9-5.5 6.1a1 1 0 0 1-1.45.05L4.9 11a1 1 0 1 1 1.35-1.47l1.95 1.79 4.8-5.34a1 1 0 1 1 1.5 1.33Z"/></svg>
-        <span>Gratuit, sans engagement, artisan assuré en décennale</span>
+        <span class="hero__puces__coche" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" focusable="false"><path d="m3.6 8.4 2.9 2.9 5.9-6.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span>Vos coordonnées ne sont jamais revendues</span>
       </li>
     </ul>
   </div>
@@ -2632,18 +2688,6 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   </div>
 </div>
 
-<div class="barre-mobile">
-  <button type="button" class="bouton bouton--fantome barre-mobile__demande"
-          data-action="aller-au-formulaire" data-emplacement="barre-mobile">
-    Ma demande
-  </button>
-  <a class="bouton bouton--vert barre-mobile__appel" href="tel:+33786505580" data-position="sticky">
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-tel"></use></svg>
-    <span class="barre-mobile__numero">07 86 50 55 80</span>
-    <span class="barre-mobile__mot">Appeler</span>
-  </a>
-</div>
-
 <!-- ==================================================================
      Pas de formulaire caché en doublon : c'est volontaire.
 
@@ -2818,6 +2862,35 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     tracer('consentement_pub', { choix: accepte ? 'accepte' : 'refuse' });
   }
 
+  /* ================================================================
+     Le bandeau ne s'affiche plus a l'arrivee.
+
+     L'ecran d'accueil doit rester net : c'est lui qui decide si le
+     visiteur commence le formulaire. Un panneau qui recouvre le bas de
+     la page avant meme la premiere question coute des demandes.
+
+     Rien n'est perdu du cote conformite, parce que rien n'a jamais ete
+     depose avant reponse : le Consent Mode v2 part de « denied » sur
+     les quatre signaux, et Clarity de consentv2 « denied ». Le bandeau
+     sert a obtenir un accord, pas a annoncer un depot deja fait ; le
+     retarder ne change donc pas ce qui est stocke, seulement le moment
+     ou la question est posee.
+
+     Quand il apparait : lorsque le hero est entierement passe au-dessus
+     de l'ecran. Le formulaire vit dedans, donc ce seul test garantit
+     qu'un panneau fixe en bas d'ecran ne recouvrira jamais une question
+     en cours de reponse — c'etait le defaut de la premiere version, qui
+     l'ouvrait des le premier clic dans le formulaire.
+
+     A defaut, une minuterie de 25 s prend le relais, mais seulement si
+     le formulaire n'a pas ete commence : quelqu'un qui repond aux
+     questions ne doit pas voir surgir un bandeau au milieu.
+
+     Un visiteur qui rebondit en trois secondes ne le voit donc jamais,
+     et n'aurait de toute facon rien apporte a mesurer.
+     ================================================================ */
+  var DELAI_BANDEAU = 25000;
+
   function preparerBandeau() {
     var bandeau = $('#bandeau-cookies');
     if (!bandeau) { return; }
@@ -2825,17 +2898,40 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     if (lireCookie(COOKIE_CONSENT) ||
         window.location.protocol.indexOf('http') !== 0) { return; }
 
-    bandeau.hidden = false;
-    document.body.classList.add('a-bandeau');
-
     function repondre(accepte) {
       appliquerConsentement(accepte);
       bandeau.hidden = true;
-      document.body.classList.remove('a-bandeau');
     }
     var oui = $('#accepter-cookies'), non = $('#refuser-cookies');
     if (oui) { oui.addEventListener('click', function () { repondre(true); }); }
     if (non) { non.addEventListener('click', function () { repondre(false); }); }
+
+    var montre = false;
+    function montrer() {
+      if (montre) { return; }
+      montre = true;
+      bandeau.hidden = false;
+      window.removeEventListener('scroll', auDefilement);
+      window.clearTimeout(minuterie);
+    }
+
+    /* Le hero contient le formulaire : tant qu'il touche l'ecran, une
+       question peut etre a l'affichage, et on se tait. */
+    var hero = $('.hero');
+    function auDefilement() {
+      if (!hero || hero.getBoundingClientRect().bottom <= 0) { montrer(); }
+    }
+    window.addEventListener('scroll', auDefilement, { passive: true });
+
+    /* La minuterie ne s'applique qu'a un visiteur qui n'a pas commence a
+       repondre. Des qu'il repond, seul le defilement ouvrira le
+       bandeau. */
+    var minuterie = window.setTimeout(montrer, DELAI_BANDEAU);
+    if (formulaire) {
+      formulaire.addEventListener('click', function () {
+        window.clearTimeout(minuterie);
+      }, { once: true });
+    }
   }
 
   /* ================================================================
@@ -3473,11 +3569,10 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
      ce qui l'a declenche. */
   $$('a[href^="tel:"]').forEach(function (lien) {
     lien.addEventListener('click', function () {
-      var zone = lien.closest('[aria-labelledby], header, footer, .barre-mobile, .ecran');
+      var zone = lien.closest('[aria-labelledby], header, footer, .ecran');
       var position = lien.getAttribute('data-position') ||
         (zone ? ({ HEADER: 'header', FOOTER: 'footer' }[zone.tagName] ||
-                 (zone.classList.contains('barre-mobile') ? 'sticky' :
-                  zone.getAttribute('aria-labelledby') || 'page')) : 'page');
+                 zone.getAttribute('aria-labelledby') || 'page') : 'page');
       var numero = lien.getAttribute('href').replace('tel:', '');
 
       tracer('phone_click', { position: position, numero: numero });
