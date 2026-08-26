@@ -75,35 +75,48 @@ gtag('config', 'AW-18335177160');
 /* ==================================================================
    Microsoft Clarity — y7tr5kz2g8.
 
-   Contrairement a la balise Google, Clarity n'est PAS chargee tant que
-   le visiteur n'a pas accepte. Ce n'est pas de la prudence excessive :
-   Clarity enregistre la session — mouvements, clics, defilement — et se
-   synchronise avec Bing. Le Consent Mode, qui permet a Google de rester
-   utile en mode refuse, n'a pas d'equivalent ici : la seule facon de ne
-   rien enregistrer sans accord est de ne pas charger le script.
+   Charge des le premier rendu, comme la balise Google. Le consentement
+   ne conditionne plus le CHARGEMENT du script, mais l'ENREGISTREMENT,
+   par l'API consentv2 de Clarity.
 
-   Le chargeur est donc expose et appele soit au chargement si le choix
-   est deja « accepte », soit au clic sur « Accepter ».
+   Ce n'est pas un assouplissement : depuis le 31 octobre 2025, Microsoft
+   applique lui-meme la regle pour l'EEE, le Royaume-Uni et la Suisse.
+   Sans signal de consentement, Clarity bascule en mode sans cookie et
+   n'enregistre aucune session pour ces visiteurs, quelle que soit la
+   date de chargement du script. La CNIL, de son cote, exclut
+   expressement le session replay de l'exemption de consentement
+   accordee a la mesure d'audience.
+
+   C'est aussi ce qui expliquait l'absence totale de sessions : le script
+   etait bien charge apres acceptation, mais aucun signal consentv2 ne
+   lui etait transmis. Il tournait donc en mode sans cookie, y compris
+   pour les visiteurs ayant accepte.
    ================================================================== */
-window.__chargerClarity = (function () {
-  var faite = false;
-  return function () {
-    if (faite) { return; }
-    if (window.location.protocol.indexOf('http') !== 0) { return; }
-    faite = true;
-    (function (c, l, a, r, i, t, y) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, 'clarity', 'script', 'y7tr5kz2g8');
-  };
-}());
+window.clarity = window.clarity || function () {
+  (window.clarity.q = window.clarity.q || []).push(arguments);
+};
+
+/* Refus par defaut : la file d'attente ci-dessus retient l'appel
+   jusqu'a l'arrivee du script, qui le rejouera dans l'ordre. */
+clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'denied' });
 
 (function () {
   try {
     var m = document.cookie.match(/(?:^|; )consentement_pub=([^;]*)/);
-    if (m && decodeURIComponent(m[1]) === 'accepte') { window.__chargerClarity(); }
+    if (m && decodeURIComponent(m[1]) === 'accepte') {
+      clarity('consentv2', { ad_Storage: 'granted', analytics_Storage: 'granted' });
+    }
   } catch (e) {}
+}());
+
+/* Le script n'est pas injecte en apercu local : le double-clic sur
+   index.html reste sans aucune requete sortante. */
+(function () {
+  if (window.location.protocol.indexOf('http') !== 0) { return; }
+  var t = document.createElement('script');
+  t.async = true;
+  t.src = 'https://www.clarity.ms/tag/y7tr5kz2g8';
+  document.head.appendChild(t);
 }());
 </script>
 
@@ -2620,8 +2633,12 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         analytics_storage: etat
       });
     } catch (e) {}
-    /* Clarity ne demarre qu'ici, et jamais en cas de refus. */
-    if (accepte && window.__chargerClarity) { window.__chargerClarity(); }
+    /* Clarity est deja chargee : on lui transmet le choix. C'est cet
+       appel qui manquait, et sans lui aucune session n'etait
+       enregistree, meme apres acceptation. */
+    try {
+      window.clarity('consentv2', { ad_Storage: etat, analytics_Storage: etat });
+    } catch (e) {}
     tracer('consentement_pub', { choix: accepte ? 'accepte' : 'refuse' });
   }
 
@@ -3222,9 +3239,19 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
     });
   });
 
+  /* Les sept liens telephone de la page, ou qu'ils soient : hero,
+     barre mobile, bloc interlocuteur, ecrans de sortie, pied de page.
+     L'emplacement accompagne l'evenement, sinon on sait qu'on a ete
+     appele sans savoir depuis quoi. */
   $$('a[href^="tel:"]').forEach(function (lien) {
     lien.addEventListener('click', function () {
-      tracer('phone_click', { numero: lien.getAttribute('href').replace('tel:', '') });
+      var zone = lien.closest('[aria-labelledby], header, footer, .barre-mobile, .ecran');
+      tracer('phone_click', {
+        numero: lien.getAttribute('href').replace('tel:', ''),
+        emplacement: lien.getAttribute('data-emplacement') ||
+          (zone ? (zone.getAttribute('aria-labelledby') ||
+                   zone.className || zone.tagName.toLowerCase()) : 'inconnu')
+      });
     });
   });
 

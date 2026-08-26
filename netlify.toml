@@ -24,8 +24,9 @@
 # Tout le reste — polices, CDN, bibliotheques — reste interdit, et la
 # page n'en charge aucun.
 #
-# Rappel : Clarity n'est chargee qu'apres acceptation du bandeau. Ces
-# directives ne font que l'autoriser, elles ne la declenchent pas.
+# Clarity et la balise Google sont chargees des le premier rendu. Ce
+# n'est pas le chargement qui est conditionne au consentement, mais la
+# mesure : Consent Mode v2 pour Google, l'API consentv2 pour Clarity.
 # 'unsafe-inline' est necessaire pour le CSS et le JS inline, qui sont
 # la contrainte du fichier unique.
 # ------------------------------------------------------------------

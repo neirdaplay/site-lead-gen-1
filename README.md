@@ -510,14 +510,22 @@ sont pas activées.
 Projet `y7tr5kz2g8`. Mesure d'audience et **enregistrement de session** :
 mouvements, clics, défilement, cartes de chaleur.
 
-> **Clarity n'est pas chargée tant que le visiteur n'a pas accepté.**
-> C'est délibéré et ça la distingue de la balise Google. Google offre le
-> Consent Mode, qui laisse la balise utile en mode refusé — elle envoie un
-> signal sans identifiant. Clarity n'a pas d'équivalent : elle enregistre ou
-> elle n'enregistre pas. La seule façon de ne rien enregistrer sans accord est
-> donc de ne pas charger le script du tout, et c'est ce que fait
-> `window.__chargerClarity()`, appelée soit au clic sur « Accepter », soit au
-> chargement si le choix est déjà enregistré.
+**Chargée dès le premier rendu**, comme la balise Google. Ce n'est pas le
+chargement qui dépend du consentement, c'est l'enregistrement — via l'API
+`clarity('consentv2', { ad_Storage, analytics_Storage })`, appelée en `denied`
+avant le script et rejouée en `granted` à l'acceptation.
+
+> **C'est cet appel qui manquait, et c'est pourquoi Clarity n'enregistrait
+> rien.** Le script était bien chargé après acceptation, mais aucun signal
+> `consentv2` ne lui parvenait : il tournait en mode sans cookie, y compris
+> pour les visiteurs ayant accepté.
+
+Charger le script plus tôt ne suffit d'ailleurs pas à enregistrer davantage :
+depuis le **31 octobre 2025**, Microsoft applique lui-même la règle pour l'EEE,
+le Royaume-Uni et la Suisse. Sans signal de consentement, Clarity bascule en
+mode sans cookie et n'enregistre aucune session, quelle que soit la date de
+chargement. La CNIL, de son côté, **exclut expressément le session replay** de
+l'exemption de consentement accordée à la mesure d'audience.
 
 **Les champs du formulaire sont masqués côté page.** Les cinq champs personnels
 — prénom, nom, e-mail, téléphone, code postal — portent
