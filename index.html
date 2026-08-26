@@ -20,6 +20,24 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
 <!-- ==================================================================
+     Prechargement de l'image LCP.
+
+     Le sujet du plus grand rendu, c'est .hero__fond — un fond CSS, pas
+     une balise <img>. fetchpriority et loading ne s'appliquent donc pas
+     a lui : le seul levier disponible est ce preload, qui lance le
+     telechargement des l'analyse du <head> au lieu d'attendre que le
+     moteur de style ait resolu la regle.
+
+     media= n'en fait descendre qu'un seul : le mobile ne paie jamais la
+     variante bureau, et inversement. type= evite qu'un navigateur sans
+     WebP precharge un fichier qu'il n'utilisera pas.
+     ================================================================== -->
+<link rel="preload" as="image" type="image/webp" fetchpriority="high"
+      href="assets/img/hero-couvreur-900.webp" media="(max-width:759px)">
+<link rel="preload" as="image" type="image/webp" fetchpriority="high"
+      href="assets/img/hero-couvreur-1600.webp" media="(min-width:760px)">
+
+<!-- ==================================================================
      Balise Google (gtag.js) — Google Ads AW-18335177160.
      L'identifiant de conversion est public : il figure en clair dans le
      HTML de tout site qui mesure ses conversions. Ce n'est pas un secret,
@@ -62,15 +80,46 @@ gtag('set', 'url_passthrough', true);
 gtag('js', new Date());
 gtag('config', 'AW-18335177160');
 
-/* Le script Google n'est charge que sur un site en ligne. L'apercu local
-   par double-clic (file://) reste ainsi sans aucune requete sortante. */
-(function () {
+/* ==================================================================
+   Chargement des scripts de mesure APRES le premier rendu.
+
+   Les deux files d'attente — dataLayer pour Google, clarity.q pour
+   Microsoft — sont installees des maintenant, de facon synchrone. Tout
+   appel emis avant l'arrivee des scripts y est memorise, puis rejoue
+   dans l'ordre. Rien n'est perdu : seul le telechargement attend.
+
+   Ce que ca change : les quelque 150 Ko de gtag.js et de Clarity ne
+   disputent plus la bande passante a l'image du hero, qui est
+   l'element LCP, et leur execution sort de la fenetre ou PageSpeed
+   mesure le blocage du thread principal.
+
+   Le plafond de 3 s couvre les onglets ouverts en arriere-plan, ou ni
+   load ni requestIdleCallback ne se declenchent forcement.
+
+   Le script n'est pas injecte en apercu local : le double-clic sur
+   index.html reste sans aucune requete sortante.
+   ================================================================== */
+function chargerApresRendu(url) {
   if (window.location.protocol.indexOf('http') !== 0) { return; }
-  var b = document.createElement('script');
-  b.async = true;
-  b.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18335177160';
-  document.head.appendChild(b);
-}());
+  var fait = false;
+  function injecter() {
+    if (fait) { return; }
+    fait = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = url;
+    document.head.appendChild(s);
+  }
+  function planifier() {
+    if (window.requestIdleCallback) { requestIdleCallback(injecter, { timeout: 1500 }); }
+    else { window.setTimeout(injecter, 200); }
+  }
+  if (document.readyState === 'complete') { planifier(); }
+  else { window.addEventListener('load', planifier); }
+  window.setTimeout(injecter, 3000);
+}
+
+chargerApresRendu('https://www.googletagmanager.com/gtag/js?id=AW-18335177160');
 
 /* ==================================================================
    Microsoft Clarity — y7tr5kz2g8.
@@ -109,15 +158,11 @@ clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'denied' });
   } catch (e) {}
 }());
 
-/* Le script n'est pas injecte en apercu local : le double-clic sur
-   index.html reste sans aucune requete sortante. */
-(function () {
-  if (window.location.protocol.indexOf('http') !== 0) { return; }
-  var t = document.createElement('script');
-  t.async = true;
-  t.src = 'https://www.clarity.ms/tag/y7tr5kz2g8';
-  document.head.appendChild(t);
-}());
+/* Meme differe que la balise Google. L'enregistrement demarre donc au
+   plus tard 3 s apres l'ouverture. En pratique la perte est nulle :
+   Clarity n'enregistre que les visiteurs ayant accepte, et personne
+   n'accepte le bandeau en moins de trois secondes. */
+chargerApresRendu('https://www.clarity.ms/tag/y7tr5kz2g8');
 </script>
 
 <style>
@@ -167,6 +212,45 @@ table{border-collapse:collapse}
    s'ajoutent a .container ne doivent regler que padding-block :
    la forme courte « padding » remettrait ces 20px a zero. */
 .container{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px}
+/* <picture> ne sert qu'a la negociation WebP : sa boite n'a aucun role de
+   mise en page. display:contents l'efface du rendu, si bien que le <img>
+   reste l'enfant direct de son parent — element de grille, element flex,
+   ou bloc centre par margin:auto — exactement comme avant l'ajout du
+   <picture>. Sans ca, chaque emballage aurait casse un alignement. */
+picture{display:contents}
+/* Indispensable avec la ligne au-dessus : display:contents fait remonter
+   TOUS les enfants du <picture> dans le parent, <source> compris. Dans une
+   grille, le <source> devenait un element a part entiere et decalait la
+   photo d'une colonne. Chromium ne le masque pas de lui-meme ici. */
+picture > source{display:none}
+
+/* Rendu differe des sections hors ecran.
+
+   La page fait plus de 15 000 px de haut sur mobile. Au chargement, le
+   navigateur calculait le style et la mise en page de la totalite, alors
+   qu'un seul ecran est visible : c'etait le poste principal de blocage
+   du thread principal, bien devant le JavaScript du site.
+
+   content-visibility:auto lui dit de sauter ce travail tant que la
+   section est hors champ, et de le faire au moment ou elle approche.
+   contain-intrinsic-size lui donne entre-temps une hauteur plausible,
+   sans quoi la barre de defilement sauterait a chaque section rendue ;
+   le mot-cle auto lui fait ensuite memoriser la hauteur reelle.
+
+   --h vaut pour le mobile, --hb pour le bureau, ou les hauteurs sont
+   tres differentes. Ces valeurs ne servent qu'avant le premier rendu de
+   la section : une approximation suffit.
+
+   Attention, contain-intrinsic-size decrit la BOITE DE CONTENU. Les
+   hauteurs relevees a l'ecran sont des boites de bordure : il faut en
+   retrancher le padding vertical de la section (112 px sur mobile,
+   176 px sur bureau) et l'eventuelle bordure. Y mettre la hauteur brute
+   allongeait chaque section de son propre padding.
+
+   Le hero, les avis et les etapes en sont exclus : ils sont vus trop
+   tot pour qu'on gagne quoi que ce soit a les differer. */
+.differe{content-visibility:auto;contain-intrinsic-size:auto var(--h,1200px)}
+@media (min-width:760px){.differe{contain-intrinsic-size:auto var(--hb,var(--h,1200px))}}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .evitement{position:absolute;left:-9999px;top:0;z-index:100;padding:12px 18px;background:var(--blanc);color:var(--titre);font-weight:700;border-radius:0 0 8px 0}
 .evitement:focus{left:0}
@@ -228,6 +312,8 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
    haut que large et 60% garde le couvreur dans le champ. */
 .hero__fond{position:absolute;inset:0;opacity:.18;
 background-image:url('assets/img/hero-couvreur.jpg');
+background-image:image-set(url('assets/img/hero-couvreur-900.webp') type('image/webp'),
+url('assets/img/hero-couvreur.jpg') type('image/jpeg'));
 background-size:cover;background-position:60% 38%}
 .hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.45)}
 .hero__interne{position:relative;z-index:2;display:grid;gap:20px;padding-block:20px 30px}
@@ -732,7 +818,10 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 .hero__colonne--texte{grid-area:texte}
 .hero__colonne--form{grid-area:formulaire;align-self:center}
 .hero__puces{grid-area:puces;margin-top:20px}
-.hero__fond{opacity:.24}
+.hero__fond{opacity:.24;
+background-image:url('assets/img/hero-couvreur.jpg');
+background-image:image-set(url('assets/img/hero-couvreur-1600.webp') type('image/webp'),
+url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 .hero__voile{background:rgba(15,39,69,.35)}
 .hero__titre{font-size:38px;min-height:calc(3 * 1.16em)}
 .hero__sous-titre{font-size:17px}
@@ -1313,9 +1402,12 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
         <!-- ---------- Confirmation ---------- -->
         <div class="ecran" id="ecran-confirmation" hidden>
-          <img class="ecran__visage" src="assets/img/interlocuteur.jpg"
-               width="72" height="72" loading="lazy" decoding="async"
-               alt="Adrien Heddebaut, conseiller toiture">
+          <picture>
+            <source type="image/webp" srcset="assets/img/interlocuteur-160.webp">
+            <img class="ecran__visage" src="assets/img/interlocuteur.jpg"
+                 width="72" height="72" loading="lazy" decoding="async"
+                 alt="Adrien Heddebaut, conseiller toiture">
+          </picture>
           <div class="ecran__marque" aria-hidden="true">
             <svg viewBox="0 0 28 28" width="30" height="30" fill="none">
               <path d="M4 14.5 11 21 24 7" stroke="currentColor" stroke-width="3.2"
@@ -1350,9 +1442,12 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
                c'est-a-dire au moment ou la confiance compte le plus. -->
           <span class="formulaire__signature">
             <span class="formulaire__avatar">
-              <img class="formulaire__visage" src="assets/img/interlocuteur.jpg"
-                   width="36" height="36" loading="lazy" decoding="async"
-                   alt="Adrien Heddebaut, conseiller toiture">
+              <picture>
+                <source type="image/webp" srcset="assets/img/interlocuteur-160.webp">
+                <img class="formulaire__visage" src="assets/img/interlocuteur.jpg"
+                     width="36" height="36" loading="lazy" decoding="async"
+                     alt="Adrien Heddebaut, conseiller toiture">
+              </picture>
               <span class="formulaire__pastille" aria-hidden="true"></span>
             </span>
             <span>
@@ -1499,7 +1594,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      1600 x 900 chacune, width/height explicites : aucun décalage de mise en
      page au chargement. Si vous changez de chantier, changez aussi la commune
      et le matériau dans les deux figcaption, les deux alt et le sous-titre. -->
-<section class="section section--gris" id="avant-apres" aria-labelledby="titre-avant-apres">
+<section class="differe section section--gris" id="avant-apres" aria-labelledby="titre-avant-apres" style="--h:3372px;--hb:1944px">
   <div class="container">
     <h2 class="section__titre" id="titre-avant-apres">Avant / Après : la reprotection d’une toiture en images</h2>
     <p class="section__sous-titre">
@@ -1517,13 +1612,21 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <div class="paire">
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
-              <img src="assets/img/avant-3.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Toiture à Dunkerque avant intervention : encrassement marqué et teinte passée">
+              <picture>
+                <source type="image/webp" srcset="assets/img/avant-3-400.webp 400w, assets/img/avant-3-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/avant-3.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="Toiture à Dunkerque avant intervention : encrassement marqué et teinte passée">
+              </picture>
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
-              <img src="assets/img/apres-3.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="La même toiture à Dunkerque après traitement et reprotection : teinte uniforme et surface saine">
+              <picture>
+                <source type="image/webp" srcset="assets/img/apres-3-400.webp 400w, assets/img/apres-3-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/apres-3.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="La même toiture à Dunkerque après traitement et reprotection : teinte uniforme et surface saine">
+              </picture>
             </figure>
           </div>
           <p class="paire__legende"><b>Nettoyage + reprotection en résine hydrofuge colorée</b> — Dunkerque</p>
@@ -1532,13 +1635,21 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <div class="paire">
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
-              <img src="assets/img/avant-1.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Toiture en tuiles béton à Hazebrouck avant intervention : teinte délavée et irrégulière, surface mate">
+              <picture>
+                <source type="image/webp" srcset="assets/img/avant-1-400.webp 400w, assets/img/avant-1-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/avant-1.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="Toiture en tuiles béton à Hazebrouck avant intervention : teinte délavée et irrégulière, surface mate">
+              </picture>
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
-              <img src="assets/img/apres-1.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="La même toiture à Hazebrouck, sous le même angle, après nettoyage et résine hydrofuge colorée : teinte profonde et uniforme">
+              <picture>
+                <source type="image/webp" srcset="assets/img/apres-1-400.webp 400w, assets/img/apres-1-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/apres-1.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="La même toiture à Hazebrouck, sous le même angle, après nettoyage et résine hydrofuge colorée : teinte profonde et uniforme">
+              </picture>
             </figure>
           </div>
           <p class="paire__legende"><b>Nettoyage + reprotection en résine hydrofuge colorée</b> — Hazebrouck</p>
@@ -1547,13 +1658,21 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <div class="paire">
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
-              <img src="assets/img/avant-2.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Toiture à Orchies avant intervention : mousses et lichens installés sur les versants">
+              <picture>
+                <source type="image/webp" srcset="assets/img/avant-2-400.webp 400w, assets/img/avant-2-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/avant-2.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="Toiture à Orchies avant intervention : mousses et lichens installés sur les versants">
+              </picture>
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
-              <img src="assets/img/apres-2.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="La même toiture à Orchies après nettoyage complet : tuiles dégagées, versants nets">
+              <picture>
+                <source type="image/webp" srcset="assets/img/apres-2-400.webp 400w, assets/img/apres-2-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/apres-2.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="La même toiture à Orchies après nettoyage complet : tuiles dégagées, versants nets">
+              </picture>
             </figure>
           </div>
           <p class="paire__legende"><b>Nettoyage + reprotection en résine hydrofuge colorée</b> — Orchies</p>
@@ -1562,13 +1681,21 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <div class="paire">
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
-              <img src="assets/img/avant-4.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Toiture à Sainghin-en-Weppes avant intervention : tuiles encrassées et teinte passée">
+              <picture>
+                <source type="image/webp" srcset="assets/img/avant-4-400.webp 400w, assets/img/avant-4-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/avant-4.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="Toiture à Sainghin-en-Weppes avant intervention : tuiles encrassées et teinte passée">
+              </picture>
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
-              <img src="assets/img/apres-4.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="La même maison à Sainghin-en-Weppes après nettoyage et reprotection : teinte uniforme">
+              <picture>
+                <source type="image/webp" srcset="assets/img/apres-4-400.webp 400w, assets/img/apres-4-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/apres-4.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="La même maison à Sainghin-en-Weppes après nettoyage et reprotection : teinte uniforme">
+              </picture>
             </figure>
           </div>
           <p class="paire__legende"><b>Nettoyage + reprotection en résine hydrofuge colorée</b> — Sainghin-en-Weppes</p>
@@ -1577,13 +1704,21 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
           <div class="paire">
             <figure class="paire__vue paire__vue--avant">
               <span class="paire__badge">Avant</span>
-              <img src="assets/img/avant-5.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="Toiture à Valenciennes avant intervention : tuiles ternies et dépôts sur les versants">
+              <picture>
+                <source type="image/webp" srcset="assets/img/avant-5-400.webp 400w, assets/img/avant-5-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/avant-5.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="Toiture à Valenciennes avant intervention : tuiles ternies et dépôts sur les versants">
+              </picture>
             </figure>
             <figure class="paire__vue paire__vue--apres">
               <span class="paire__badge">Après</span>
-              <img src="assets/img/apres-5.jpg" width="1200" height="900"
-                   loading="lazy" decoding="async" alt="La même maison à Valenciennes après nettoyage et reprotection : teinte ravivée et uniforme">
+              <picture>
+                <source type="image/webp" srcset="assets/img/apres-5-400.webp 400w, assets/img/apres-5-800.webp 800w"
+                        sizes="(min-width:1120px) 530px, calc((100vw - 60px) / 2)">
+                <img src="assets/img/apres-5.jpg" width="800" height="600"
+                     loading="lazy" decoding="async" alt="La même maison à Valenciennes après nettoyage et reprotection : teinte ravivée et uniforme">
+              </picture>
             </figure>
           </div>
           <p class="paire__legende"><b>Nettoyage + reprotection en résine hydrofuge colorée</b> — Valenciennes</p>
@@ -1796,7 +1931,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </section>
 
 <!-- ================= NOS 3 PRESTATIONS ================= -->
-<section class="section section--blanc" aria-labelledby="titre-prestations">
+<section class="differe section section--blanc" aria-labelledby="titre-prestations" style="--h:1674px;--hb:614px">
   <div class="container">
     <h2 class="section__titre" id="titre-prestations">Nos trois prestations</h2>
     <p class="section__sous-titre">
@@ -1841,7 +1976,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </section>
 
 <!-- ================= TABLEAU DE PRIX ================= -->
-<section class="section section--gris" aria-labelledby="titre-prix">
+<section class="differe section section--gris" aria-labelledby="titre-prix" style="--h:775px;--hb:586px">
   <div class="container">
     <h2 class="section__titre" id="titre-prix">Repères de prix</h2>
     <p class="section__sous-titre">
@@ -1918,7 +2053,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </section>
 
 <!-- ================= SIGNAUX ================= -->
-<section class="section section--blanc" aria-labelledby="titre-signaux">
+<section class="differe section section--blanc" aria-labelledby="titre-signaux" style="--h:2050px;--hb:895px">
   <div class="container">
     <h2 class="section__titre" id="titre-signaux">Faut-il intervenir maintenant ?</h2>
     <p class="section__sous-titre">
@@ -2020,7 +2155,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      chantier » : 116 points ne représentent pas les 3 000 chantiers réalisés,
      ils en montrent l'étendue géographique. Garder cette formulation tant
      qu'on ne dispose pas des communes réelles. -->
-<section class="section section--gris" aria-labelledby="titre-zone">
+<section class="differe section section--gris" aria-labelledby="titre-zone" style="--h:1555px;--hb:841px">
   <div class="container">
     <h2 class="section__titre" id="titre-zone">
       Intervention <span data-geo="en-secteur">dans le Nord</span>, et nulle part ailleurs
@@ -2231,11 +2366,15 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
      Le texte parle de l'interlocuteur et du suivi, jamais de
      l'execution des travaux ni d'une qualification technique : ce
      serait faux, et les pages legales disent l'inverse. -->
-<section class="section interlocuteur" aria-labelledby="titre-interlocuteur">
+<section class="differe section interlocuteur" aria-labelledby="titre-interlocuteur" style="--h:594px;--hb:307px">
   <div class="container interlocuteur__interne">
-    <img class="interlocuteur__photo" src="assets/img/interlocuteur.jpg"
-         width="160" height="160" loading="lazy" decoding="async"
-         alt="Portrait d’Adrien Heddebaut">
+    <picture>
+      <source type="image/webp" srcset="assets/img/interlocuteur-160.webp 1x,
+                                        assets/img/interlocuteur-320.webp 2x">
+      <img class="interlocuteur__photo" src="assets/img/interlocuteur.jpg"
+           width="160" height="160" loading="lazy" decoding="async"
+           alt="Portrait d’Adrien Heddebaut">
+    </picture>
     <div>
       <!-- À VALIDER -->
       <p class="interlocuteur__nom" id="titre-interlocuteur">Adrien Heddebaut</p>
@@ -2259,7 +2398,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </section>
 
 <!-- ================= FAQ ================= -->
-<section class="section section--gris" aria-labelledby="titre-faq">
+<section class="differe section section--gris" aria-labelledby="titre-faq" style="--h:740px;--hb:584px">
   <div class="container">
     <h2 class="section__titre" id="titre-faq">Les questions qu’on nous pose</h2>
     <p class="section__sous-titre">
@@ -2406,7 +2545,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </section>
 
 <!-- ================= CTA FINAL ================= -->
-<section class="final" aria-labelledby="titre-final">
+<section class="differe final" aria-labelledby="titre-final" style="--h:290px;--hb:182px">
   <div class="container">
     <h2 class="final__titre" id="titre-final">Une toiture ne se répare jamais toute seule</h2>
     <p class="final__texte">
@@ -2426,7 +2565,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </main>
 
 <!-- ================= PIED DE PAGE ================= -->
-<footer class="pied">
+<footer class="differe pied" style="--h:465px;--hb:216px">
   <div class="container">
     <div class="pied__haut">
       <a class="logo" href="index.html" aria-label="Mon Couvreur Nord, retour à l’accueil">
@@ -2605,6 +2744,13 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
 
+  /* Repousse un travail non urgent hors du chemin critique. Le plafond
+     evite qu'il soit indefiniment reporte sur une page occupee. */
+  function auRepos(fn) {
+    if (window.requestIdleCallback) { window.requestIdleCallback(fn, { timeout: 800 }); }
+    else { window.setTimeout(fn, 60); }
+  }
+
   /* ================================================================
      0. Google Ads — conversion et consentement
      ================================================================ */
@@ -2662,9 +2808,10 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         analytics_storage: etat
       });
     } catch (e) {}
-    /* Clarity est deja chargee : on lui transmet le choix. C'est cet
-       appel qui manquait, et sans lui aucune session n'etait
-       enregistree, meme apres acceptation. */
+    /* On transmet le choix a Clarity. C'est cet appel qui manquait, et
+       sans lui aucune session n'etait enregistree, meme apres
+       acceptation. Si le script n'est pas encore arrive, la file
+       clarity.q le retient et le rejoue. */
     try {
       window.clarity('consentv2', { ad_Storage: etat, analytics_Storage: etat });
     } catch (e) {}
@@ -3148,13 +3295,34 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
       return;
     }
 
+    /* Chaque lecture de offsetLeft force le navigateur a recalculer la
+       mise en page. Lues element par element, sur deux carrousels, ces
+       lectures representaient a elles seules l'essentiel du temps de
+       blocage du thread principal au chargement.
+
+       Or ces positions ne dependent pas du defilement — offsetLeft se
+       mesure par rapport au parent positionne, pas au scroll. Elles ne
+       bougent qu'au redimensionnement. On les releve donc une fois, en
+       un seul lot, et on jette le releve au resize. */
+    var reperes = null;
+    function positions() {
+      if (reperes) { return reperes; }
+      var base = piste.offsetLeft;
+      var p = elements.map(function (el) { return el.offsetLeft - base; });
+      /* Une section encore sautee par content-visibility n'a aucune mise
+         en page : toutes les positions y valent zero. On ne fige pas une
+         mesure fausse — on la refera a l'entree dans le champ. */
+      if (p[p.length - 1] > 0) { reperes = p; }
+      return p;
+    }
+
     /* Index courant : l'element dont le bord gauche est le plus proche
        de celui de la piste. Plus fiable qu'un compteur maison, qui
        decrocherait au premier swipe. */
     function courant() {
-      var ref = piste.scrollLeft, meilleur = 0, ecart = Infinity;
-      for (var i = 0; i < elements.length; i++) {
-        var d = Math.abs(elements[i].offsetLeft - piste.offsetLeft - ref);
+      var ref = piste.scrollLeft, p = positions(), meilleur = 0, ecart = Infinity;
+      for (var i = 0; i < p.length; i++) {
+        var d = Math.abs(p[i] - ref);
         if (d < ecart) { ecart = d; meilleur = i; }
       }
       return meilleur;
@@ -3162,7 +3330,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 
     function versElement(i) {
       i = Math.max(0, Math.min(elements.length - 1, i));
-      piste.scrollTo({ left: elements[i].offsetLeft - piste.offsetLeft,
+      piste.scrollTo({ left: positions()[i],
         behavior: mouvementReduit() ? 'auto' : 'smooth' });
     }
 
@@ -3205,8 +3373,36 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
       window.clearTimeout(attente);
       attente = window.setTimeout(rafraichir, 90);
     });
-    window.addEventListener('resize', rafraichir);
-    rafraichir();
+    window.addEventListener('resize', function () { reperes = null; rafraichir(); });
+
+    /* Ce premier rafraichir lit la mise en page, ce qui oblige le
+       navigateur a la calculer sur-le-champ. Appele ici, en fin de
+       document, il la lui fait calculer AVANT la premiere peinture :
+       c'etait le plus gros poste de blocage du thread principal au
+       chargement. Repousse au repos, il tombe apres la peinture, quand
+       la mise en page est deja a jour — la lecture ne coute plus rien.
+
+       Rien n'attend pour autant : les points et les fleches sont
+       construits et branches juste au-dessus, de facon synchrone. Seul
+       l'etat initial (point actif, fleches grisees) arrive un souffle
+       plus tard, et un clic anticipe reste sans consequence, versElement
+       bornant deja l'index. */
+    auRepos(rafraichir);
+
+    /* Le carrousel avant/apres est dans une section a rendu differe : au
+       moment du auRepos ci-dessus, elle n'a pas encore de mise en page.
+       On remesure donc a son arrivee dans le champ. Sans effet pour le
+       carrousel des avis, deja rendu — il passe ici une fois, et
+       l'observateur se debranche. */
+    if (window.IntersectionObserver) {
+      var guet = new IntersectionObserver(function (entrees) {
+        if (!entrees[0].isIntersecting) { return; }
+        reperes = null;
+        rafraichir();
+        guet.disconnect();
+      });
+      guet.observe(racine);
+    }
   }
 
   /* --- Avis : le HTML est produit depuis le tableau AVIS --- */
