@@ -246,26 +246,6 @@ letter-spacing:-.02em;color:#fff;min-height:calc(3 * 1.16em)}
 /* --- Carte formulaire --- */
 .formulaire{background:var(--blanc);color:var(--texte);border:1px solid rgba(255,255,255,.5);
 border-radius:12px;box-shadow:0 10px 30px rgba(4,15,30,.28);padding:16px 16px 18px}
-/* --- Appel : premiere sortie de la carte, avant le formulaire ---
-   Quatre visiteurs sur cinq ont passe 65 ans : beaucoup composeront le
-   numero plutot que d'enchainer six ecrans. Le numero est donc ecrit en
-   toutes lettres dans le bouton, pas seulement porte par le lien. */
-.appel{display:flex;align-items:center;justify-content:center;gap:11px;
-width:100%;min-height:64px;padding:14px 18px;border:0;border-radius:10px;
-background:var(--vert-fonce);color:#fff;font:inherit;font-size:19px;font-weight:800;
-line-height:1.2;text-align:center;text-decoration:none;cursor:pointer;
-box-shadow:0 3px 12px rgba(10,122,70,.3);
-transition:background-color .14s ease}
-.appel:hover{background:#08633A}
-.appel svg{flex:0 0 auto;width:23px;height:23px}
-@media (prefers-reduced-motion:reduce){.appel{transition:none}}
-@media (max-width:360px){.appel{font-size:17.5px;gap:9px}.appel svg{width:21px;height:21px}}
-.appel__horaires{margin:9px 0 0;font-size:13px;line-height:1.45;
-color:var(--texte);text-align:center}
-/* Separateur « ou » : deux filets et le mot, sur le blanc de la carte. */
-.ou{display:flex;align-items:center;gap:12px;margin:16px 0 4px;
-font-size:13px;color:#4A5568}
-.ou::before,.ou::after{content:"";flex:1 1 auto;height:1px;background:var(--bord)}
 .formulaire__titre{margin:0 0 3px;font-size:18px;font-weight:800;color:var(--titre);line-height:1.25}
 .formulaire__accroche{margin:0 0 13px;font-size:13.5px;line-height:1.45;color:var(--note)}
 .progression__ligne{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
@@ -1080,17 +1060,6 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
             aria-labelledby="formulaire-titre">
         <input type="hidden" name="form-name" value="lead">
 
-        <!-- Hors des horaires d'ouverture, le script remplace le libelle
-             par « Être rappelé » et renvoie vers le formulaire : mieux
-             vaut un formulaire rempli qu'un appel dans le vide. -->
-        <a class="appel" id="appel-hero" href="tel:+33786505580" data-position="hero">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"></use></svg>
-          <span id="appel-hero-libelle">Appeler 07 86 50 55 80</span>
-        </a>
-        <p class="appel__horaires" id="appel-horaires">Du lundi au samedi, 8h-19h</p>
-
-        <p class="ou">ou</p>
-
         <h2 class="formulaire__titre" id="formulaire-titre">Votre demande de devis</h2>
         <p class="formulaire__accroche">6 questions, 2 minutes. Aucun engagement.</p>
 
@@ -1111,7 +1080,6 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         <fieldset class="etape est-active" data-etape="1">
           <legend class="sr-only">Étape 1 sur 6 : votre projet</legend>
           <h3 class="etape__titre">Votre projet de toiture concerne :</h3>
-          <p class="etape__aide">Ou décrivez votre projet en 1 minute</p>
           <p class="etape__aide">Choisissez la prestation la plus proche.</p>
           <div class="options">
             <button type="button" class="option" data-champ="projet" data-valeur="Nettoyage / Démoussage" data-teinte="cyan" aria-pressed="false">
@@ -3301,39 +3269,8 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   });
 
   /* ================================================================
-     3 bis. Appel telephonique
+     3 bis. Suivi des appels
      ================================================================ */
-
-  /* Du lundi au samedi, de 8 h a 19 h. L'heure est celle du visiteur :
-     c'est la seule dont dispose une page statique, et pour une audience
-     du Nord elle coincide avec la notre. */
-  function dansLesHoraires(quand) {
-    var d = quand || new Date();
-    var jour = d.getDay();          /* 0 = dimanche */
-    var heure = d.getHours();
-    return jour >= 1 && jour <= 6 && heure >= 8 && heure < 19;
-  }
-
-  /* Hors horaires, le bouton du hero cesse d'etre un lien telephone :
-     il renvoie au formulaire. Un appel qui sonne dans le vide coute
-     plus qu'il ne rapporte. Il reste vert et au meme endroit. */
-  function reglerBoutonAppel() {
-    var bouton = $('#appel-hero');
-    var libelle = $('#appel-hero-libelle');
-    var horaires = $('#appel-horaires');
-    if (!bouton || !libelle) { return; }
-    if (dansLesHoraires()) { return; }
-    bouton.setAttribute('href', '#devis');
-    bouton.setAttribute('data-action', 'aller-au-formulaire');
-    bouton.setAttribute('data-emplacement', 'hero-hors-horaires');
-    bouton.removeAttribute('data-position');
-    libelle.textContent = 'Être rappelé';
-    if (horaires) {
-      horaires.textContent = 'Nous sommes fermés — laissez votre numéro, ' +
-        'on vous rappelle dès l’ouverture (lundi au samedi, 8h-19h).';
-    }
-  }
-  reglerBoutonAppel();
 
   /* Tous les liens telephone de la page. La position accompagne
      l'evenement : un appel dont on ignore d'ou il part ne dit rien de

@@ -538,17 +538,14 @@ Clarity répartit sa charge sur `a.clarity.ms` à `z.clarity.ms`, d'où le joker
 
 ### Appel téléphonique
 
-Le téléphone est la première sortie de la page, avant le formulaire :
-**82 % de l'audience a plus de 65 ans** et une large part appellera plutôt que
-d'enchaîner six écrans. Il apparaît à quatre endroits — en-tête, haut de la
-carte du formulaire, barre mobile, pied de page — et le **numéro est écrit en
-toutes lettres** partout, jamais seulement porté par le lien.
+Le numéro apparaît en **en-tête** et dans la **barre mobile**, écrit en toutes
+lettres et jamais seulement porté par le lien. Dans la barre mobile, l'appel
+prend 60 % de la largeur en vert plein, la demande 40 % en contour.
 
-**Horaires.** Du lundi au samedi, 8h-19h, d'après l'heure du visiteur — la
-seule dont dispose une page statique. En dehors, le bouton du hero devient
-« Être rappelé » et renvoie au formulaire : un appel qui sonne dans le vide
-coûte plus qu'il ne rapporte. Il reste vert et à la même place. Pour changer la
-plage, voir `dansLesHoraires()` dans `index.html`.
+**La carte du formulaire n'en porte pas.** Un bouton d'appel y avait été ajouté
+puis retiré : il repoussait le parcours et alourdissait la carte. Le formulaire
+reprend le haut de la carte, sur son titre. Les écrans de sortie gardent leur
+ligne « Une urgence ? », qui est antérieure et voulue.
 
 > **Le vert demandé, #12B76A, n'a pas été retenu pour les fonds de bouton.**
 > Avec du texte blanc il donne **2,62:1**, sous le seuil de 3:1 réservé aux
