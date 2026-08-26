@@ -334,6 +334,45 @@ pixels rendus à la première question. Le titre reste dans le document, hors
 écran — c'est lui qui nomme le formulaire pour les lecteurs d'écran via
 `aria-labelledby`, il ne peut donc pas être supprimé.
 
+### L'écran d'arrivée
+
+**Le formulaire n'est plus le premier élément visuel.** Au-dessus de la ligne
+de flottaison, sur un écran de 360 px, on ne voit que quatre choses :
+
+1. la médaille « Artisan assuré en décennale » ;
+2. un H1 concret — *Nettoyage et démoussage de toiture à [Ville]* ;
+3. la ligne *Devis gratuit, sans engagement* ;
+4. **le bouton d'appel**, pleine largeur, 64 px de haut, numéro en toutes
+   lettres.
+
+Puis un lien discret, *Ou décrivez votre projet en ligne*, qui fait défiler
+jusqu'au formulaire. Celui-ci commence sous la ligne de flottaison : seul le
+bord haut de sa carte dépasse, ce qui invite à faire défiler sans montrer de
+question.
+
+C'est un renversement assumé : 83 % de l'audience a 65 ans ou plus, et pour
+cette tranche le téléphone reste le geste naturel là où six étapes de
+formulaire demandent un effort.
+
+**Comment le formulaire est repoussé.** `.hero__colonne--texte` reçoit
+`min-height:calc(100svh - 130px)` sous 760 px, avec son contenu centré
+verticalement. Deux points à connaître avant d'y toucher :
+
+- `100svh`, pas `100vh` : sur mobile, `vh` compte la barre d'adresse rétractée,
+  donc une hauteur dont on ne dispose pas au chargement. La déclaration `vh`
+  qui précède sert de repli aux navigateurs qui ignorent `svh`.
+- **Contenu centré, pas collé en haut** : sur un grand téléphone il resterait
+  sinon 400 px de photo vide sous le lien, ce qui se lit comme un oubli.
+  Centré, l'espace se répartit et le bouton tombe au milieu de l'écran.
+
+> **Le vert #12B76A est bien celui demandé — mais le texte dessus est en bleu
+> nuit, pas en blanc.** Blanc sur #12B76A ne donne que **2,62:1**, sous les
+> 4,5:1 exigés et même sous les 3:1 des grands textes. `#0F2745` sur `#12B76A`
+> donne **5,72:1** : conforme AA à toutes les tailles, et le vert reste
+> exactement celui demandé. Sur une audience dont la sensibilité aux
+> contrastes baisse avec l'âge, ce n'était pas négociable. Repasser le texte
+> en blanc est une seule ligne dans `.bouton-appel`, en connaissance de cause.
+
 ### Réassurance du hero
 
 La pastille en haut du hero porte une **médaille** et la seule promesse
@@ -347,12 +386,12 @@ chose.
 > (art. L. 121-2 du code de la consommation). La médaille apporte le signal
 > visuel recherché ; la garantie décennale apporte le fond.
 
-Les trois puces sous le formulaire reprennent des promesses **concrètes** —
-délai de rappel, devis chiffré après visite, coordonnées jamais revendues.
-Elles évitent volontairement les mots du bandeau de réassurance placé juste en
-dessous (*100 % gratuit*, *Sans engagement*, *Un seul technicien vous
-contacte*, *Intervention dans tout le Nord*) : répéter les mêmes termes à cent
-pixels d'écart se lit comme une erreur de relecture, pas comme une insistance.
+**Les puces de réassurance ont quitté le hero** pour le liséré juste en
+dessous, afin de ne laisser au-dessus de la ligne de flottaison que le titre,
+la ligne et le bouton d'appel. Le liséré en compte six ; *100 % gratuit* et
+*Sans engagement* en ont été retirés, la ligne sous le titre le disant déjà —
+répéter les mêmes termes à cent pixels d'écart se lit comme une erreur de
+relecture, pas comme une insistance.
 
 | Étape | Question | Champ |
 |---|---|---|
@@ -603,6 +642,52 @@ Pour en faire une **conversion secondaire** : créez une action de conversion
 « Appel depuis le site » dans Google Ads, puis collez sa valeur `send_to` dans
 la constante `CONVERSION_APPEL` de `index.html`. Tant qu'elle est vide,
 l'événement reste dans le dataLayer et rien n'est envoyé.
+
+### Tableau de prix
+
+**Il est tout en bas, après la FAQ, et c'est délibéré.** Placé haut, il laissait
+le visiteur se disqualifier sur un chiffre avant d'avoir vu un seul chantier,
+un seul avis, ni la moindre explication de ce qu'on fait. Il arrive donc une
+fois que tout le reste a été lu.
+
+Le titre est une question — *Combien coûte un traitement de toiture ?* — parce
+que c'est la formulation dans laquelle le visiteur se reconnaît, et parce
+qu'elle capte la même requête sur les moteurs.
+
+Deux phrases précèdent le tableau : ce dont le prix dépend (surface réelle des
+versants, accessibilité du toit, état du support) et le fait que seule une
+visite gratuite permet de chiffrer. Sans elles, une fourchette au m² se lit
+comme un tarif ferme, et tout écart constaté ensuite passe pour une hausse.
+
+L'introduction porte `.section__sous-titre--long`, qui la passe au fer à
+gauche : un paragraphe centré au-delà de deux ou trois lignes se lit mal, l'œil
+devant rechercher le début de ligne à chaque retour.
+
+### Instrumentation
+
+Sept événements sont poussés dans le `dataLayer` :
+
+| Événement | Quand | Données |
+|---|---|---|
+| `page_view_complete` | au LCP définitif | `lcp_ms`, `lcp_element` |
+| `scroll_25` / `_50` / `_75` | palier de lecture atteint | `profondeur` |
+| `phone_click` | clic sur un lien `tel:` | `position`, `numero` |
+| `form_start` | premier clic dans l'étape 1 | `premier_champ`, `premiere_valeur` |
+| `form_step` | changement d'étape | `step_number`, `step_name` |
+| `lead_submit` | envoi accepté par Netlify | voir §9 |
+
+**`page_view_complete` porte la valeur du LCP mesurée sur le terrain**, sur de
+vrais téléphones et un vrai réseau, plutôt que sur un banc d'essai. Il part au
+premier des deux : masquage de l'onglet, ou chargement complet — le LCP n'est
+définitif qu'à ce moment, et un visiteur qui s'en va sans rien émettre ne
+laisse aucune trace de ce qu'il a attendu.
+
+**Les paliers de défilement mesurent la part de page vue**, pas la position de
+défilement : sur une page de 15 000 px, « avoir défilé de 25 % » et « avoir vu
+le quart de la page » ne sont pas la même chose. Chaque palier part une fois et
+une seule, et le calcul se fait au repos après l'événement — lire `scrollHeight`
+force une mise en page, et le faire à chaque pixel parcouru rendrait le
+défilement saccadé.
 
 ### Consentement (Consent Mode v2)
 

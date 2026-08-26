@@ -33,9 +33,9 @@
      WebP precharge un fichier qu'il n'utilisera pas.
      ================================================================== -->
 <link rel="preload" as="image" type="image/webp" fetchpriority="high"
-      href="assets/img/hero-couvreur-900.webp" media="(max-width:759px)">
+      href="assets/img/hero-couvreur-640.webp" media="(max-width:759px)">
 <link rel="preload" as="image" type="image/webp" fetchpriority="high"
-      href="assets/img/hero-couvreur-1600.webp" media="(min-width:760px)">
+      href="assets/img/hero-couvreur-1200.webp" media="(min-width:760px)">
 
 <!-- ==================================================================
      Balise Google (gtag.js) — Google Ads AW-18335177160.
@@ -317,7 +317,7 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
    haut que large et 60% garde le couvreur dans le champ. */
 .hero__fond{position:absolute;inset:0;opacity:.18;
 background-image:url('assets/img/hero-couvreur.jpg');
-background-image:image-set(url('assets/img/hero-couvreur-900.webp') type('image/webp'),
+background-image:image-set(url('assets/img/hero-couvreur-640.webp') type('image/webp'),
 url('assets/img/hero-couvreur.jpg') type('image/jpeg'));
 background-size:cover;background-position:60% 38%}
 .hero__voile{position:absolute;inset:0;background:rgba(15,39,69,.45)}
@@ -333,17 +333,37 @@ font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#fff}
 .hero__titre{margin:12px 0 0;font-size:29px;line-height:1.16;font-weight:800;
 letter-spacing:-.02em;color:#fff;min-height:calc(3 * 1.16em)}
 .hero__titre em{font-style:normal;color:var(--vert)}
-.hero__sous-titre{margin:11px 0 0;max-width:520px;font-size:15.5px;line-height:1.5;color:#C9D8E9}
-.hero__sous-titre b{color:var(--blanc);font-weight:700}
-.hero__puces{list-style:none;margin:0;padding:0;display:grid;gap:11px}
-.hero__puces li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.45;color:#E4EDF7}
-/* Pastille pleine plutot qu'un simple trait : sur le bleu nuit du hero,
-   un aplat vert se lit de bien plus loin qu'une coche filaire, et c'est
-   ce qui donne a la liste son air de garanties cochees. */
-.hero__puces__coche{flex:0 0 auto;display:grid;place-items:center;
-width:21px;height:21px;margin-top:1px;border-radius:6px;
-background:var(--vert);color:#06301C}
-.hero__puces__coche svg{width:14px;height:14px}
+.hero__accroche{margin:10px 0 0;font-size:17px;line-height:1.4;font-weight:600;color:#DCE8F5}
+/* ============================================================
+   Bouton d'appel du hero.
+
+   Le vert demande, #12B76A, est bien celui-ci — mais avec du texte
+   BLANC il ne donne que 2,62:1, sous les 4,5:1 exiges et meme sous
+   les 3:1 des grands textes. Sur une audience dont la sensibilite aux
+   contrastes baisse avec l'age, ce n'etait pas negociable.
+
+   La sortie n'est pas de changer le vert : c'est d'ecrire dessus en
+   bleu nuit du site plutot qu'en blanc. #0F2745 sur #12B76A donne
+   5,72:1 — conforme AA a toutes les tailles, et le vert reste
+   exactement celui demande.
+   ============================================================ */
+.bouton-appel{display:flex;align-items:center;justify-content:center;gap:11px;
+width:100%;min-height:64px;padding:12px 18px;margin-top:18px;
+border-radius:12px;border:0;background:#12B76A;color:#0F2745;
+font-family:inherit;font-size:22px;font-weight:800;letter-spacing:.01em;
+text-decoration:none;box-shadow:0 6px 20px rgba(18,183,106,.3);
+transition:background-color .12s ease,transform .12s ease}
+.bouton-appel svg{flex:0 0 auto;width:24px;height:24px}
+.bouton-appel:hover{background:#0FA25D}
+.bouton-appel:active{transform:translateY(1px)}
+@media (prefers-reduced-motion:reduce){.bouton-appel{transition:none}}
+
+/* Sortie secondaire, volontairement discrete : elle ne doit pas
+   disputer l'attention au bouton juste au-dessus. */
+.hero__vers-form{display:flex;align-items:center;justify-content:center;
+min-height:44px;margin-top:6px;font-size:15.5px;line-height:1.4;
+color:#C9D8E9;text-decoration:underline;text-underline-offset:3px}
+.hero__vers-form:hover{color:var(--blanc)}
 
 /* --- Carte formulaire --- */
 .formulaire{background:var(--blanc);color:var(--texte);border:1px solid rgba(255,255,255,.5);
@@ -579,6 +599,10 @@ border-radius:var(--rayon-s);font-size:15.5px;line-height:1.6;color:var(--titre)
 .section--blanc{background:var(--blanc)}
 .section__titre{margin:0 auto;max-width:760px;text-align:center;font-size:26px;line-height:1.25;font-weight:700;color:var(--titre);letter-spacing:-.01em}
 .section__sous-titre{margin:14px auto 0;max-width:620px;text-align:center;font-size:16px;line-height:1.6;color:var(--texte)}
+/* Un paragraphe centre au-dela de deux ou trois lignes se lit mal : a
+   chaque retour a la ligne l'oeil doit rechercher le debut, qui se
+   deplace. Les introductions longues passent donc au fer a gauche. */
+.section__sous-titre--long{text-align:left}
 .section__note{margin:16px auto 0;max-width:700px;text-align:center;font-size:15.5px;line-height:1.65;color:var(--texte)}
 .section__cta{margin-top:32px;text-align:center}
 .bloc{margin-top:36px}
@@ -780,6 +804,25 @@ padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
 .formulaire__titre{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
 overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .formulaire__accroche{display:none}
+
+/* La colonne de texte occupe le premier ecran a elle seule.
+
+   C'est ce qui fait descendre le formulaire sous la ligne de
+   flottaison : sans cette hauteur, sa carte commencait vers 370 px et
+   la premiere question restait visible, alors que l'ecran d'arrivee ne
+   doit porter que le titre, la ligne et le bouton d'appel.
+
+   Le contenu est centre plutot que colle en haut : sur un grand
+   telephone il resterait sinon 400 px de photo vide sous le lien, ce
+   qui se lit comme un oubli. Centre, l'espace se repartit et le bouton
+   tombe au milieu de l'ecran, la ou le pouce l'attend.
+
+   100svh et non 100vh : sur mobile, vh compte la barre d'adresse
+   retractee, donc une hauteur qu'on n'a pas au chargement. La ligne vh
+   qui precede sert de repli aux navigateurs qui ignorent svh. */
+.hero__colonne--texte{display:flex;flex-direction:column;justify-content:center;
+min-height:calc(100vh - 130px);
+min-height:calc(100svh - 130px)}
 }
 
 /* Ecrans etroits : le chevron ajoute a droite coute une dizaine de
@@ -797,10 +840,9 @@ overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
    reassurance principale, et elle tient sur une ligne. */
 @media (max-height:700px) and (max-width:600px){
 .hero__interne{padding-block:14px 24px;gap:16px}
-.hero__titre{margin:0;font-size:26px}
-.hero__sous-titre{margin-top:9px;font-size:14.5px}
-.hero__puces{gap:9px}
-.hero__puces li{font-size:13.5px}
+.hero__titre{margin:0;font-size:25px}
+.hero__accroche{margin-top:8px;font-size:15.5px}
+.bouton-appel{min-height:60px;margin-top:14px;font-size:20px}
 .formulaire{padding:15px 15px 17px}
 }
 @media (min-width:640px){
@@ -851,18 +893,19 @@ justify-items:start;text-align:left;align-items:center}
 }
 @media (min-width:1000px){
 .hero__interne{grid-template-columns:1.05fr 400px;
-grid-template-areas:'texte formulaire' 'puces formulaire';
+grid-template-areas:'texte formulaire';
 align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 .hero__colonne--texte{grid-area:texte}
 .hero__colonne--form{grid-area:formulaire;align-self:center}
-.hero__puces{grid-area:puces;margin-top:20px}
 .hero__fond{opacity:.24;
 background-image:url('assets/img/hero-couvreur.jpg');
-background-image:image-set(url('assets/img/hero-couvreur-1600.webp') type('image/webp'),
+background-image:image-set(url('assets/img/hero-couvreur-1200.webp') type('image/webp'),
 url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 .hero__voile{background:rgba(15,39,69,.35)}
-.hero__titre{font-size:38px;min-height:calc(3 * 1.16em)}
-.hero__sous-titre{font-size:17px}
+.hero__titre{font-size:38px;min-height:calc(2 * 1.16em)}
+.hero__accroche{font-size:18px}
+.bouton-appel{max-width:420px}
+.hero__vers-form{justify-content:flex-start;max-width:420px}
 .formulaire{padding:26px 24px}
 .entete__interne{min-height:72px}
 }
@@ -1176,20 +1219,37 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
         Artisan assuré en décennale
       </span>
 
+      <!-- Titre concret, pas une promesse : le visiteur doit reconnaitre
+           en une seconde qu'il est au bon endroit. -->
       <h1 class="hero__titre">
-        Devis toiture <em data-geo="a-ville">dans le Nord</em>&nbsp;:
-        un couvreur vous rappelle sous 48 h
+        Nettoyage et démoussage de toiture
+        <em data-geo="a-ville">dans le Nord</em>
       </h1>
 
-      <!-- Deux lignes, pas quatre : la promesse d'abord, en gras, puis
-           ce qu'il faut faire. « Assure en decennale » a quitte cette
-           phrase — c'est desormais le role de la medaille juste
-           au-dessus, et le repeter a dix lignes d'ecart ne convainc
-           personne de plus. -->
-      <p class="hero__sous-titre">
-        <b>Gratuit et sans engagement.</b> Décrivez votre toiture en 2 minutes,
-        un couvreur vous rappelle.
-      </p>
+      <p class="hero__accroche">Devis gratuit, sans engagement</p>
+
+      <!-- ============================================================
+           L'appel passe devant le formulaire.
+
+           83 % de l'audience a 65 ans ou plus : pour cette tranche, le
+           telephone reste le geste naturel, et un formulaire en six
+           etapes lui demande un effort que l'appel ne demande pas. Le
+           bouton est donc le seul element interactif au-dessus de la
+           ligne de flottaison, en pleine largeur et 64 px de haut.
+
+           Le numero est ecrit en toutes lettres : porte par le seul
+           lien, il serait invisible a qui n'ose pas cliquer sans savoir
+           ou ca mene.
+           ============================================================ -->
+      <a class="bouton-appel" href="tel:+33786505580" data-position="hero">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-tel"></use></svg>
+        07 86 50 55 80
+      </a>
+
+      <a class="hero__vers-form" href="#devis"
+         data-action="aller-au-formulaire" data-emplacement="hero-lien">
+        Ou décrivez votre projet en ligne
+      </a>
 
     </div>
 
@@ -1499,7 +1559,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           <span class="formulaire__signature">
             <span class="formulaire__avatar">
               <picture>
-                <source type="image/webp" srcset="assets/img/interlocuteur-160.webp">
+                <source type="image/webp" srcset="assets/img/interlocuteur-112.webp">
                 <img class="formulaire__visage" src="assets/img/interlocuteur.jpg"
                      width="36" height="36" loading="lazy" decoding="async"
                      alt="Adrien Heddebaut, conseiller toiture">
@@ -1515,20 +1575,6 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       </form>
     </div>
 
-    <ul class="hero__puces">
-      <li>
-        <span class="hero__puces__coche" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" focusable="false"><path d="m3.6 8.4 2.9 2.9 5.9-6.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span>Rappel sous 24 à 48 h ouvrées</span>
-      </li>
-      <li>
-        <span class="hero__puces__coche" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" focusable="false"><path d="m3.6 8.4 2.9 2.9 5.9-6.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span>Devis chiffré après visite sur place</span>
-      </li>
-      <li>
-        <span class="hero__puces__coche" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" focusable="false"><path d="m3.6 8.4 2.9 2.9 5.9-6.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span>Vos coordonnées ne sont jamais revendues</span>
-      </li>
-    </ul>
   </div>
 </section>
 
@@ -1540,9 +1586,14 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 <!-- ================= LISERE DE REASSURANCE ================= -->
 <div class="confiance">
   <div class="container">
+    <!-- Les trois promesses concretes viennent du hero, que l'on a
+         reduit a l'essentiel. « 100 % gratuit » et « Sans engagement »
+         en sont retires : la ligne sous le titre le dit deja, et le
+         repeter a cent pixels d'ecart ne convainc personne de plus. -->
     <ul class="confiance__liste">
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>100 % gratuit</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Sans engagement</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Rappel sous 24 à 48 h ouvrées</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Devis chiffré après visite</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Coordonnées jamais revendues</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Artisan assuré décennale</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Un seul technicien vous contacte</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Intervention dans tout le Nord</li>
@@ -2027,83 +2078,6 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
         <span class="presta__duree">30 ans</span>
         <span class="presta__unite">Et plus</span>
       </article>
-    </div>
-  </div>
-</section>
-
-<!-- ================= TABLEAU DE PRIX ================= -->
-<section class="differe section section--gris" aria-labelledby="titre-prix" style="--h:775px;--hb:586px">
-  <div class="container">
-    <h2 class="section__titre" id="titre-prix">Repères de prix</h2>
-    <p class="section__sous-titre">
-      Des fourchettes honnêtes, pour situer votre budget avant même de nous
-      appeler. Personne ne peut chiffrer un toit sans l’avoir vu.
-    </p>
-
-    <div class="tableau-enveloppe">
-      <table class="reperes">
-        <caption class="sr-only">Prix indicatifs au mètre carré et durabilité par prestation</caption>
-        <thead>
-          <tr>
-            <th scope="col">Prestation</th>
-            <th scope="col">Prix indicatif au m²</th>
-            <th scope="col">Durabilité</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Nettoyage / Démoussage</th>
-            <td><span class="valeur">20 à 30 €</span></td>
-            <td>1 à 2 ans</td>
-          </tr>
-          <!-- ==============================================================
-               RAPPEL POUR PLUS TARD — mention « garantie 10 ans »
-               Cette formulation n'est valable que tant que les travaux sont
-               exécutés ET garantis par Technitoit.
-               En cas de revente des leads à des artisans tiers, dont on ne
-               maîtrise ni l'exécution ni les garanties, remplacer par :
-               « protection durable, 10 ans et plus selon exposition ».
-               Sans quoi la mention devient une allégation invérifiable.
-               ============================================================== -->
-          <tr class="phare">
-            <th scope="row">Reprotection de toiture<span class="badge-phare">Le meilleur rapport durée / prix</span></th>
-            <td><span class="valeur">80 à 120 €</span></td>
-            <td><span class="valeur">garantie 10 ans</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Couverture neuve</th>
-            <td><span class="valeur">190 à 280 €</span></td>
-            <td>30 ans et plus</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="source">
-      Fourchettes indicatives, variables selon l’état du support,
-      l’accessibilité, la pente et l’exposition. Le prix définitif est établi
-      après visite gratuite.
-      <!-- DURABILITE ANNONCEE : « une quinzaine d'années » est une durée de vie
-           constatée, distincte de la garantie contractuelle de dix ans. Les
-           deux sont volontairement distinguées ici et dans le sous-titre de la
-           section Avant / Après. Une durabilité annoncée doit pouvoir être
-           justifiée : conservez de quoi l'étayer. -->
-      Une reprotection tient couramment <b>une quinzaine d’années</b> ; la
-      <b>garantie</b> accordée par l’entreprise, elle, court sur <b>dix ans</b>.
-      Ce sont deux choses différentes, et nous préférons l’écrire.
-    </p>
-
-    <p class="section__note">
-      Un simple démoussage retire la mousse mais laisse la tuile poreuse : elle
-      revient en une à deux saisons. La reprotection referme cette porosité et
-      protège durablement le support. Son coût reste très inférieur à celui
-      d’une couverture neuve.
-    </p>
-
-    <div class="section__cta">
-      <button type="button" class="bouton bouton--orange"
-              data-action="aller-au-formulaire" data-emplacement="section-prix">
-        Estimer mon projet →
-      </button>
     </div>
   </div>
 </section>
@@ -2596,6 +2570,87 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           </p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TABLEAU DE PRIX ================= -->
+<section class="differe section section--blanc" aria-labelledby="titre-prix" style="--h:935px;--hb:637px">
+  <div class="container">
+    <h2 class="section__titre" id="titre-prix">Combien coûte un traitement de toiture&nbsp;?</h2>
+    <p class="section__sous-titre section__sous-titre--long">
+      Le prix dépend de trois choses : la <b>surface réelle des versants</b>,
+      l’<b>accessibilité du toit</b> — un accès en nacelle ne se facture pas
+      comme un simple échafaudage — et l’<b>état du support</b> avant
+      traitement. Ces fourchettes servent à situer un budget, pas à établir un
+      devis : seule une <b>visite gratuite sur place</b> permet de chiffrer
+      votre toiture.
+    </p>
+
+    <div class="tableau-enveloppe">
+      <table class="reperes">
+        <caption class="sr-only">Prix indicatifs au mètre carré et durabilité par prestation</caption>
+        <thead>
+          <tr>
+            <th scope="col">Prestation</th>
+            <th scope="col">Prix indicatif au m²</th>
+            <th scope="col">Durabilité</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Nettoyage / Démoussage</th>
+            <td><span class="valeur">20 à 30 €</span></td>
+            <td>1 à 2 ans</td>
+          </tr>
+          <!-- ==============================================================
+               RAPPEL POUR PLUS TARD — mention « garantie 10 ans »
+               Cette formulation n'est valable que tant que les travaux sont
+               exécutés ET garantis par Technitoit.
+               En cas de revente des leads à des artisans tiers, dont on ne
+               maîtrise ni l'exécution ni les garanties, remplacer par :
+               « protection durable, 10 ans et plus selon exposition ».
+               Sans quoi la mention devient une allégation invérifiable.
+               ============================================================== -->
+          <tr class="phare">
+            <th scope="row">Reprotection de toiture<span class="badge-phare">Le meilleur rapport durée / prix</span></th>
+            <td><span class="valeur">80 à 120 €</span></td>
+            <td><span class="valeur">garantie 10 ans</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Couverture neuve</th>
+            <td><span class="valeur">190 à 280 €</span></td>
+            <td>30 ans et plus</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source">
+      Fourchettes indicatives, variables selon l’état du support,
+      l’accessibilité, la pente et l’exposition. Le prix définitif est établi
+      après visite gratuite.
+      <!-- DURABILITE ANNONCEE : « une quinzaine d'années » est une durée de vie
+           constatée, distincte de la garantie contractuelle de dix ans. Les
+           deux sont volontairement distinguées ici et dans le sous-titre de la
+           section Avant / Après. Une durabilité annoncée doit pouvoir être
+           justifiée : conservez de quoi l'étayer. -->
+      Une reprotection tient couramment <b>une quinzaine d’années</b> ; la
+      <b>garantie</b> accordée par l’entreprise, elle, court sur <b>dix ans</b>.
+      Ce sont deux choses différentes, et nous préférons l’écrire.
+    </p>
+
+    <p class="section__note">
+      Un simple démoussage retire la mousse mais laisse la tuile poreuse : elle
+      revient en une à deux saisons. La reprotection referme cette porosité et
+      protège durablement le support. Son coût reste très inférieur à celui
+      d’une couverture neuve.
+    </p>
+
+    <div class="section__cta">
+      <button type="button" class="bouton bouton--orange"
+              data-action="aller-au-formulaire" data-emplacement="section-prix">
+        Estimer mon projet →
+      </button>
     </div>
   </div>
 </section>
@@ -3544,6 +3599,92 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   }
 
   /* ================================================================
+     2 ter. Mesure du rendu et de la lecture
+
+     Deux signaux qui manquaient pour diagnostiquer autrement qu'a
+     l'aveugle : ce que le visiteur a reellement vu, et jusqu'ou il a
+     lu.
+     ================================================================ */
+
+  /* page_view_complete porte la valeur du LCP, en millisecondes, et
+     l'element qui l'a produit. C'est la seule facon d'avoir la mesure
+     du terrain — celle des vrais telephones sur le vrai reseau —
+     plutot que celle d'un banc d'essai.
+
+     L'evenement part au premier des deux : le masquage de l'onglet, ou
+     le chargement complet. Le LCP n'est definitif qu'a ce moment-la,
+     et un visiteur qui s'en va sans que rien ne soit emis ne laisse
+     aucune trace de ce qu'il a attendu. */
+  function mesurerLCP() {
+    if (!window.PerformanceObserver) { return; }
+    var dernier = null, envoye = false;
+    try {
+      var obs = new PerformanceObserver(function (liste) {
+        var entrees = liste.getEntries();
+        dernier = entrees[entrees.length - 1];
+      });
+      obs.observe({ type: 'largest-contentful-paint', buffered: true });
+    } catch (e) { return; }
+
+    function envoyer() {
+      if (envoye || !dernier) { return; }
+      envoye = true;
+      try { obs.disconnect(); } catch (e) {}
+      var cible = dernier.element;
+      tracer('page_view_complete', {
+        lcp_ms: Math.round(dernier.startTime),
+        lcp_element: cible ? (cible.tagName.toLowerCase() +
+          (cible.className ? '.' + String(cible.className).split(' ')[0] : '')) : 'inconnu'
+      });
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') { envoyer(); }
+    });
+    if (document.readyState === 'complete') { auRepos(envoyer); }
+    else { window.addEventListener('load', function () { auRepos(envoyer); }); }
+  }
+
+  /* scroll_25 / 50 / 75 : chaque palier une fois et une seule.
+
+     La mesure porte sur le bas de la fenetre rapporte a la hauteur du
+     document, et non sur la position de defilement seule : sur une page
+     de 15 000 px, « avoir defile de 25 % » et « avoir vu le quart de la
+     page » ne sont pas la meme chose, et c'est la seconde qui interesse.
+
+     Le calcul se fait au repos apres l'evenement de defilement, jamais
+     pendant : lire scrollHeight force une mise en page, et le faire a
+     chaque pixel parcouru rendrait le defilement saccade. */
+  function suivreDefilement() {
+    var paliers = [25, 50, 75], atteints = {}, enAttente = false;
+
+    function verifier() {
+      enAttente = false;
+      var doc = document.documentElement;
+      var hauteur = Math.max(doc.scrollHeight, document.body.scrollHeight);
+      var vu = window.pageYOffset + window.innerHeight;
+      var part = hauteur > window.innerHeight
+        ? Math.round(100 * vu / hauteur) : 100;
+      for (var i = 0; i < paliers.length; i++) {
+        var p = paliers[i];
+        if (part >= p && !atteints[p]) {
+          atteints[p] = true;
+          tracer('scroll_' + p, { profondeur: part });
+        }
+      }
+      if (atteints[75]) { window.removeEventListener('scroll', auDefilement); }
+    }
+
+    function auDefilement() {
+      if (enAttente) { return; }
+      enAttente = true;
+      auRepos(verifier);
+    }
+    window.addEventListener('scroll', auDefilement, { passive: true });
+    /* Une page plus courte que l'ecran est vue en entier d'emblee. */
+    auRepos(verifier);
+  }
+
+  /* ================================================================
      3. Ancres vers le formulaire
      ================================================================ */
   $$('[data-action="aller-au-formulaire"]').forEach(function (element) {
@@ -3628,6 +3769,8 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   monterCarrousel($('#carrousel-paires'));
   preparerBandeau();
   tracer('page_ready', { ville_detectee: (window.__GEO && window.__GEO.ville) || '' });
+  mesurerLCP();
+  suivreDefilement();
 })(window, document);
 </script>
 </body>
