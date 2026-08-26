@@ -193,7 +193,21 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
 /* --- En-tete --- */
 .entete{position:relative;z-index:20;background:var(--blanc);border-bottom:1px solid var(--bord)}
 .entete__interne{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px}
-.entete__cta{white-space:nowrap}
+.entete__cta{white-space:nowrap;gap:8px}
+.entete__cta svg{flex:0 0 auto;width:17px;height:17px}
+/* Le numero ne disparait jamais : sous 400px on retire l'habillage,
+   jamais le numero lui-meme. */
+@media (max-width:420px){.entete__cta{padding:10px 12px;font-size:14px}
+.entete__cta svg{width:15px;height:15px}}
+/* Sous 360px, le numero et le logo ne tiennent plus cote a cote. Le
+   numero est ce qu'on est venu chercher : c'est le nom de marque qui
+   se laisse tronquer, jamais l'inverse. */
+@media (max-width:360px){
+.entete__interne{gap:8px}
+.logo{min-width:0}
+.logo b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.entete__cta{flex:0 0 auto;padding:10px 10px;font-size:13.5px;gap:6px}
+}
 .logo{display:flex;align-items:center;gap:10px;min-height:44px;padding:2px 0;text-decoration:none;color:var(--titre)}
 .logo svg{flex:0 0 auto;width:30px;height:30px;color:var(--bleu)}
 .logo b{display:block;font-size:16px;font-weight:800;letter-spacing:-.015em;line-height:1.15;white-space:nowrap}
@@ -232,6 +246,26 @@ letter-spacing:-.02em;color:#fff;min-height:calc(3 * 1.16em)}
 /* --- Carte formulaire --- */
 .formulaire{background:var(--blanc);color:var(--texte);border:1px solid rgba(255,255,255,.5);
 border-radius:12px;box-shadow:0 10px 30px rgba(4,15,30,.28);padding:16px 16px 18px}
+/* --- Appel : premiere sortie de la carte, avant le formulaire ---
+   Quatre visiteurs sur cinq ont passe 65 ans : beaucoup composeront le
+   numero plutot que d'enchainer six ecrans. Le numero est donc ecrit en
+   toutes lettres dans le bouton, pas seulement porte par le lien. */
+.appel{display:flex;align-items:center;justify-content:center;gap:11px;
+width:100%;min-height:64px;padding:14px 18px;border:0;border-radius:10px;
+background:var(--vert-fonce);color:#fff;font:inherit;font-size:19px;font-weight:800;
+line-height:1.2;text-align:center;text-decoration:none;cursor:pointer;
+box-shadow:0 3px 12px rgba(10,122,70,.3);
+transition:background-color .14s ease}
+.appel:hover{background:#08633A}
+.appel svg{flex:0 0 auto;width:23px;height:23px}
+@media (prefers-reduced-motion:reduce){.appel{transition:none}}
+@media (max-width:360px){.appel{font-size:17.5px;gap:9px}.appel svg{width:21px;height:21px}}
+.appel__horaires{margin:9px 0 0;font-size:13px;line-height:1.45;
+color:var(--texte);text-align:center}
+/* Separateur « ou » : deux filets et le mot, sur le blanc de la carte. */
+.ou{display:flex;align-items:center;gap:12px;margin:16px 0 4px;
+font-size:13px;color:#4A5568}
+.ou::before,.ou::after{content:"";flex:1 1 auto;height:1px;background:var(--bord)}
 .formulaire__titre{margin:0 0 3px;font-size:18px;font-weight:800;color:var(--titre);line-height:1.25}
 .formulaire__accroche{margin:0 0 13px;font-size:13.5px;line-height:1.45;color:var(--note)}
 .progression__ligne{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
@@ -642,7 +676,15 @@ body.a-bandeau .barre-mobile{display:none}
 .barre-mobile{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:10px;
 padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--blanc);
 border-top:1px solid var(--bord);box-shadow:0 -2px 10px rgba(15,39,69,.07)}
-.barre-mobile .bouton{flex:1 1 50%;min-height:48px;padding:12px 10px;font-size:16px}
+.barre-mobile .bouton{min-height:60px;padding:12px 10px;font-size:16px}
+/* L'appel passe devant : il occupe 60 % et le vert plein, la demande
+   40 % en contour. L'ordre visuel place l'appel a droite, sous le
+   pouce, sans changer l'ordre de lecture du document. */
+.barre-mobile__demande{flex:1 1 40%;order:1}
+.barre-mobile__appel{flex:1 1 60%;order:2;gap:8px}
+.barre-mobile__appel .barre-mobile__numero{display:none}
+@media (min-width:380px){.barre-mobile__appel .barre-mobile__numero{display:inline}
+.barre-mobile__appel .barre-mobile__mot{display:none}}
 .a-completer{padding:1px 6px;border-radius:4px;background:#FFF3CD;border:1px solid #E6D28A;color:#6B5312;font-size:.95em;font-weight:600}
 
 /* --- Points de rupture --- */
@@ -993,11 +1035,10 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
       </svg>
       <span><b>Mon Couvreur Nord</b><small>Toiture · Nord (59)</small></span>
     </a>
-    <button type="button" class="bouton bouton--vert entete__cta"
-            data-action="aller-au-formulaire" data-emplacement="entete">
-      <span class="cta-long">Ma demande de devis</span>
-      <span class="cta-court">Ma demande</span>
-    </button>
+    <a class="bouton bouton--vert entete__cta" href="tel:+33786505580" data-position="header">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"></use></svg>
+      07 86 50 55 80
+    </a>
   </div>
 </header>
 
@@ -1039,6 +1080,17 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
             aria-labelledby="formulaire-titre">
         <input type="hidden" name="form-name" value="lead">
 
+        <!-- Hors des horaires d'ouverture, le script remplace le libelle
+             par « Être rappelé » et renvoie vers le formulaire : mieux
+             vaut un formulaire rempli qu'un appel dans le vide. -->
+        <a class="appel" id="appel-hero" href="tel:+33786505580" data-position="hero">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"></use></svg>
+          <span id="appel-hero-libelle">Appeler 07 86 50 55 80</span>
+        </a>
+        <p class="appel__horaires" id="appel-horaires">Du lundi au samedi, 8h-19h</p>
+
+        <p class="ou">ou</p>
+
         <h2 class="formulaire__titre" id="formulaire-titre">Votre demande de devis</h2>
         <p class="formulaire__accroche">6 questions, 2 minutes. Aucun engagement.</p>
 
@@ -1059,6 +1111,7 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
         <fieldset class="etape est-active" data-etape="1">
           <legend class="sr-only">Étape 1 sur 6 : votre projet</legend>
           <h3 class="etape__titre">Votre projet de toiture concerne :</h3>
+          <p class="etape__aide">Ou décrivez votre projet en 1 minute</p>
           <p class="etape__aide">Choisissez la prestation la plus proche.</p>
           <div class="options">
             <button type="button" class="option" data-champ="projet" data-valeur="Nettoyage / Démoussage" data-teinte="cyan" aria-pressed="false">
@@ -2473,14 +2526,15 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
 </div>
 
 <div class="barre-mobile">
-  <a class="bouton bouton--fantome" href="tel:+33786505580">
-    <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><use href="#i-tel"></use></svg>
-    Appeler
-  </a>
-  <button type="button" class="bouton bouton--orange"
+  <button type="button" class="bouton bouton--fantome barre-mobile__demande"
           data-action="aller-au-formulaire" data-emplacement="barre-mobile">
     Ma demande
   </button>
+  <a class="bouton bouton--vert barre-mobile__appel" href="tel:+33786505580" data-position="sticky">
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><use href="#i-tel"></use></svg>
+    <span class="barre-mobile__numero">07 86 50 55 80</span>
+    <span class="barre-mobile__mot">Appeler</span>
+  </a>
 </div>
 
 <!-- ==================================================================
@@ -2590,6 +2644,13 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
   /* Action de conversion « Envoi de formulaire de lead » (Google Ads).
      Valeur et devise reprises telles quelles de l'extrait genere. */
   var CONVERSION_LEAD = 'AW-18335177160/RwVzCJ6r-OYcEMiz8qZE';
+
+  /* Conversion secondaire, facultative : un clic sur un lien telephone.
+     A RENSEIGNER pour la compter dans Google Ads — creer une action de
+     conversion « Appel depuis le site », puis coller ici sa valeur
+     send_to. Tant que la chaine est vide, l'evenement reste dans le
+     dataLayer et rien n'est envoye a Google Ads. */
+  var CONVERSION_APPEL = '';
   var CONVERSION_VALEUR = 1.0;
   var CONVERSION_DEVISE = 'EUR';
 
@@ -3239,19 +3300,67 @@ align-content:center;column-gap:40px;row-gap:0;padding-block:56px 64px}
     });
   });
 
-  /* Les sept liens telephone de la page, ou qu'ils soient : hero,
-     barre mobile, bloc interlocuteur, ecrans de sortie, pied de page.
-     L'emplacement accompagne l'evenement, sinon on sait qu'on a ete
-     appele sans savoir depuis quoi. */
+  /* ================================================================
+     3 bis. Appel telephonique
+     ================================================================ */
+
+  /* Du lundi au samedi, de 8 h a 19 h. L'heure est celle du visiteur :
+     c'est la seule dont dispose une page statique, et pour une audience
+     du Nord elle coincide avec la notre. */
+  function dansLesHoraires(quand) {
+    var d = quand || new Date();
+    var jour = d.getDay();          /* 0 = dimanche */
+    var heure = d.getHours();
+    return jour >= 1 && jour <= 6 && heure >= 8 && heure < 19;
+  }
+
+  /* Hors horaires, le bouton du hero cesse d'etre un lien telephone :
+     il renvoie au formulaire. Un appel qui sonne dans le vide coute
+     plus qu'il ne rapporte. Il reste vert et au meme endroit. */
+  function reglerBoutonAppel() {
+    var bouton = $('#appel-hero');
+    var libelle = $('#appel-hero-libelle');
+    var horaires = $('#appel-horaires');
+    if (!bouton || !libelle) { return; }
+    if (dansLesHoraires()) { return; }
+    bouton.setAttribute('href', '#devis');
+    bouton.setAttribute('data-action', 'aller-au-formulaire');
+    bouton.setAttribute('data-emplacement', 'hero-hors-horaires');
+    bouton.removeAttribute('data-position');
+    libelle.textContent = 'Être rappelé';
+    if (horaires) {
+      horaires.textContent = 'Nous sommes fermés — laissez votre numéro, ' +
+        'on vous rappelle dès l’ouverture (lundi au samedi, 8h-19h).';
+    }
+  }
+  reglerBoutonAppel();
+
+  /* Tous les liens telephone de la page. La position accompagne
+     l'evenement : un appel dont on ignore d'ou il part ne dit rien de
+     ce qui l'a declenche. */
   $$('a[href^="tel:"]').forEach(function (lien) {
     lien.addEventListener('click', function () {
       var zone = lien.closest('[aria-labelledby], header, footer, .barre-mobile, .ecran');
-      tracer('phone_click', {
-        numero: lien.getAttribute('href').replace('tel:', ''),
-        emplacement: lien.getAttribute('data-emplacement') ||
-          (zone ? (zone.getAttribute('aria-labelledby') ||
-                   zone.className || zone.tagName.toLowerCase()) : 'inconnu')
-      });
+      var position = lien.getAttribute('data-position') ||
+        (zone ? ({ HEADER: 'header', FOOTER: 'footer' }[zone.tagName] ||
+                 (zone.classList.contains('barre-mobile') ? 'sticky' :
+                  zone.getAttribute('aria-labelledby') || 'page')) : 'page');
+      var numero = lien.getAttribute('href').replace('tel:', '');
+
+      tracer('phone_click', { position: position, numero: numero });
+
+      /* Le meme evenement en gtag, pour que Google Ads puisse s'en
+         servir sans conteneur GTM. */
+      try { window.gtag('event', 'phone_click', { position: position }); } catch (e) {}
+      if (CONVERSION_APPEL) {
+        try {
+          window.gtag('event', 'conversion', {
+            send_to: CONVERSION_APPEL,
+            value: 0,
+            currency: CONVERSION_DEVISE
+          });
+        } catch (e) {}
+      }
     });
   });
 

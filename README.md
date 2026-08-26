@@ -536,6 +536,37 @@ le code, où il ne peut pas être désactivé par mégarde. **Ne le retirez pas.
 Clarity répartit sa charge sur `a.clarity.ms` à `z.clarity.ms`, d'où le joker
 `https://*.clarity.ms` dans le CSP, plus `c.bing.com` pour sa synchronisation.
 
+### Appel téléphonique
+
+Le téléphone est la première sortie de la page, avant le formulaire :
+**82 % de l'audience a plus de 65 ans** et une large part appellera plutôt que
+d'enchaîner six écrans. Il apparaît à quatre endroits — en-tête, haut de la
+carte du formulaire, barre mobile, pied de page — et le **numéro est écrit en
+toutes lettres** partout, jamais seulement porté par le lien.
+
+**Horaires.** Du lundi au samedi, 8h-19h, d'après l'heure du visiteur — la
+seule dont dispose une page statique. En dehors, le bouton du hero devient
+« Être rappelé » et renvoie au formulaire : un appel qui sonne dans le vide
+coûte plus qu'il ne rapporte. Il reste vert et à la même place. Pour changer la
+plage, voir `dansLesHoraires()` dans `index.html`.
+
+> **Le vert demandé, #12B76A, n'a pas été retenu pour les fonds de bouton.**
+> Avec du texte blanc il donne **2,62:1**, sous le seuil de 3:1 réservé aux
+> grands textes et loin des 4,5:1 exigés en dessous de 18,66 px. C'est le vert
+> bouton du site, `--vert-fonce` (#0A7A46), qui est utilisé : **5,41:1**, sûr à
+> toutes les tailles. Sur une audience qui perd en sensibilité aux contrastes
+> avec l'âge, ce n'était pas un détail. #12B76A reste utilisé là où il ne porte
+> pas de texte : pastilles, étoiles, barre de progression.
+
+**Suivi.** Chaque lien `tel:` pousse un `phone_click` dans le `dataLayer` avec
+sa `position` — `hero`, `header`, `sticky`, `footer` — et émet le même
+événement en gtag, pour que Google Ads puisse s'en servir sans conteneur GTM.
+
+Pour en faire une **conversion secondaire** : créez une action de conversion
+« Appel depuis le site » dans Google Ads, puis collez sa valeur `send_to` dans
+la constante `CONVERSION_APPEL` de `index.html`. Tant qu'elle est vide,
+l'événement reste dans le dataLayer et rien n'est envoyé.
+
 ### Consentement (Consent Mode v2)
 
 Les quatre signaux — `ad_storage`, `ad_user_data`, `ad_personalization`,
