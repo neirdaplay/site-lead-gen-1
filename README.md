@@ -344,7 +344,21 @@ pixels rendus à la première question. Le titre reste dans le document, hors
 3. la ligne *Devis gratuit, sans engagement* ;
 4. **le bouton d'appel**, pleine largeur, 64 px de haut, numéro en toutes
    lettres ;
-5. le formulaire, avec ses deux premières réponses.
+5. le formulaire, avec ses trois premières réponses.
+
+**Le titre est coupé à la main.** Un `<br class="coupe-mobile">` sépare
+*Nettoyage et démoussage* du reste, sous 760 px seulement — en deux colonnes la
+place ne manque pas. C'est la seule façon d'obtenir une première ligne stable
+quel que soit le nom de commune injecté ; la suite se replie librement, puisque
+`à Villeneuve-d'Ascq` et `dans le Nord` n'occupent pas la même largeur.
+
+> **Le titre n'a plus de `min-height`.** Elle réservait trois lignes pour
+> absorber le remplacement du nom de commune. Mais ce remplacement est
+> synchrone et se produit **avant la première peinture** — le titre est déjà
+> définitif quand le navigateur dessine, il n'y a aucun décalage à absorber.
+> Avec la coupure fixe, le titre par défaut ne fait que deux lignes, et la
+> troisième réservée pour rien ouvrait un vide visible sous le titre. CLS
+> mesuré à 0 sans elle.
 
 C'est un renversement assumé : 83 % de l'audience a 65 ans ou plus, et pour
 cette tranche le téléphone reste le geste naturel là où six étapes de
@@ -607,8 +621,14 @@ Clarity répartit sa charge sur `a.clarity.ms` à `z.clarity.ms`, d'où le joker
 
 ### Appel téléphonique
 
-Le numéro apparaît en **en-tête**, écrit en toutes lettres et jamais seulement
-porté par le lien.
+**L'en-tête dit « Appeler », pas le numéro.** Celui-ci est écrit en toutes
+lettres sur le gros bouton vert du hero, visible sans défiler : le répéter dans
+la barre coûtait toute sa largeur et forçait le nom de marque à se tronquer
+sous 360 px. Le lien porte un `aria-label` complet — *Appeler le
+07 86 50 55 80* — pour qu'un lecteur d'écran annonce la destination.
+
+La règle « le numéro n'est jamais porté par le seul lien » reste tenue : elle
+l'est par le bouton du hero, et `t-appel.mjs` le vérifie explicitement.
 
 **Il n'y a plus de barre collante en bas d'écran.** Elle a été retirée : elle
 recouvrait en permanence 78 px de contenu et donnait à la page l'air comprimé.

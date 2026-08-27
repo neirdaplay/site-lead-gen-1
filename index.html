@@ -212,6 +212,8 @@ table{border-collapse:collapse}
    s'ajoutent a .container ne doivent regler que padding-block :
    la forme courte « padding » remettrait ces 20px a zero. */
 .container{width:100%;max-width:var(--max);margin:0 auto;padding:0 20px}
+/* Coupure de ligne qui ne vaut que sur mobile. */
+@media (min-width:760px){br.coupe-mobile{display:none}}
 /* <picture> ne sert qu'a la negociation WebP : sa boite n'a aucun role de
    mise en page. display:contents l'efface du rendu, si bien que le <img>
    reste l'enfant direct de son parent — element de grille, element flex,
@@ -284,13 +286,11 @@ text-decoration:none;cursor:pointer;transition:background-color .15s ease,border
 .entete__interne{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px}
 .entete__cta{white-space:nowrap;gap:8px}
 .entete__cta svg{flex:0 0 auto;width:17px;height:17px}
-/* Le numero ne disparait jamais : sous 400px on retire l'habillage,
-   jamais le numero lui-meme. */
 @media (max-width:420px){.entete__cta{padding:10px 12px;font-size:14px}
 .entete__cta svg{width:15px;height:15px}}
-/* Sous 360px, le numero et le logo ne tiennent plus cote a cote. Le
-   numero est ce qu'on est venu chercher : c'est le nom de marque qui
-   se laisse tronquer, jamais l'inverse. */
+/* « Appeler » tient partout : le nom de marque n'a plus besoin d'etre
+   tronque pour lui laisser la place, mais la regle reste au cas ou une
+   commune tres longue s'invite dans le logo. */
 @media (max-width:360px){
 .entete__interne{gap:8px}
 .logo{min-width:0}
@@ -328,12 +328,22 @@ font-size:12.5px;font-weight:600;letter-spacing:.02em;color:#fff}
 .hero__badge svg{width:14px;height:14px;color:var(--vert)}
 /* La medaille porte ses propres couleurs : pas de currentColor ici, et
    un peu plus de place que les icones monochromes du meme encart. */
-.hero__badge--medaille{padding:8px 15px;font-size:13px}
-.hero__badge--medaille svg{width:21px;height:21px;margin:-2px 0 -2px -3px}
+/* Volontairement discrete : elle rassure, elle n'annonce pas. Elle ne
+   doit pas peser autant que le titre juste en dessous. */
+.hero__badge--medaille{padding:5px 11px 5px 8px;gap:6px;font-size:12px}
+.hero__badge--medaille svg{width:16px;height:16px;margin:-1px 0}
+/* Pas de min-height ici. Elle reservait trois lignes pour absorber le
+   remplacement du nom de commune, mais ce remplacement est synchrone et
+   se produit avant la premiere peinture : le titre est deja definitif
+   quand le navigateur dessine, il n'y a donc aucun decalage a absorber.
+   Avec la coupure fixe apres « demoussage », le titre par defaut ne
+   fait que deux lignes et la troisieme, reservee pour rien, ouvrait un
+   vide visible sous le titre. */
 .hero__titre{margin:12px 0 0;font-size:29px;line-height:1.16;font-weight:800;
-letter-spacing:-.02em;color:#fff;min-height:calc(3 * 1.16em)}
+letter-spacing:-.02em;color:#fff}
 .hero__titre em{font-style:normal;color:var(--vert)}
-.hero__accroche{margin:10px 0 0;font-size:17px;line-height:1.4;font-weight:600;color:#DCE8F5}
+.hero__accroche{margin:10px 0 0;max-width:460px;font-size:16.5px;line-height:1.45;color:#C9D8E9}
+.hero__accroche b{color:var(--blanc);font-weight:700}
 /* ============================================================
    Bouton d'appel du hero.
 
@@ -840,7 +850,7 @@ overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 }
 @media (min-width:700px){
 .hero__interne{padding-block:42px 50px}
-.hero__titre{font-size:36px;min-height:calc(3 * 1.16em)}
+.hero__titre{font-size:36px}
 }
 @media (min-width:760px){
 /* Trois avis de front, et les fleches prennent le relais du doigt. */
@@ -886,7 +896,7 @@ background-image:url('assets/img/hero-couvreur.jpg');
 background-image:image-set(url('assets/img/hero-couvreur-1200.webp') type('image/webp'),
 url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 .hero__voile{background:rgba(15,39,69,.35)}
-.hero__titre{font-size:38px;min-height:calc(2 * 1.16em)}
+.hero__titre{font-size:38px}
 .hero__accroche{font-size:18px}
 .bouton-appel{max-width:420px}
 .formulaire{padding:26px 24px}
@@ -1168,9 +1178,16 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       </svg>
       <span><b>Mon Couvreur Nord</b><small>Toiture · Nord (59)</small></span>
     </a>
-    <a class="bouton bouton--vert entete__cta" href="tel:+33786505580" data-position="header">
+    <!-- « Appeler » plutot que le numero : celui-ci est ecrit en toutes
+         lettres sur le gros bouton vert juste en dessous, visible sans
+         defiler. Le repeter ici coutait toute la largeur de l'en-tete
+         pour rien, et forcait le nom de marque a se tronquer sous
+         360 px. Le libelle reste explicite pour un lecteur d'ecran
+         grace a aria-label. -->
+    <a class="bouton bouton--vert entete__cta" href="tel:+33786505580"
+       data-position="header" aria-label="Appeler le 07 86 50 55 80">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tel"></use></svg>
-      07 86 50 55 80
+      Appeler
     </a>
   </div>
 </header>
@@ -1204,12 +1221,27 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 
       <!-- Titre concret, pas une promesse : le visiteur doit reconnaitre
            en une seconde qu'il est au bon endroit. -->
+      <!-- Les coupures sont fixees a la main plutot que laissees au
+           navigateur : « Nettoyage et demoussage » d'un cote, l'objet
+           et le lieu de l'autre. C'est la seule facon d'obtenir trois
+           lignes stables quel que soit le nom de commune injecte.
+           Sous 760 px seulement : en deux colonnes, la place ne manque
+           pas et le <br> ferait un titre inutilement etroit. -->
       <h1 class="hero__titre">
-        Nettoyage et démoussage de toiture
-        <em data-geo="a-ville">dans le Nord</em>
+        Nettoyage et démoussage<br class="coupe-mobile">
+        de toiture <em data-geo="a-ville">dans le Nord</em>
       </h1>
 
-      <p class="hero__accroche">Devis gratuit, sans engagement</p>
+      <!-- La promesse d'abord, en gras, puis ce qui va se passer.
+           « Estimation » et non « devis » : le formulaire connait la
+           prestation et la surface, de quoi situer une fourchette au
+           telephone. Le chiffrage ferme, lui, suppose la visite — c'est
+           ce que dit la section des prix, et les deux ne doivent pas se
+           contredire. -->
+      <p class="hero__accroche">
+        <b>Gratuit et sans engagement.</b> Un expert vous rappelle avec votre
+        estimation.
+      </p>
 
       <!-- ============================================================
            L'appel passe devant le formulaire.
