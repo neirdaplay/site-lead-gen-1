@@ -431,6 +431,10 @@ transform:rotate(-45deg);transition:border-color .12s ease}
 @media (prefers-reduced-motion:reduce){.option{transition:none}}
 
 .formulaire__pied{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+/* Indispensable : un display explicite l'emporte sur le display:none
+   que la feuille du navigateur applique a [hidden]. Sans cette ligne,
+   masquer le pied par l'attribut ne fait rien. */
+.formulaire__pied[hidden]{display:none}
 .retour{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 4px;
 background:none;border:0;font:inherit;font-size:14px;font-weight:600;color:var(--note);cursor:pointer}
 .retour:hover{color:var(--titre);text-decoration:underline}
@@ -597,6 +601,37 @@ margin:0 auto 18px;border-radius:50%;background:var(--vert-pale);color:var(--ver
 border-radius:var(--rayon-s);font-size:15.5px;line-height:1.6;color:var(--titre);text-align:left}
 .ecran__rappel b{color:var(--vert-fonce)}
 
+/* --- Ecran de resultat : la fourchette --- */
+.resultat{padding:22px 18px;border:2px solid var(--vert-fonce);border-radius:var(--rayon);
+background:var(--blanc);text-align:center}
+.resultat__objet{margin:0 0 10px!important;font-size:14px!important;line-height:1.45!important;
+color:var(--note)!important}
+/* Le montant est le seul element de la carte qu'on doit pouvoir lire de
+   loin : il porte la promesse du titre. clamp pour qu'une fourchette a
+   cinq chiffres tienne aussi a 320 px. */
+.resultat__montant{margin:0!important;font-size:clamp(28px, 8.4vw, 40px)!important;
+font-weight:800;line-height:1.1!important;letter-spacing:-.02em;color:var(--bleu)!important;
+white-space:nowrap}
+.resultat__mention{margin:10px 0 0!important;font-size:13px!important;color:var(--note)!important}
+.cadrage{margin-top:14px;padding:16px;border-radius:var(--rayon-s);
+background:var(--bleu-pale);border:1px solid #CFE0F2;text-align:left}
+.cadrage p{margin:0!important;font-size:15px!important;line-height:1.6!important;color:var(--texte)!important}
+.suite{display:flex;align-items:flex-start;gap:13px;margin-top:16px;text-align:left}
+.suite__visage{flex:0 0 auto;display:block;width:56px;height:56px;border-radius:50%;
+object-fit:cover;background:#E3E8EF;border:2px solid var(--blanc);box-shadow:0 2px 8px rgba(15,39,69,.14)}
+.suite__texte{margin:0!important;font-size:15px!important;line-height:1.55!important}
+.suite__texte b{color:var(--titre)}
+/* Le bouton d'appel du resultat reprend celui du hero, en un cran plus
+   petit : le numero entier y tient, la ou le hero porte un libelle. */
+.bouton-appel--resultat{margin-top:18px;min-height:60px;font-size:17px;
+line-height:1.3;text-align:center}
+/* Le libelle peut passer sur deux lignes, le numero jamais : dix
+   chiffres coupes en plein milieu ne se lisent plus. */
+.nombre-tel{white-space:nowrap}
+.bouton-appel--resultat svg{width:21px;height:21px}
+@media (max-width:400px){.bouton-appel--resultat{font-size:15px;gap:8px}}
+.resultat__attente{margin:10px 0 0!important;font-size:13.5px!important;color:var(--note)!important}
+
 /* --- Lisere de reassurance --- */
 .confiance{background:var(--gris);border-bottom:1px solid var(--bord)}
 .confiance__liste{display:flex;flex-wrap:wrap;justify-content:center;gap:9px 24px;margin:0;padding:14px 0;list-style:none}
@@ -710,21 +745,14 @@ margin:0 auto 14px;border-radius:10px;background:var(--gris);color:var(--bleu)}
 .presta--phare .presta__duree{color:var(--vert-fonce)}
 .presta__unite{display:block;margin-top:5px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--note)}
 
-/* --- Tableau de prix --- */
-.tableau-enveloppe{margin-top:32px;overflow-x:auto;border:1px solid var(--bord);
-border-radius:var(--rayon);background:var(--blanc);-webkit-overflow-scrolling:touch}
-table.reperes{width:100%;min-width:540px;font-size:15.5px}
-table.reperes th,table.reperes td{padding:16px;text-align:left;vertical-align:middle;border-bottom:1px solid var(--bord)}
-table.reperes thead th{background:var(--bleu);color:var(--blanc);font-size:14px;font-weight:700;border-bottom:none}
-table.reperes tbody tr:nth-child(even){background:var(--gris)}
-table.reperes tbody tr:last-child th,table.reperes tbody tr:last-child td{border-bottom:none}
-table.reperes tbody th{font-weight:600;color:var(--titre)}
-tr.phare{background:var(--vert-pale)!important}
-tr.phare th{border-left:3px solid var(--vert);font-weight:800}
-.badge-phare{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;
-background:var(--vert-fonce);color:#fff;font-size:11px;font-weight:700;letter-spacing:.01em;white-space:nowrap;vertical-align:middle}
-.valeur{font-weight:700;color:var(--vert-fonce);white-space:nowrap}
-.source{margin:10px 2px 0;font-size:12px;line-height:1.5;color:var(--note)}
+/* --- Facteurs de prix --- */
+/* Le tableau de prix qui occupait cette place a ete retire : les
+   montants ne vivent plus que dans la constante TARIFS du script, et
+   ces cartes expliquent ce qui les fait varier sans en citer aucun. */
+.facteur{border-top:3px solid var(--vert)}
+.facteur__icone{display:flex;align-items:center;justify-content:center;width:44px;height:44px;
+margin-bottom:14px;border-radius:11px;background:var(--vert-pale);color:var(--vert-fonce)}
+.facteur__icone svg{width:24px;height:24px}
 
 /* --- Signaux --- */
 .signal{display:flex;gap:14px;align-items:flex-start;background:var(--blanc);
@@ -1139,19 +1167,13 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     <rect x="3.4" y="7.2" width="17.2" height="11.4" rx="1"/>
     <path d="M3.4 4.6h17.2M3.4 3.5v2.2M20.6 3.5v2.2"/>
   </symbol>
+  <!-- Etape 2 : plus de 150 m2 — meme famille, avec un « + » -->
+  <symbol id="i-carre-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.6" y="7.2" width="14.6" height="11.4" rx="1"/>
+    <path d="M2.6 4.6h14.6M2.6 3.5v2.2M17.2 3.5v2.2"/>
+    <path d="M20.4 11.6v4.8M18 14h4.8"/>
+  </symbol>
 
-  <!-- Etape 5 : delais -->
-  <symbol id="i-goutte-alerte" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 3.2c3.4 4 5.3 6.7 5.3 9.1a5.3 5.3 0 0 1-10.6 0c0-2.4 1.9-5.1 5.3-9.1Z"/>
-    <path d="M12 9.6v3.5"/><path d="M12 16h.01"/>
-  </symbol>
-  <symbol id="i-calendrier" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3.4" y="5.6" width="17.2" height="15" rx="2"/>
-    <path d="M3.4 10.2h17.2M8 3.4v4M16 3.4v4"/>
-  </symbol>
-  <symbol id="i-horloge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="8.6"/><path d="M12 6.9v5.4l3.3 2"/>
-  </symbol>
   <symbol id="i-loupe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="10.6" cy="10.6" r="6.6"/><path d="M15.3 15.3 20.6 20.6"/>
   </symbol>
@@ -1239,8 +1261,8 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
            Sous 760 px seulement : en deux colonnes, la place ne manque
            pas et le <br> ferait un titre inutilement etroit. -->
       <h1 class="hero__titre">
-        Nettoyage et démoussage<br class="coupe-mobile">
-        de toiture <em data-geo="a-ville">dans le Nord</em>
+        Combien coûte le traitement<br class="coupe-mobile">
+        de votre toiture <em>en 2026</em>&nbsp;?
       </h1>
 
       <!-- La promesse d'abord, en gras, puis ce qui va se passer.
@@ -1250,8 +1272,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
            ce que dit la section des prix, et les deux ne doivent pas se
            contredire. -->
       <p class="hero__accroche">
-        <b>Gratuit et sans engagement.</b> Un expert vous rappelle avec votre
-        estimation.
+        <b>Estimation en 2 minutes.</b> Gratuit, sans engagement.
       </p>
 
       <!-- ============================================================
@@ -1290,8 +1311,8 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
             aria-labelledby="formulaire-titre">
         <input type="hidden" name="form-name" value="lead">
 
-        <h2 class="formulaire__titre" id="formulaire-titre">Votre demande de devis</h2>
-        <p class="formulaire__accroche">6 questions, 2 minutes. Aucun engagement.</p>
+        <h2 class="formulaire__titre" id="formulaire-titre">Votre estimation</h2>
+        <p class="formulaire__accroche">5 questions, 2 minutes. Aucun engagement.</p>
 
         <div id="progression" role="progressbar" aria-valuemin="0" aria-valuemax="100"
              aria-valuenow="17" aria-valuetext="Étape 1 sur 6" aria-label="Progression du formulaire">
@@ -1307,8 +1328,9 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
         <p class="sr-only" id="formulaire-annonce" role="status" aria-live="polite"></p>
 
         <!-- ---------- Etape 1 : le projet ---------- -->
+<!-- ---------- Etape 1 : le projet ---------- -->
         <fieldset class="etape est-active" data-etape="1">
-          <legend class="sr-only">Étape 1 sur 6 : votre projet</legend>
+          <legend class="sr-only">Étape 1 sur 5 : votre projet</legend>
           <h3 class="etape__titre">Votre projet de toiture concerne :</h3>
           <p class="etape__aide">Choisissez la prestation la plus proche.</p>
           <div class="options">
@@ -1327,26 +1349,9 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           </div>
         </fieldset>
 
-        <!-- ---------- Etape 2 : proprietaire ou locataire ---------- -->
+        <!-- ---------- Etape 2 : surface ---------- -->
         <fieldset class="etape" data-etape="2" hidden>
-          <legend class="sr-only">Étape 2 sur 6 : votre situation</legend>
-          <h3 class="etape__titre">Vous êtes :</h3>
-          <p class="etape__aide">Les travaux de toiture engagent le propriétaire du logement.</p>
-          <div class="options">
-            <button type="button" class="option" data-champ="statut" data-valeur="Propriétaire du logement" data-teinte="vert" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-maison-cle"></use></svg></span>
-              <span class="option__texte">Propriétaire du logement</span>
-            </button>
-            <button type="button" class="option" data-champ="statut" data-valeur="Locataire" data-teinte="ardoise" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-cles"></use></svg></span>
-              <span class="option__texte">Locataire</span>
-            </button>
-          </div>
-        </fieldset>
-
-        <!-- ---------- Etape 3 : surface ---------- -->
-        <fieldset class="etape" data-etape="3" hidden>
-          <legend class="sr-only">Étape 3 sur 6 : surface de la toiture</legend>
+          <legend class="sr-only">Étape 2 sur 5 : surface de la toiture</legend>
           <h3 class="etape__titre">Surface approximative de la toiture</h3>
           <p class="etape__aide">Une estimation suffit, la mesure se fait sur place.</p>
           <div class="options">
@@ -1362,6 +1367,10 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-carre-grand"></use></svg></span>
               <span class="option__texte">100 à 150 m²</span>
             </button>
+            <button type="button" class="option" data-champ="surface" data-valeur="Plus de 150 m²" data-teinte="ardoise" aria-pressed="false">
+              <span class="option__icone" aria-hidden="true"><svg><use href="#i-carre-xl"></use></svg></span>
+              <span class="option__texte">Plus de 150 m²</span>
+            </button>
             <button type="button" class="option" data-champ="surface" data-valeur="Je ne sais pas" data-teinte="ambre" aria-pressed="false">
               <span class="option__icone" aria-hidden="true"><svg><use href="#i-question"></use></svg></span>
               <span class="option__texte">Je ne sais pas</span>
@@ -1369,42 +1378,26 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           </div>
         </fieldset>
 
-        <!-- ---------- Etape 4 : delai ---------- -->
-        <fieldset class="etape" data-etape="4" hidden>
-          <legend class="sr-only">Étape 4 sur 6 : délai</legend>
-          <h3 class="etape__titre">Pour quand ?</h3>
-          <p class="etape__aide">Cela détermine l’ordre de rappel.</p>
+        <!-- ---------- Etape 3 : proprietaire ou locataire ---------- -->
+        <fieldset class="etape" data-etape="3" hidden>
+          <legend class="sr-only">Étape 3 sur 5 : votre situation</legend>
+          <h3 class="etape__titre">Vous êtes :</h3>
+          <p class="etape__aide">Les travaux de toiture engagent le propriétaire du logement.</p>
           <div class="options">
-            <button type="button" class="option" data-champ="delai" data-valeur="Urgent (fuite en cours)" data-teinte="rouge" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-goutte-alerte"></use></svg></span>
-              <span class="option__texte">Urgent (fuite en cours)</span>
+            <button type="button" class="option" data-champ="statut" data-valeur="Propriétaire du logement" data-teinte="vert" aria-pressed="false">
+              <span class="option__icone" aria-hidden="true"><svg><use href="#i-maison-cle"></use></svg></span>
+              <span class="option__texte">Propriétaire du logement</span>
             </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Dans 3 mois" data-teinte="ambre" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-calendrier"></use></svg></span>
-              <span class="option__texte">Dans 3 mois</span>
-            </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Dans 3 à 6 mois" data-teinte="vert" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-calendrier"></use></svg></span>
-              <span class="option__texte">Dans 3 à 6 mois</span>
-            </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Dans 6 à 12 mois" data-teinte="cyan" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-horloge"></use></svg></span>
-              <span class="option__texte">Dans 6 à 12 mois</span>
-            </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="L’année prochaine" data-teinte="bleu" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-horloge"></use></svg></span>
-              <span class="option__texte">L’année prochaine</span>
-            </button>
-            <button type="button" class="option" data-champ="delai" data-valeur="Je me renseigne" data-teinte="ardoise" aria-pressed="false">
-              <span class="option__icone" aria-hidden="true"><svg><use href="#i-loupe"></use></svg></span>
-              <span class="option__texte">Je me renseigne</span>
+            <button type="button" class="option" data-champ="statut" data-valeur="Locataire" data-teinte="ardoise" aria-pressed="false">
+              <span class="option__icone" aria-hidden="true"><svg><use href="#i-cles"></use></svg></span>
+              <span class="option__texte">Locataire</span>
             </button>
           </div>
         </fieldset>
 
-        <!-- ---------- Etape 5 : code postal ---------- -->
-        <fieldset class="etape" data-etape="5" hidden>
-          <legend class="sr-only">Étape 5 sur 6 : votre code postal</legend>
+        <!-- ---------- Etape 4 : code postal ---------- -->
+        <fieldset class="etape" data-etape="4" hidden>
+          <legend class="sr-only">Étape 4 sur 5 : votre code postal</legend>
           <h3 class="etape__titre">Votre code postal</h3>
           <p class="etape__aide">Nous intervenons uniquement dans le département du Nord (59).</p>
           <div class="champ">
@@ -1419,11 +1412,12 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           </button>
         </fieldset>
 
-        <!-- ---------- Etape 6 : coordonnees ---------- -->
-        <fieldset class="etape" data-etape="6" hidden>
-          <legend class="sr-only">Étape 6 sur 6 : vos coordonnées</legend>
-          <h3 class="etape__titre">Vos coordonnées</h3>
-          <p class="etape__aide">Dernière étape. Un seul technicien vous contacte sous 24 à 48 h ouvrées.</p>
+        <!-- ---------- Etape 5 : coordonnees ---------- -->
+        <fieldset class="etape" data-etape="5" hidden>
+          <legend class="sr-only">Étape 5 sur 5 : vos coordonnées</legend>
+          <h3 class="etape__titre">Votre estimation est prête</h3>
+          <p class="etape__aide">Où souhaitez-vous la recevoir ? Un seul technicien
+            vous contacte sous 24 à 48 h ouvrées.</p>
 
           <div class="champ champ--duo">
             <div>
@@ -1478,7 +1472,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           </div>
           <button type="submit" class="bouton bouton--orange bouton--large est-en-attente" id="envoyer"
                   style="margin-top:18px">
-            Recevoir mon devis gratuit
+            Voir mon estimation →
           </button>
           <p class="champ__erreur" id="erreur-consentement" role="alert"
              style="margin-top:10px;text-align:center"></p>
@@ -1494,7 +1488,11 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
         <input type="hidden" name="projet" id="h-projet">
         <input type="hidden" name="statut" id="h-statut">
         <input type="hidden" name="surface" id="h-surface">
-        <input type="hidden" name="delai" id="h-delai">
+        <!-- Fourchette calculee cote client, transmise avec le lead : elle
+             dit ce que le visiteur a vu a l'ecran, ce qui evite d'annoncer
+             au telephone un montant different de celui qu'il a lu. -->
+        <input type="hidden" name="estimation_basse" id="h-estimation_basse">
+        <input type="hidden" name="estimation_haute" id="h-estimation_haute">
         <input type="hidden" name="gclid" id="h-gclid">
         <input type="hidden" name="gbraid" id="h-gbraid">
         <input type="hidden" name="wbraid" id="h-wbraid">
@@ -1541,34 +1539,49 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           </button>
         </div>
 
-        <!-- ---------- Confirmation ---------- -->
-        <div class="ecran" id="ecran-confirmation" hidden>
-          <picture>
-            <source type="image/webp" srcset="assets/img/interlocuteur-160.webp">
-            <img class="ecran__visage" src="assets/img/interlocuteur.jpg"
-                 width="72" height="72" loading="lazy" decoding="async"
-                 alt="Adrien Heddebaut, conseiller toiture">
-          </picture>
-          <div class="ecran__marque" aria-hidden="true">
-            <svg viewBox="0 0 28 28" width="30" height="30" fill="none">
-              <path d="M4 14.5 11 21 24 7" stroke="currentColor" stroke-width="3.2"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <!-- ---------- Resultat : la fourchette calculee ----------
+             Cet ecran remplace l'ancienne confirmation. La promesse du
+             titre est « votre estimation » : elle doit donc etre tenue a
+             l'ecran, pas seulement annoncee. Les montants viennent de la
+             constante TARIFS, seule source de verite de la page.
+             ---------------------------------------------------------- -->
+        <div class="ecran" id="ecran-resultat" hidden>
+
+          <div class="resultat">
+            <p class="resultat__objet" id="resultat-objet"></p>
+            <p class="resultat__montant" id="resultat-montant"></p>
+            <p class="resultat__mention" id="resultat-mention">Fourchette indicative, TVA incluse</p>
           </div>
-          <h3>Votre demande est enregistrée</h3>
-          <p>Merci, nous avons bien reçu votre demande.</p>
-          <div class="ecran__rappel">
-            <p style="margin:0 0 8px"><b>Ce qui se passe maintenant :</b></p>
-            <p style="margin:0">
-              <b>Adrien Heddebaut vous appelle sous 24 à 48 h ouvrées</b> pour
-              comprendre votre projet et convenir d’une visite gratuite. Si vous
-              ne décrochez pas, il laisse un message.
+
+          <div class="cadrage">
+            <p>
+              Cette fourchette est large parce que trois choses la font varier
+              du simple au double : l’état réel de vos tuiles, l’accessibilité
+              du toit et la pente des versants. Seule une visite gratuite
+              permet de la resserrer.
             </p>
           </div>
-          <p style="margin-top:16px;font-size:14.5px;color:#667085">
-            Une urgence ? Appelez directement le
-            <a href="tel:+33786505580"><b>07 86 50 55 80</b></a>.
-          </p>
+
+          <div class="suite">
+            <picture>
+              <source type="image/webp" srcset="assets/img/interlocuteur-160.webp">
+              <img class="suite__visage" src="assets/img/interlocuteur.jpg"
+                   width="56" height="56" loading="lazy" decoding="async"
+                   alt="Adrien Heddebaut, conseiller toiture">
+            </picture>
+            <p class="suite__texte">
+              <b>Adrien vous rappelle sous 24 à 48 h ouvrées</b> pour affiner
+              votre estimation et convenir d’une visite. Un seul technicien,
+              un seul appel.
+            </p>
+          </div>
+
+          <a class="bouton-appel bouton-appel--resultat" href="tel:+33786505580"
+             data-position="resultat" aria-label="Appeler maintenant le 07 86 50 55 80">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-tel"></use></svg>
+            <span>Appeler maintenant —&nbsp;<span class="nombre-tel">07 86 50 55 80</span></span>
+          </a>
+          <p class="resultat__attente">Ou attendez simplement notre appel.</p>
         </div>
 
         <div class="formulaire__pied">
@@ -1629,8 +1642,8 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 <!-- ================= AVIS =================
      Le contenu vient du tableau AVIS, en tete de script : pour publier
      de vrais avis, il n'y a que ce tableau a modifier, jamais ce HTML.
-     Tant qu'une entree porte « exemple: true », un bandeau jaune le
-     signale et disparait de lui-meme une fois les vrais avis colles.
+     Tant qu'il est vide, toute cette section est masquee — mieux vaut
+     pas d'avis du tout que des avis inventes.
      Aucune note moyenne, aucun compteur, aucun logo Google : rien de
      tout cela ne sera affiche sans source verifiable. -->
 <section class="section section--blanc" id="avis" aria-labelledby="titre-avis">
@@ -2607,62 +2620,50 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       Le prix dépend de trois choses : la <b>surface réelle des versants</b>,
       l’<b>accessibilité du toit</b> — un accès en nacelle ne se facture pas
       comme un simple échafaudage — et l’<b>état du support</b> avant
-      traitement. Ces fourchettes servent à situer un budget, pas à établir un
-      devis : seule une <b>visite gratuite sur place</b> permet de chiffrer
-      votre toiture.
+      traitement. L’estimateur en haut de page vous donne une fourchette à
+      partir de vos réponses ; seule une <b>visite gratuite sur place</b>
+      permet ensuite de la resserrer en devis.
     </p>
 
-    <div class="tableau-enveloppe">
-      <table class="reperes">
-        <caption class="sr-only">Prix indicatifs au mètre carré et durabilité par prestation</caption>
-        <thead>
-          <tr>
-            <th scope="col">Prestation</th>
-            <th scope="col">Prix indicatif au m²</th>
-            <th scope="col">Durabilité</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Nettoyage / Démoussage</th>
-            <td><span class="valeur">20 à 30 €</span></td>
-            <td>1 à 2 ans</td>
-          </tr>
-          <!-- ==============================================================
-               RAPPEL POUR PLUS TARD — mention « garantie 10 ans »
-               Cette formulation n'est valable que tant que les travaux sont
-               exécutés ET garantis par Technitoit.
-               En cas de revente des leads à des artisans tiers, dont on ne
-               maîtrise ni l'exécution ni les garanties, remplacer par :
-               « protection durable, 10 ans et plus selon exposition ».
-               Sans quoi la mention devient une allégation invérifiable.
-               ============================================================== -->
-          <tr class="phare">
-            <th scope="row">Reprotection de toiture<span class="badge-phare">Le meilleur rapport durée / prix</span></th>
-            <td><span class="valeur">80 à 120 €</span></td>
-            <td><span class="valeur">garantie 10 ans</span></td>
-          </tr>
-          <tr>
-            <th scope="row">Couverture neuve</th>
-            <td><span class="valeur">190 à 280 €</span></td>
-            <td>30 ans et plus</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Trois cartes, un facteur chacune, aucun chiffre.
+
+         Le tableau de prix au m2 qui se trouvait ici a ete retire : il
+         faisait double emploi avec l'estimateur et donnait gratuitement
+         l'information que le formulaire echange contre des coordonnees.
+         Les montants ne vivent plus qu'a un seul endroit, la constante
+         TARIFS du script. -->
+    <div class="grille grille--3 bloc">
+      <article class="carte facteur">
+        <span class="facteur__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-carre-grand"></use></svg></span>
+        <h3 class="carte__titre">La surface réelle des versants</h3>
+        <p class="carte__texte">
+          Ce n’est pas la surface au sol de la maison : un toit à forte pente
+          développe bien plus de mètres carrés qu’il n’en couvre. Deux maisons
+          de même emprise peuvent demander des quantités de produit très
+          différentes.
+        </p>
+      </article>
+      <article class="carte facteur">
+        <span class="facteur__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-maison-neuve"></use></svg></span>
+        <h3 class="carte__titre">L’accessibilité du toit</h3>
+        <p class="carte__texte">
+          Un pignon dégagé se traite depuis un échafaudage simple ; une maison
+          de ville coincée entre deux mitoyens peut imposer une nacelle et un
+          arrêté de voirie. C’est souvent ce poste, et non le produit, qui
+          creuse l’écart entre deux devis.
+        </p>
+      </article>
+      <article class="carte facteur">
+        <span class="facteur__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-loupe"></use></svg></span>
+        <h3 class="carte__titre">L’état du support</h3>
+        <p class="carte__texte">
+          Une tuile saine se nettoie et se protège directement. Une tuile déjà
+          gélive, fissurée ou descellée demande d’abord des remplacements, et
+          ce sont eux qui font varier le total — parfois du simple au double
+          sur un même toit.
+        </p>
+      </article>
     </div>
-    <p class="source">
-      Fourchettes indicatives, variables selon l’état du support,
-      l’accessibilité, la pente et l’exposition. Le prix définitif est établi
-      après visite gratuite.
-      <!-- DURABILITE ANNONCEE : « une quinzaine d'années » est une durée de vie
-           constatée, distincte de la garantie contractuelle de dix ans. Les
-           deux sont volontairement distinguées ici et dans le sous-titre de la
-           section Avant / Après. Une durabilité annoncée doit pouvoir être
-           justifiée : conservez de quoi l'étayer. -->
-      Une reprotection tient couramment <b>une quinzaine d’années</b> ; la
-      <b>garantie</b> accordée par l’entreprise, elle, court sur <b>dix ans</b>.
-      Ce sont deux choses différentes, et nous préférons l’écrire.
-    </p>
 
     <p class="section__note">
       Un simple démoussage retire la mousse mais laisse la tuile poreuse : elle
@@ -2674,7 +2675,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     <div class="section__cta">
       <button type="button" class="bouton bouton--orange"
               data-action="aller-au-formulaire" data-emplacement="section-prix">
-        Estimer mon projet →
+        Obtenir mon estimation en 2 minutes →
       </button>
     </div>
   </div>
@@ -2755,9 +2756,11 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       <p class="bandeau-cookies__texte">
         Nous aimerions mesurer deux choses : quelle annonce a mené à votre
         demande, et comment cette page est utilisée, afin de la corriger là où
-        elle bloque. Cela suppose des cookies et l’enregistrement anonyme de
-        votre navigation sur cette page. <b>Rien n’est déposé ni enregistré si
-        vous refusez</b>, et le formulaire fonctionne à l’identique.
+        elle bloque. Cela suppose des cookies et l’enregistrement de votre
+        navigation sur cette page. <b>Si vous refusez, aucun cookie n’est
+        déposé et aucune session n’est enregistrée</b> : seul un décompte de
+        visites anonyme, qui ne permet pas de vous reconnaître, continue de
+        tourner. Le formulaire, lui, fonctionne à l’identique.
         <a href="confidentialite.html">En savoir plus</a>.
       </p>
     </div>
@@ -2773,9 +2776,11 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 
      Netlify analyse index.html au déploiement pour détecter les
      formulaires. Le formulaire visible #formulaire-devis porte
-     data-netlify="true" et contient déjà la totalité des 25 champs
-     en dur dans le HTML (y compris les <input type="hidden"> que le
-     script remplit). Le doublon serait donc redondant, et deux
+     data-netlify="true" et contient déjà la totalité des 26 champs
+     en dur dans le HTML — y compris les <input type="hidden"> que le
+     script remplit, dont estimation_basse et estimation_haute que
+     l'estimateur renseigne avant l'envoi. Le doublon serait donc
+     redondant, et deux
      <form name="lead"> sur la même page rendaient la détection
      Netlify indéterminée : c'est ce qui faisait échouer l'envoi.
 
@@ -2804,46 +2809,59 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 (function (window, document) {
   'use strict';
 
+  /* Vide, et c'est voulu : aucun avis reel n'a encore ete recueilli.
+
+     Six exemples occupaient cette place. Ils etaient signales comme
+     tels dans le code, mais rien ne les distinguait de vrais avis a
+     l'ecran — c'est exactement ce qu'on ne veut pas sur une page qui
+     promet des chantiers reels.
+
+     Tant que ce tableau est vide, la section « Nos avis clients
+     recents » ne s'affiche pas du tout : monterAvis() la masque. Pour
+     la faire revenir, il suffit d'ajouter des entrees ici, rien
+     d'autre, ni dans le HTML ni dans le CSS :
+
+       { prenom: 'Michel', commune: 'Armentieres', note: 5,
+         texte: 'mot pour mot ce que la personne a ecrit',
+         date: 'Mars 2026' }
+
+     Ne recopiez que des avis reellement recus. Aucune note moyenne ni
+     compteur d'avis ne sera affiche sans fiche publique verifiable. */
+  var AVIS = [];
+
   /* ================================================================
-     Avis affiches dans le carrousel, apres le hero.
+     TARIFS — seule source de verite des montants de la page.
 
-     POUR PUBLIER DE VRAIS AVIS : remplacer les entrees ci-dessous, et
-     retirer « exemple: true ». Rien d'autre a toucher, ni dans le HTML
-     ni dans le CSS. Tant qu'une entree porte ce drapeau, un bandeau
-     jaune le signale sur la page ; il disparait tout seul ensuite.
+     Depuis que le tableau de prix a ete retire de la section « Combien
+     coute un traitement de toiture ? », plus aucun chiffre n'est ecrit
+     en dur dans le HTML : tout ce que le visiteur voit vient d'ici.
+     Changer un prix, c'est changer une ligne de ce tableau.
 
-     Ne recopiez que des avis reellement recus, mot pour mot. Une note
-     moyenne ou un nombre d'avis ne s'affichent pas ici : ils ne seront
-     ajoutes que s'ils proviennent d'une fiche publique verifiable.
+     prix : euros par metre carre, bas et haut de fourchette.
+     Les cles doivent correspondre EXACTEMENT aux data-valeur des
+     boutons de l'etape 1.
      ================================================================ */
-  var AVIS = [
-    // PLACEHOLDER — a remplacer
-    { prenom: 'Michel', commune: 'Armentières', note: 5, exemple: true,
-      texte: 'Toiture nettoyée et reprotégée en deux jours. Le technicien a pris le temps de tout m\u2019expliquer avant de commencer, et les abords étaient propres en partant.',
-      date: 'Mars 2026' },
-    // PLACEHOLDER — a remplacer
-    { prenom: 'Nicole', commune: 'Orchies', note: 5, exemple: true,
-      texte: 'J\u2019avais des mousses depuis des années et je ne savais pas à qui m\u2019adresser. Un seul interlocuteur, un devis clair, pas de mauvaise surprise sur la facture.',
-      date: 'Février 2026' },
-    // PLACEHOLDER — a remplacer
-    { prenom: 'Jean-Pierre', commune: 'Bailleul', note: 5, exemple: true,
-      texte: 'Rappel le lendemain de ma demande, visite dans la semaine. Le devis correspondait à ce qui avait été annoncé au téléphone.',
-      date: 'Février 2026' },
-    // PLACEHOLDER — a remplacer
-    { prenom: 'Christiane', commune: 'Douai', note: 5, exemple: true,
-      texte: 'Travail soigné et équipe polie. On m\u2019a montré les photos avant et après depuis le toit, ce que je n\u2019aurais pas pu voir moi-même.',
-      date: 'Janvier 2026' },
-    // PLACEHOLDER — a remplacer
-    { prenom: 'Gérard', commune: 'Hazebrouck', note: 5, exemple: true,
-      texte: 'Une tuile poreuse sur toute la façade sud. La difference se voit depuis la rue, et je n\u2019ai plus d\u2019humidité dans les combles.',
-      date: 'Janvier 2026' },
-    // PLACEHOLDER — a remplacer
-    { prenom: 'Monique', commune: 'Valenciennes', note: 5, exemple: true,
-      texte: 'On m\u2019avait proposé bien plus cher ailleurs pour la même chose. Ici le prix annoncé est celui que j\u2019ai payé.',
-      date: 'Décembre 2025' }
-  ];
+  var TARIFS = {
+    'Nettoyage / Démoussage':  { bas: 20,  haut: 30 },
+    'Reprotection hydrofuge':  { bas: 80,  haut: 120 },
+    'Couverture neuve':        { bas: 190, haut: 280 }
+  };
 
-  var NB_ETAPES = 6;
+  /* Surface retenue pour le calcul, en metres carres. On prend la borne
+     BASSE de la tranche pour le bas de fourchette et la borne HAUTE pour
+     le haut : c'est ce qui donne sa largeur a l'estimation, et cette
+     largeur est le motif de l'appel. Les cles correspondent aux
+     data-valeur des boutons de l'etape 2. */
+  var SURFACES = {
+    'Moins de 50 m²':  { bas: 30,  haut: 50 },
+    '50 à 100 m²':     { bas: 50,  haut: 100 },
+    '100 à 150 m²':    { bas: 100, haut: 150 },
+    'Plus de 150 m²':  { bas: 150, haut: 220 }
+    /* « Je ne sais pas » n'a volontairement pas d'entree : sans surface,
+       on affiche un prix au metre carre plutot qu'un total invente. */
+  };
+
+  var NB_ETAPES = 5;
   /* Les deux dernieres etapes sont designees par leur role, jamais par
      leur numero : une renumerotation ne peut alors plus les oublier. */
   var ETAPE_CODE_POSTAL = NB_ETAPES - 1;
@@ -3104,7 +3122,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   var annonce = $('#formulaire-annonce');
   var ecranLocataire = $('#ecran-locataire');
   var ecranHorsZone = $('#ecran-hors-zone');
-  var ecranConfirmation = $('#ecran-confirmation');
+  var ecranResultat = $('#ecran-resultat');
 
   var etape = 1;
   var demarre = false;
@@ -3116,8 +3134,46 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   }
 
   function nomEtape(n) {
-    return ({ 1: 'projet', 2: 'statut', 3: 'surface',
-              4: 'delai', 5: 'code_postal', 6: 'coordonnees' })[n] || ('etape_' + n);
+    return ({ 1: 'projet', 2: 'surface', 3: 'statut',
+              4: 'code_postal', 5: 'coordonnees' })[n] || ('etape_' + n);
+  }
+
+  /* ================================================================
+     Le calcul de la fourchette.
+
+     Renvoie toujours un objet exploitable : soit un total en euros,
+     soit — quand la surface est inconnue — un prix au metre carre. Il
+     n'y a pas de troisieme cas, parce qu'il n'y a pas d'ecran qui
+     promette une estimation sans la donner.
+     ================================================================ */
+  function calculerEstimation(projet, surface) {
+    var t = TARIFS[projet];
+    if (!t) { return null; }
+    var sfc = SURFACES[surface];
+    if (!sfc) {
+      /* Surface inconnue : on donne le prix au metre carre, qui reste
+         une information vraie, plutot qu'un total tire au hasard. */
+      return { auM2: true, bas: t.bas, haut: t.haut, projet: projet, surface: surface };
+    }
+    return {
+      auM2: false, projet: projet, surface: surface,
+      bas: arrondirCentaine(t.bas * sfc.bas),
+      haut: arrondirCentaine(t.haut * sfc.haut)
+    };
+  }
+
+  function arrondirCentaine(v) { return Math.round(v / 100) * 100; }
+
+  /* Espace fine insecable entre les milliers, comme l'exige la
+     typographie francaise, et insecable avant le symbole euro. */
+  function euros(v) {
+    return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, '\u202F') + '\u00A0€';
+  }
+
+  function texteEstimation(e) {
+    if (!e) { return ''; }
+    return e.auM2 ? euros(e.bas) + ' à ' + euros(e.haut) + ' par m²'
+                  : euros(e.bas) + ' – ' + euros(e.haut);
   }
 
   function afficherEtape(n, silencieux) {
@@ -3128,7 +3184,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     }
     if (ecranLocataire) { ecranLocataire.hidden = true; }
     if (ecranHorsZone) { ecranHorsZone.hidden = true; }
-    if (ecranConfirmation) { ecranConfirmation.hidden = true; }
+    if (ecranResultat) { ecranResultat.hidden = true; }
 
     etape = n;
     var pct = Math.round((n / NB_ETAPES) * 100);
@@ -3155,6 +3211,50 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     }
   }
 
+  /* Remplit l'ecran de resultat puis l'affiche. « degrade » signale que
+     l'envoi n'a pas abouti : le montant reste le meme, seule la suite
+     annoncee change. */
+  function montrerResultat(e, degrade) {
+    var objet = $('#resultat-objet'), montant = $('#resultat-montant');
+    var mention = $('#resultat-mention'), suite = $('.suite__texte');
+    var attente = $('.resultat__attente');
+
+    if (montant) { montant.textContent = texteEstimation(e); }
+    if (objet && e) {
+      objet.textContent = 'Estimation pour ' + libelleProjet(e.projet) +
+        (e.auM2 ? '' : ', ' + e.surface.toLowerCase());
+    }
+    if (mention) {
+      mention.textContent = e && e.auM2
+        ? 'Prix au m² — indiquez la surface pour un total'
+        : 'Fourchette indicative, TVA incluse';
+    }
+    if (suite) {
+      suite.innerHTML = degrade
+        ? '<b>Votre demande n’a pas pu être transmise.</b> Votre estimation ' +
+          'reste valable : appelez-nous et nous la reprenons ensemble, ' +
+          'aucun formulaire à refaire.'
+        : '<b>Adrien vous rappelle sous 24 à 48 h ouvrées</b> pour affiner ' +
+          'votre estimation et convenir d’une visite. Un seul technicien, ' +
+          'un seul appel.';
+    }
+    if (attente) { attente.hidden = !!degrade; }
+
+    afficherEcran(ecranResultat, degrade
+      ? 'Votre estimation est affichée. L’envoi n’a pas abouti, appelez-nous.'
+      : 'Votre estimation est prête.');
+  }
+
+  /* « Estimation pour une reprotection de toiture » : l'article et la
+     tournure changent selon la prestation, on ne les devine pas. */
+  function libelleProjet(p) {
+    return ({
+      'Nettoyage / Démoussage': 'un nettoyage et démoussage',
+      'Reprotection hydrofuge': 'une reprotection hydrofuge',
+      'Couverture neuve':       'une couverture neuve'
+    })[p] || 'votre projet';
+  }
+
   function afficherEcran(element, message) {
     for (var i = 0; i < etapes.length; i++) {
       etapes[i].classList.remove('est-active');
@@ -3164,7 +3264,12 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     if (boutonRetour) { boutonRetour.hidden = true; }
     if (ecranLocataire) { ecranLocataire.hidden = (element !== ecranLocataire); }
     if (ecranHorsZone) { ecranHorsZone.hidden = (element !== ecranHorsZone); }
-    if (ecranConfirmation) { ecranConfirmation.hidden = (element !== ecranConfirmation); }
+    if (ecranResultat) { ecranResultat.hidden = (element !== ecranResultat); }
+    /* La signature du pied dit deja « Adrien vous rappelle sous 24 a
+       48 h » : sur l'ecran de resultat, le bloc de suite le dit en plus
+       grand, juste au-dessus. On masque le doublon. */
+    var pied = $('.formulaire__pied');
+    if (pied) { pied.hidden = (element === ecranResultat); }
     if (annonce && message) { annonce.textContent = message; }
 
     var h3 = $('h3', element);
@@ -3377,11 +3482,24 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 
     /* En cas d'echec, on affiche une reference courte (ex. « ref. 404 »).
        Elle ne veut rien dire pour le visiteur, mais elle permet de
-       diagnostiquer a distance sans avoir a ouvrir la console. */
+       diagnostiquer a distance sans avoir a ouvrir la console.
+
+       Le visiteur, lui, voit quand meme son estimation : elle a ete
+       calculee chez lui, elle ne depend d'aucun serveur, et la lui
+       refuser parce qu'un POST a echoue serait lui faire payer une
+       panne qui n'est pas la sienne. Seule change la suite : au lieu
+       d'attendre un appel qui n'arrivera pas, on l'invite a appeler. */
     function echec(message, reference) {
       envoiEnCours = false;
       boutonEnvoi.disabled = false;
       boutonEnvoi.textContent = libelle;
+      tracer('form_error', { etape: ETAPE_COORDONNEES, reference: reference || 'inconnue' });
+
+      if (estimation) {
+        montrerResultat(estimation, true);
+        return;
+      }
+      /* Sans estimation calculable, on retombe sur l'ancien message. */
       if (blocErreur) {
         blocErreur.textContent = message ||
           'L’envoi n’a pas abouti. Vérifiez votre connexion et réessayez, ' +
@@ -3394,7 +3512,17 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
         }
         blocErreur.classList.add('est-visible');
       }
-      tracer('form_error', { etape: 6, reference: reference || 'inconnue' });
+    }
+
+    /* L'estimation est calculee AVANT le corps de la requete : les deux
+       champs caches doivent partir avec le lead, pour qu'au telephone on
+       reparle du montant que le visiteur a reellement lu. */
+    var estimation = calculerEstimation(
+      ($('#h-projet') || {}).value || '', ($('#h-surface') || {}).value || '');
+    var champBas = $('#h-estimation_basse'), champHaut = $('#h-estimation_haute');
+    if (champBas && champHaut) {
+      champBas.value = estimation ? (estimation.auM2 ? estimation.bas + ' €/m²' : String(estimation.bas)) : '';
+      champHaut.value = estimation ? (estimation.auM2 ? estimation.haut + ' €/m²' : String(estimation.haut)) : '';
     }
 
     /* Corps url-encode : tous les champs nommes du formulaire. */
@@ -3438,15 +3566,16 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       boutonEnvoi.textContent = libelle;
       tracer('lead_submit', {
         projet: ($('#h-projet') || {}).value || '',
-        delai: ($('#h-delai') || {}).value || '',
         surface: ($('#h-surface') || {}).value || '',
-        code_postal: (champCP || {}).value || ''
+        code_postal: (champCP || {}).value || '',
+        estimation_basse: (champBas || {}).value || '',
+        estimation_haute: (champHaut || {}).value || ''
       });
       /* Une conversion, et une seule : la demande est enregistree cote
          serveur. Ni l'ouverture du formulaire ni un clic sur le
          telephone ne comptent comme telle. */
       signalerConversion();
-      afficherEcran(ecranConfirmation, 'Votre demande est enregistrée.');
+      montrerResultat(estimation, false);
     })['catch'](function (erreur) {
       if (window.console && console.error) { console.error('Envoi impossible :', erreur); }
       echec(null, 'reseau');
@@ -3585,6 +3714,18 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   function monterAvis() {
     var piste = $('#piste-avis');
     if (!piste) { return; }
+
+    /* Aucun avis reel : on masque la section entiere plutot que
+       d'afficher un carrousel vide ou, pire, des exemples inventes.
+       Elle revient d'elle-meme des qu'une entree est ajoutee au
+       tableau AVIS. */
+    var section = document.getElementById('avis');
+    if (!AVIS.length) {
+      if (section) { section.hidden = true; }
+      return;
+    }
+    if (section) { section.hidden = false; }
+
     var html = '';
     for (var i = 0; i < AVIS.length; i++) {
       var a = AVIS[i];
@@ -3606,12 +3747,10 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     }
     piste.innerHTML = html;
 
-    /* Le bandeau visible a ete retire a la demande. Il ne reste que cet
-       avertissement en console : tant qu'il s'affiche, des avis
-       d'exemple sont en ligne. */
-    var reste = AVIS.some(function (a) { return a.exemple; });
-    if (reste && window.console && console.warn) {
-      console.warn('Avis d\u2019exemple encore en place : remplacer le tableau AVIS ' +
+    /* Filet de securite : si un jour quelqu'un remet une entree marquee
+       « exemple », elle ne doit pas passer inapercue en ligne. */
+    if (AVIS.some(function (a) { return a.exemple; }) && window.console && console.warn) {
+      console.warn('Avis d\u2019exemple en place : remplacer le tableau AVIS ' +
         'dans index.html avant la mise en ligne.');
     }
   }

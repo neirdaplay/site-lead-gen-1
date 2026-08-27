@@ -51,6 +51,21 @@ exports.handler = async function (evenement) {
     return { statusCode: 200, body: 'ok' };
   }
 
+  /* Les deux bornes arrivent en chaines : soit des entiers (« 8000 »),
+     soit un prix au metre carre (« 80 €/m² ») quand le visiteur a
+     repondu « Je ne sais pas » a la surface. On les rend telles
+     quelles, sans tenter de les reformater. */
+  function estimationVue(d) {
+    const bas = (d.estimation_basse || '').trim();
+    const haut = (d.estimation_haute || '').trim();
+    if (!bas || !haut) { return 'non calculée'; }
+    const auM2 = /m²/.test(bas);
+    const nombre = (v) => v.replace(/[^\d]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return auM2
+      ? echapper(nombre(bas) + ' à ' + nombre(haut) + ' € par m²')
+      : echapper(nombre(bas) + ' € – ' + nombre(haut) + ' €');
+  }
+
   const tel = lienTelephone(donnees.telephone);
   const source = [donnees.utm_campaign, donnees.utm_term].filter(Boolean).join(' / ');
 
@@ -59,8 +74,11 @@ exports.handler = async function (evenement) {
     '',
     'Projet : ' + echapper(donnees.projet),
     'Surface : ' + echapper(donnees.surface),
-    'Délai : ' + echapper(donnees.delai),
     'Code postal : ' + echapper(donnees.code_postal),
+    /* La fourchette affichee au visiteur part avec le lead : au
+       telephone, on reparle du montant qu'il a reellement lu, pas d'un
+       autre recalcule de tete. */
+    '💶 Estimation vue : ' + estimationVue(donnees),
     '',
     echapper(donnees.prenom) + ' ' + echapper(donnees.nom),
     '📞 ' + (tel

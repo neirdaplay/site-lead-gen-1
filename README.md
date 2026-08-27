@@ -318,10 +318,85 @@ remplacez les coordonnées des `<circle>` et reformulez la légende.
 
 ---
 
-## 7. Le formulaire
+## 7. Le formulaire — l'estimateur
 
-Six étapes, une question par écran, cartes cliquables pleine largeur qui font
+Cinq étapes, une question par écran, cartes cliquables pleine largeur qui font
 avancer automatiquement. Aucun bouton « suivant » sur les questions à choix.
+
+| Étape | Question | Champ |
+|---|---|---|
+| 1 | Votre projet de toiture concerne | `projet` |
+| 2 | Surface approximative | `surface` |
+| 3 | Vous êtes | `statut` |
+| 4 | Votre code postal | `code_postal` |
+| 5 | Vos coordonnées | `prenom`, `nom`, `telephone`, `email` *(facultatif)*, `consentement` |
+
+**Le formulaire tient sa promesse : il affiche vraiment une fourchette.** Le
+titre annonce « Votre estimation », l'étape 5 s'appelle « Votre estimation est
+prête », et l'écran suivant donne le montant. Il n'existe aucun chemin qui
+promette une estimation sans la donner.
+
+### Les montants : `TARIFS`, source unique
+
+Tous les chiffres de la page viennent d'une seule constante, en tête du script :
+
+```js
+var TARIFS = {
+  'Nettoyage / Démoussage':  { bas: 20,  haut: 30 },
+  'Reprotection hydrofuge':  { bas: 80,  haut: 120 },
+  'Couverture neuve':        { bas: 190, haut: 280 }
+};
+```
+
+Les clés doivent correspondre **exactement** aux `data-valeur` des boutons de
+l'étape 1. Une seconde table, `SURFACES`, donne les bornes retenues par tranche.
+Changer un prix, c'est changer une ligne — il n'y a plus nulle part ailleurs à
+répercuter, puisque le tableau de prix a été retiré de la page.
+
+**La fourchette est volontairement large** : on prend la borne basse de la
+surface pour le bas et la borne haute pour le haut. C'est cette largeur qui
+crée le besoin d'un appel pour la resserrer. Les totaux sont arrondis à la
+centaine.
+
+> **« Je ne sais pas » n'affiche jamais de total.** Sans surface, on donne le
+> prix au mètre carré — « 80 € à 120 € par m² » — qui reste une information
+> vraie, plutôt qu'un total tiré au hasard. `SURFACES` n'a volontairement pas
+> d'entrée pour cette réponse : c'est l'absence de clé qui déclenche ce mode.
+
+### L'écran de résultat
+
+Il remplace l'ancienne confirmation. Le montant, l'objet de l'estimation et la
+mention légale sortent du calcul ; le reste est statique.
+
+Deux détails à ne pas défaire :
+
+- **La signature du pied de carte est masquée sur cet écran**
+  (`.formulaire__pied[hidden]`), parce que le bloc « Adrien vous rappelle » le
+  dit déjà juste au-dessus, en plus grand. Notez la règle CSS
+  `.formulaire__pied[hidden]{display:none}` : sans elle, le `display:flex`
+  l'emporterait sur l'attribut et le masquage ne ferait rien.
+- **Le numéro du bouton d'appel porte `.nombre-tel{white-space:nowrap}}`** : dix
+  chiffres coupés en plein milieu ne se lisent plus.
+
+### L'envoi : l'estimation d'abord, le POST ensuite
+
+L'estimation est calculée **avant** de construire le corps de la requête, et
+écrite dans deux champs cachés — `estimation_basse` et `estimation_haute` — qui
+partent avec le lead et figurent dans la notification Telegram. Au téléphone,
+on reparle ainsi du montant que le visiteur a réellement lu.
+
+> **Un envoi qui échoue n'efface pas l'estimation.** Elle a été calculée chez le
+> visiteur, elle ne dépend d'aucun serveur, et la lui refuser parce qu'un POST
+> a échoué serait lui faire payer une panne qui n'est pas la sienne. L'écran de
+> résultat s'affiche quand même ; seule la suite annoncée change — au lieu
+> d'attendre un rappel qui n'arrivera pas, on l'invite à appeler. `t-envoi.mjs`
+> le vérifie sur un 404 et sur une coupure réseau.
+
+**Il n'y a pas de formulaire caché en doublon, et il ne faut pas en ajouter.**
+Les 26 champs, `estimation_basse` et `estimation_haute` compris, sont en dur
+dans le HTML du formulaire visible — c'est ce que Netlify analyse. Deux
+`<form name="lead">` sur la même page rendaient la détection indéterminée :
+c'est ce qui faisait échouer l'envoi au départ.
 Un chevron à droite de chaque carte dit qu'elle fait avancer, au lieu de la
 laisser passer pour une case à cocher ; il est dessiné en CSS pour ne pas
 ajouter un SVG à chacune des quinze réponses.
@@ -413,15 +488,6 @@ la ligne et le bouton d'appel. Le liséré en compte six ; *100 % gratuit* et
 répéter les mêmes termes à cent pixels d'écart se lit comme une erreur de
 relecture, pas comme une insistance.
 
-| Étape | Question | Champ |
-|---|---|---|
-| 1 | Votre projet de toiture concerne | `projet` |
-| 2 | Vous êtes | `statut` |
-| 3 | Surface approximative | `surface` |
-| 4 | Pour quand | `delai` |
-| 5 | Votre code postal | `code_postal` |
-| 6 | Vos coordonnées | `prenom`, `nom`, `telephone`, `email` *(facultatif)*, `consentement` |
-
 **L'e-mail n'est pas obligatoire.** Le rappel se fait par téléphone : exiger
 une adresse coûtait des demandes sans rien apporter. S'il est saisi, il doit
 être valide ; s'il est laissé vide, le lead part normalement et la notification
@@ -436,20 +502,23 @@ la case pour continuer », plutôt qu'un bouton mort qui n'explique rien.
 
 ### Avis
 
-Le carrousel placé après le hero est alimenté par le tableau `AVIS`, en tête du
-script. **Pour publier de vrais avis, il n'y a que ce tableau à modifier** :
-prénom, commune, note, texte, date. Retirez `exemple: true` au passage.
+**Le tableau `AVIS` est vide, et la section est masquée.** Six avis d'exemple
+occupaient cette place ; ils étaient signalés comme tels dans le code, mais
+rien ne les distinguait de vrais avis à l'écran — exactement ce qu'on ne veut
+pas sur une page qui promet des chantiers réels.
 
-> **Le garde-fou visible a été retiré à la demande.** Il ne reste qu'un
-> avertissement dans la console du navigateur : tant qu'il s'affiche, des avis
-> d'exemple sont en ligne. Rien ne le signale plus au visiteur — ni à vous, si
-> vous n'ouvrez pas la console.
+`monterAvis()` masque toute la section « Nos avis clients récents » tant que le
+tableau est vide. Pour la faire revenir, il suffit d'y ajouter des entrées,
+rien d'autre — ni HTML, ni CSS :
 
-**Ne publiez que des avis réellement reçus,
-recopiés mot pour mot** : inventer des avis est une pratique commerciale
-trompeuse. Aucune note moyenne, aucun compteur et aucun logo Google ne sont
-affichés — ils ne le seront que s'ils proviennent d'une fiche publique
-vérifiable.
+```js
+{ prenom: 'Michel', commune: 'Armentières', note: 5,
+  texte: 'mot pour mot ce que la personne a écrit',
+  date: 'Mars 2026' }
+```
+
+Ne recopiez que des avis réellement reçus. Aucune note moyenne ni compteur
+d'avis ne sera affiché sans fiche publique vérifiable.
 
 ### Carrousels
 
@@ -677,25 +746,28 @@ Pour en faire une **conversion secondaire** : créez une action de conversion
 la constante `CONVERSION_APPEL` de `index.html`. Tant qu'elle est vide,
 l'événement reste dans le dataLayer et rien n'est envoyé.
 
-### Tableau de prix
+### Section « Combien coûte un traitement de toiture ? »
 
-**Il est tout en bas, après la FAQ, et c'est délibéré.** Placé haut, il laissait
-le visiteur se disqualifier sur un chiffre avant d'avoir vu un seul chantier,
-un seul avis, ni la moindre explication de ce qu'on fait. Il arrive donc une
-fois que tout le reste a été lu.
+**Elle ne contient plus aucun chiffre.** Le tableau de prix au m² qui s'y
+trouvait a été retiré : il faisait double emploi avec l'estimateur et donnait
+gratuitement l'information que le formulaire échange contre des coordonnées.
 
-Le titre est une question — *Combien coûte un traitement de toiture ?* — parce
-que c'est la formulation dans laquelle le visiteur se reconnaît, et parce
-qu'elle capte la même requête sur les moteurs.
+À la place, trois cartes expliquent **ce qui fait varier le prix** — la surface
+réelle des versants, l'accessibilité du toit, l'état du support — sans citer un
+seul montant. Puis le paragraphe sur le démoussage qui laisse la tuile poreuse,
+et un CTA orange qui remonte au formulaire.
 
-Deux phrases précèdent le tableau : ce dont le prix dépend (surface réelle des
-versants, accessibilité du toit, état du support) et le fait que seule une
-visite gratuite permet de chiffrer. Sans elles, une fourchette au m² se lit
-comme un tarif ferme, et tout écart constaté ensuite passe pour une hausse.
+Elle reste **tout en bas, après la FAQ**, et c'est délibéré : placée haut, elle
+laissait le visiteur se disqualifier sur un chiffre avant d'avoir vu un seul
+chantier ni la moindre explication de ce qu'on fait.
 
 L'introduction porte `.section__sous-titre--long`, qui la passe au fer à
 gauche : un paragraphe centré au-delà de deux ou trois lignes se lit mal, l'œil
 devant rechercher le début de ligne à chaque retour.
+
+> **`TARIFS` est désormais la seule source de vérité des montants**, et elle
+> n'est lue que par l'estimateur. Si vous remettez des chiffres dans cette
+> section, vous créez une seconde source qui divergera.
 
 ### Instrumentation
 
