@@ -342,9 +342,16 @@ pixels rendus à la première question. Le titre reste dans le document, hors
 1. la médaille « Artisan assuré en décennale » ;
 2. un H1 concret — *Nettoyage et démoussage de toiture à [Ville]* ;
 3. la ligne *Devis gratuit, sans engagement* ;
-4. **le bouton d'appel**, pleine largeur, 64 px de haut, numéro en toutes
-   lettres ;
+4. **le bouton d'appel**, pleine largeur, 64 px de haut, libellé
+   *Parler à un couvreur* ;
 5. le formulaire, avec ses trois premières réponses.
+
+**La taille du titre suit la largeur, pas la hauteur d'écran.**
+`font-size:clamp(23px, 6.6vw, 29px)`. Un point de rupture en `max-height` s'en
+chargeait auparavant, si bien qu'un 360 × 800 — très courant sur Android —
+gardait 29 px et cassait *Nettoyage et démoussage* en deux, laissant
+*démoussage* seul sur sa ligne juste avant la coupure fixe. Le clamp fait tenir
+cette première ligne de 320 px à 440 px, vérifié sur sept tailles réelles.
 
 **Le titre est coupé à la main.** Un `<br class="coupe-mobile">` sépare
 *Nettoyage et démoussage* du reste, sous 760 px seulement — en deux colonnes la
@@ -621,14 +628,22 @@ Clarity répartit sa charge sur `a.clarity.ms` à `z.clarity.ms`, d'où le joker
 
 ### Appel téléphonique
 
-**L'en-tête dit « Appeler », pas le numéro.** Celui-ci est écrit en toutes
-lettres sur le gros bouton vert du hero, visible sans défiler : le répéter dans
-la barre coûtait toute sa largeur et forçait le nom de marque à se tronquer
-sous 360 px. Le lien porte un `aria-label` complet — *Appeler le
-07 86 50 55 80* — pour qu'un lecteur d'écran annonce la destination.
+**Les deux boutons du haut portent un libellé, pas le numéro** : *Appeler* dans
+l'en-tête, *Parler à un couvreur* sur le grand bouton vert du hero. Sur un
+téléphone, personne ne recopie dix chiffres — on appuie ; et un numéro répété
+deux fois en haut d'écran mangeait toute la largeur de la barre, forçant le nom
+de marque à se tronquer sous 360 px.
 
-La règle « le numéro n'est jamais porté par le seul lien » reste tenue : elle
-l'est par le bouton du hero, et `t-appel.mjs` le vérifie explicitement.
+Chacun porte un `aria-label` complet — *Appeler le 07 86 50 55 80*, *Parler à
+un couvreur au 07 86 50 55 80* — pour qu'un lecteur d'écran annonce la
+destination.
+
+> **Le numéro n'est pas perdu pour autant.** Il reste écrit en toutes lettres
+> **cinq fois** plus bas dans la page : bloc interlocuteur, FAQ, appel final,
+> pied de page, écran de confirmation. C'est ce qui sert à qui veut composer à
+> la main ou rappeler depuis un fixe — un cas réel sur une audience à 83 % de
+> 65 ans et plus. `t-appel.mjs` vérifie ce compte : si une refonte faisait
+> tomber le numéro de la page, le test échouerait.
 
 **Il n'y a plus de barre collante en bas d'écran.** Elle a été retirée : elle
 recouvrait en permanence 78 px de contenu et donnait à la page l'air comprimé.
