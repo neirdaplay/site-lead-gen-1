@@ -358,12 +358,6 @@ transition:background-color .12s ease,transform .12s ease}
 .bouton-appel:active{transform:translateY(1px)}
 @media (prefers-reduced-motion:reduce){.bouton-appel{transition:none}}
 
-/* Sortie secondaire, volontairement discrete : elle ne doit pas
-   disputer l'attention au bouton juste au-dessus. */
-.hero__vers-form{display:flex;align-items:center;justify-content:center;
-min-height:44px;margin-top:6px;font-size:15.5px;line-height:1.4;
-color:#C9D8E9;text-decoration:underline;text-underline-offset:3px}
-.hero__vers-form:hover{color:var(--blanc)}
 
 /* --- Carte formulaire --- */
 .formulaire{background:var(--blanc);color:var(--texte);border:1px solid rgba(255,255,255,.5);
@@ -805,24 +799,14 @@ padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
 overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .formulaire__accroche{display:none}
 
-/* La colonne de texte occupe le premier ecran a elle seule.
+/* Le bloc de titre reste colle en haut du hero.
 
-   C'est ce qui fait descendre le formulaire sous la ligne de
-   flottaison : sans cette hauteur, sa carte commencait vers 370 px et
-   la premiere question restait visible, alors que l'ecran d'arrivee ne
-   doit porter que le titre, la ligne et le bouton d'appel.
-
-   Le contenu est centre plutot que colle en haut : sur un grand
-   telephone il resterait sinon 400 px de photo vide sous le lien, ce
-   qui se lit comme un oubli. Centre, l'espace se repartit et le bouton
-   tombe au milieu de l'ecran, la ou le pouce l'attend.
-
-   100svh et non 100vh : sur mobile, vh compte la barre d'adresse
-   retractee, donc une hauteur qu'on n'a pas au chargement. La ligne vh
-   qui precede sert de repli aux navigateurs qui ignorent svh. */
-.hero__colonne--texte{display:flex;flex-direction:column;justify-content:center;
-min-height:calc(100vh - 130px);
-min-height:calc(100svh - 130px)}
+   Une version precedente lui donnait la hauteur du premier ecran, pour
+   que le formulaire commence sous la ligne de flottaison. Sur un vrai
+   telephone, avec la barre du navigateur en bas, ca laissait un grand
+   vide au-dessus du badge et le formulaire n'apparaissait plus du tout.
+   L'appel garde la premiere place par son poids visuel — pleine
+   largeur, 64 px, vert plein — pas en occupant l'ecran entier. */
 }
 
 /* Ecrans etroits : le chevron ajoute a droite coute une dizaine de
@@ -905,7 +889,6 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 .hero__titre{font-size:38px;min-height:calc(2 * 1.16em)}
 .hero__accroche{font-size:18px}
 .bouton-appel{max-width:420px}
-.hero__vers-form{justify-content:flex-start;max-width:420px}
 .formulaire{padding:26px 24px}
 .entete__interne{min-height:72px}
 }
@@ -1244,11 +1227,6 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       <a class="bouton-appel" href="tel:+33786505580" data-position="hero">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-tel"></use></svg>
         07 86 50 55 80
-      </a>
-
-      <a class="hero__vers-form" href="#devis"
-         data-action="aller-au-formulaire" data-emplacement="hero-lien">
-        Ou décrivez votre projet en ligne
       </a>
 
     </div>

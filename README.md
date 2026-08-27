@@ -336,34 +336,33 @@ pixels rendus à la première question. Le titre reste dans le document, hors
 
 ### L'écran d'arrivée
 
-**Le formulaire n'est plus le premier élément visuel.** Au-dessus de la ligne
-de flottaison, sur un écran de 360 px, on ne voit que quatre choses :
+**L'appel passe devant le formulaire**, sans le chasser de l'écran. Sur un
+écran de 360 × 640, sans défiler, on voit dans l'ordre :
 
 1. la médaille « Artisan assuré en décennale » ;
 2. un H1 concret — *Nettoyage et démoussage de toiture à [Ville]* ;
 3. la ligne *Devis gratuit, sans engagement* ;
 4. **le bouton d'appel**, pleine largeur, 64 px de haut, numéro en toutes
-   lettres.
-
-Puis un lien discret, *Ou décrivez votre projet en ligne*, qui fait défiler
-jusqu'au formulaire. Celui-ci commence sous la ligne de flottaison : seul le
-bord haut de sa carte dépasse, ce qui invite à faire défiler sans montrer de
-question.
+   lettres ;
+5. le formulaire, avec ses deux premières réponses.
 
 C'est un renversement assumé : 83 % de l'audience a 65 ans ou plus, et pour
 cette tranche le téléphone reste le geste naturel là où six étapes de
-formulaire demandent un effort.
+formulaire demandent un effort. Mais l'appel garde la première place **par son
+poids visuel** — pleine largeur, vert plein, deux fois la hauteur d'une carte
+de réponse — et non en occupant l'écran à lui seul.
 
-**Comment le formulaire est repoussé.** `.hero__colonne--texte` reçoit
-`min-height:calc(100svh - 130px)` sous 760 px, avec son contenu centré
-verticalement. Deux points à connaître avant d'y toucher :
+> **Ne redonnez pas au bloc de titre la hauteur du premier écran.** Une version
+> intermédiaire posait `min-height:calc(100svh - 130px)` sur
+> `.hero__colonne--texte`, contenu centré, pour que le formulaire commence sous
+> la ligne de flottaison. Sur un vrai téléphone, barre du navigateur comprise,
+> cela laissait un grand vide au-dessus du badge et le formulaire
+> n'apparaissait plus du tout. Le critère de recette est vérifié dans
+> `t-perf.mjs` en 320 × 568, 360 × 640 et 390 × 844 : le bouton d'appel entier
+> **et** la première réponse visible, les deux à la fois.
 
-- `100svh`, pas `100vh` : sur mobile, `vh` compte la barre d'adresse rétractée,
-  donc une hauteur dont on ne dispose pas au chargement. La déclaration `vh`
-  qui précède sert de repli aux navigateurs qui ignorent `svh`.
-- **Contenu centré, pas collé en haut** : sur un grand téléphone il resterait
-  sinon 400 px de photo vide sous le lien, ce qui se lit comme un oubli.
-  Centré, l'espace se répartit et le bouton tombe au milieu de l'écran.
+Il n'y a **pas** de lien « Ou décrivez votre projet en ligne » : il occupait
+une ligne pour dire ce que le formulaire juste en dessous montre déjà.
 
 > **Le vert #12B76A est bien celui demandé — mais le texte dessus est en bleu
 > nuit, pas en blanc.** Blanc sur #12B76A ne donne que **2,62:1**, sous les
