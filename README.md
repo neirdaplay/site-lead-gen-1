@@ -331,10 +331,50 @@ avancer automatiquement. Aucun bouton « suivant » sur les questions à choix.
 | 4 | Votre code postal | `code_postal` |
 | 5 | Vos coordonnées | `prenom`, `nom`, `telephone`, `email` *(facultatif)*, `consentement` |
 
-**Le formulaire tient sa promesse : il affiche vraiment une fourchette.** Le
-titre annonce « Votre estimation », l'étape 5 s'appelle « Votre estimation est
-prête », et l'écran suivant donne le montant. Il n'existe aucun chemin qui
-promette une estimation sans la donner.
+**Le formulaire tient sa promesse : il affiche vraiment une fourchette.** Il
+n'existe aucun chemin qui promette une estimation sans la donner.
+
+### Annoncer la récompense
+
+Un formulaire dont on ignore la contrepartie ne se remplit pas. Le prix qui
+attend au bout est donc annoncé **avant** qu'on demande quoi que ce soit :
+
+| Où | Quoi |
+|---|---|
+| `<h1>` | *Combien coûte le traitement de votre toiture en 2026 ?* |
+| Bouton principal du hero | *Obtenir ma fourchette de prix* |
+| Titre de la carte | *Votre fourchette de prix* |
+| Sous-titre de la carte | *5 questions. Votre estimation s'affiche à la fin, avant tout appel.* |
+| Liséré sous le hero | *Fourchette de prix immédiate*, en première position |
+| Bandeau `.recompense` | un message par étape |
+
+**Le bouton d'appel est passé en second, en contour vert sur blanc.** Le chemin
+principal est devenu l'estimation ; l'appel reste à un doigt, mais ce n'est
+plus le choix par défaut.
+
+**Le bandeau `.recompense` est un seul élément, cinq messages** (`MESSAGES_ETAPE`
+dans le script) : l'étape 1 rappelle ce qui attend, les suivantes rapprochent la
+récompense. Deux bandeaux verts empilés auraient dit la même chose deux fois à
+vingt pixels d'écart. Il disparaît avec la barre de progression sur les écrans
+de sortie.
+
+Sur l'**étape 5**, l'encadré `.pret` (« ✓ Votre estimation est prête ») remplace
+le titre de l'étape, qui disait exactement la même chose : le `<h3>` reste dans
+le document en `sr-only`, parce qu'il structure l'étape pour les lecteurs
+d'écran.
+
+> **Le titre et le sous-titre de la carte sont désormais visibles sur mobile.**
+> Ils y étaient masqués pour gagner une cinquantaine de pixels — mais ce sont
+> eux qui annoncent la récompense. En contrepartie, **la première réponse n'est
+> plus au-dessus de la ligne de flottaison en 320 × 568** : six annonces
+> successives y remplissent l'écran. Elle l'est encore en 360 × 640 et
+> au-delà, ce que `t-perf.mjs` vérifie ; en 320 il ne contrôle plus que la
+> présence du mot *estimation* ou *fourchette* sans défiler.
+
+> **Le bandeau est en 13 px**, en dessous des 15 px retenus ailleurs pour une
+> audience de 65 ans et plus. C'est un rappel qui accompagne, pas un texte à
+> lire, et le contraste mesuré est de **5,06:1**. Le passer à 15 px est une
+> ligne dans `.recompense`.
 
 ### Les montants : `TARIFS`, source unique
 

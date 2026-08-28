@@ -371,6 +371,12 @@ text-decoration:none;box-shadow:0 6px 20px rgba(18,183,106,.3);
 transition:background-color .12s ease,transform .12s ease}
 .bouton-appel svg{flex:0 0 auto;width:24px;height:24px}
 .bouton-appel:hover{background:#0FA25D}
+/* Second choix : contour vert sur blanc. Le vert fonce du site, et non
+   le #12B76A du bouton plein — sur blanc celui-ci ne donne que 2,3:1,
+   illisible. #0A7A46 donne 5,41:1. */
+.bouton-appel--secondaire{margin-top:10px;background:var(--blanc);color:var(--vert-fonce);
+border:2px solid var(--vert-fonce);box-shadow:none;font-size:18px;min-height:56px}
+.bouton-appel--secondaire:hover{background:var(--vert-pale)}
 .bouton-appel:active{transform:translateY(1px)}
 @media (prefers-reduced-motion:reduce){.bouton-appel{transition:none}}
 
@@ -386,6 +392,27 @@ border-radius:14px;box-shadow:0 10px 30px rgba(4,15,30,.28);padding:18px 18px 20
 .progression__piste{height:6px;border-radius:99px;background:#E7ECF3;overflow:hidden}
 .progression__barre{height:100%;width:14%;border-radius:99px;background:var(--vert);transition:width .28s ease}
 @media (prefers-reduced-motion:reduce){.progression__barre{transition:none}}
+/* Bandeau de recompense : ce que le visiteur obtiendra au bout.
+   13 px comme demande — c'est en dessous des 15 px retenus ailleurs
+   pour une audience de 65 ans et plus, mais il s'agit d'un rappel qui
+   accompagne, pas d'un texte a lire. Le vert fonce sur vert pale tient
+   a 5,2:1, donc largement au-dessus du seuil. */
+.recompense{display:flex;align-items:center;gap:8px;margin:11px 0 0;
+padding:8px 11px;border-radius:var(--rayon-s);
+background:var(--vert-pale);border:1px solid #B7E7CE;
+font-size:13px;font-weight:600;line-height:1.35;color:var(--vert-fonce)}
+.recompense svg{flex:0 0 auto;width:16px;height:16px}
+.recompense[hidden]{display:none}
+
+/* Etape 5 : l'encadre remplace le titre de l'etape, qui disait deja
+   la meme chose. */
+.pret{margin-bottom:16px;padding:13px 14px;border-radius:var(--rayon-s);
+background:var(--vert-pale);border:1px solid #A9E7C7}
+.pret__titre{display:flex;align-items:center;gap:8px;margin:0;
+font-size:16.5px;font-weight:800;color:var(--vert-fonce);line-height:1.3}
+.pret__titre svg{flex:0 0 auto;width:18px;height:18px}
+.pret__texte{margin:5px 0 0;font-size:15px;line-height:1.45;color:var(--texte)}
+
 .etape{margin-top:18px}
 .etape[hidden]{display:none}
 .etape__titre{margin:0 0 4px;font-size:17.5px;font-weight:700;color:var(--titre);line-height:1.3}
@@ -839,9 +866,13 @@ padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
    ecran, car c'est lui qui nomme le formulaire pour les lecteurs
    d'ecran via aria-labelledby. */
 @media (max-width:759px){
-.formulaire__titre{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
-overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.formulaire__accroche{display:none}
+/* Le titre et l'accroche etaient masques ici pour gagner une
+   cinquantaine de pixels. Ils reviennent : c'est precisement eux qui
+   annoncent la recompense, et un formulaire dont on ignore la
+   contrepartie ne se remplit pas. Le titre est un cran plus petit
+   qu'en bureau pour limiter la reprise de place. */
+.formulaire__titre{font-size:17px}
+.formulaire__accroche{margin-bottom:11px;font-size:13px}
 
 /* Le bloc de titre reste colle en haut du hero.
 
@@ -872,11 +903,16 @@ overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 /* Ecrans courts : on resserre, mais la medaille reste — c'est la
    reassurance principale, et elle tient sur une ligne. */
 @media (max-height:700px) and (max-width:600px){
-.hero__interne{padding-block:14px 24px;gap:16px}
+.hero__interne{padding-block:12px 18px;gap:14px}
 .hero__titre{margin:0}
-.hero__accroche{margin-top:8px;font-size:15.5px}
-.bouton-appel{min-height:60px;margin-top:14px;font-size:20px}
-.formulaire{padding:15px 15px 17px}
+.hero__accroche{margin-top:7px;font-size:15px}
+.bouton-appel{min-height:56px;margin-top:12px;font-size:18px}
+.bouton-appel--secondaire{min-height:50px;margin-top:8px;font-size:16.5px}
+.hero__badge--medaille{padding:4px 10px 4px 7px;font-size:11.5px}
+.formulaire{padding:14px 14px 16px}
+.formulaire__accroche{margin-bottom:9px}
+.recompense{margin-top:9px;padding:7px 10px}
+.etape{margin-top:14px}
 }
 @media (min-width:640px){
 .diptyque{grid-template-columns:repeat(2,1fr)}
@@ -1168,6 +1204,11 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     <path d="M3.4 4.6h17.2M3.4 3.5v2.2M20.6 3.5v2.2"/>
   </symbol>
   <!-- Etape 2 : plus de 150 m2 — meme famille, avec un « + » -->
+  <!-- Bandeau de recompense : le jeu n'avait ni cadeau ni etiquette -->
+  <symbol id="i-etiquette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11.4 3H4.6A1.6 1.6 0 0 0 3 4.6v6.8c0 .42.17.83.47 1.13l8 8a1.6 1.6 0 0 0 2.26 0l6.8-6.8a1.6 1.6 0 0 0 0-2.26l-8-8A1.6 1.6 0 0 0 11.4 3Z"/>
+    <path d="M7.4 7.4h.01"/>
+  </symbol>
   <symbol id="i-carre-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <rect x="2.6" y="7.2" width="14.6" height="11.4" rx="1"/>
     <path d="M2.6 4.6h14.6M2.6 3.5v2.2M17.2 3.5v2.2"/>
@@ -1271,9 +1312,12 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
            telephone. Le chiffrage ferme, lui, suppose la visite — c'est
            ce que dit la section des prix, et les deux ne doivent pas se
            contredire. -->
-      <p class="hero__accroche">
-        <b>Estimation en 2 minutes.</b> Gratuit, sans engagement.
-      </p>
+      <!-- Une ligne, pas deux. « Estimation en 2 minutes » est desormais
+           dit par le sous-titre de la carte, cent pixels plus bas et de
+           facon plus precise (« 5 questions. Votre estimation s'affiche
+           a la fin »). Le repeter ici ne convainquait personne de plus
+           et repoussait la premiere question d'autant. -->
+      <p class="hero__accroche"><b>Gratuit et sans engagement.</b></p>
 
       <!-- ============================================================
            L'appel passe devant le formulaire.
@@ -1291,8 +1335,22 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
            pour qui veut composer a la main ou depuis un fixe, et
            l'aria-label le donne aux lecteurs d'ecran.
            ============================================================ -->
-      <a class="bouton-appel" href="tel:+33786505580" data-position="hero"
-         aria-label="Parler à un couvreur au 07 86 50 55 80">
+      <!-- L'estimation passe devant, l'appel reste a un doigt.
+
+           Le bouton d'appel etait seul et disait « Parler a un
+           couvreur » : rien n'annoncait qu'un prix attendait au bout du
+           formulaire, et personne ne s'engage dans un echange dont il
+           ignore la contrepartie. Le libelle principal nomme donc la
+           recompense, et l'appel passe en second, en contour : toujours
+           la, mais plus le chemin par defaut. -->
+      <button type="button" class="bouton-appel" id="vers-estimation"
+              data-action="aller-au-formulaire" data-emplacement="hero-principal">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-etiquette"></use></svg>
+        Obtenir ma fourchette de prix
+      </button>
+
+      <a class="bouton-appel bouton-appel--secondaire" href="tel:+33786505580"
+         data-position="hero" aria-label="Parler à un couvreur au 07 86 50 55 80">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-tel"></use></svg>
         Parler à un couvreur
       </a>
@@ -1311,8 +1369,9 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
             aria-labelledby="formulaire-titre">
         <input type="hidden" name="form-name" value="lead">
 
-        <h2 class="formulaire__titre" id="formulaire-titre">Votre estimation</h2>
-        <p class="formulaire__accroche">5 questions, 2 minutes. Aucun engagement.</p>
+        <h2 class="formulaire__titre" id="formulaire-titre">Votre fourchette de prix</h2>
+        <p class="formulaire__accroche">5 questions. Votre estimation s’affiche à la
+          fin, avant tout appel.</p>
 
         <div id="progression" role="progressbar" aria-valuemin="0" aria-valuemax="100"
              aria-valuenow="17" aria-valuetext="Étape 1 sur 6" aria-label="Progression du formulaire">
@@ -1324,6 +1383,18 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
             <div class="progression__barre" id="prog-barre" style="width:17%"></div>
           </div>
         </div>
+
+        <!-- Un seul bandeau, cinq messages.
+
+             Le message de l'etape 1 rappelle ce qui attend ; ceux des
+             etapes 2 a 5 rapprochent la recompense a mesure qu'on
+             avance. Deux bandeaux verts empiles auraient dit la meme
+             chose deux fois a vingt pixels d'ecart. Les textes vivent
+             dans MESSAGES_ETAPE, cote script. -->
+        <p class="recompense" id="recompense">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-etiquette"></use></svg>
+          <span id="recompense-texte">Votre estimation vous attend à l’étape 5</span>
+        </p>
 
         <p class="sr-only" id="formulaire-annonce" role="status" aria-live="polite"></p>
 
@@ -1415,9 +1486,18 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
         <!-- ---------- Etape 5 : coordonnees ---------- -->
         <fieldset class="etape" data-etape="5" hidden>
           <legend class="sr-only">Étape 5 sur 5 : vos coordonnées</legend>
-          <h3 class="etape__titre">Votre estimation est prête</h3>
-          <p class="etape__aide">Où souhaitez-vous la recevoir ? Un seul technicien
-            vous contacte sous 24 à 48 h ouvrées.</p>
+          <!-- Le titre passe hors ecran : l'encadre ci-dessous dit
+               exactement la meme chose, en plus visible. Il reste dans
+               le document parce qu'il structure l'etape pour les
+               lecteurs d'ecran. -->
+          <h3 class="etape__titre sr-only">Votre estimation est prête</h3>
+          <div class="pret">
+            <p class="pret__titre">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+              Votre estimation est prête
+            </p>
+            <p class="pret__texte">Renseignez vos coordonnées pour l’afficher.</p>
+          </div>
 
           <div class="champ champ--duo">
             <div>
@@ -1629,6 +1709,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
          en sont retires : la ligne sous le titre le dit deja, et le
          repeter a cent pixels d'ecart ne convainc personne de plus. -->
     <ul class="confiance__liste">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Fourchette de prix immédiate</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Rappel sous 24 à 48 h ouvrées</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Devis chiffré après visite</li>
       <li><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-check"></use></svg>Coordonnées jamais revendues</li>
@@ -2861,6 +2942,18 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
        on affiche un prix au metre carre plutot qu'un total invente. */
   };
 
+  /* Ce que le bandeau vert annonce a chaque etape. Un seul element,
+     cinq textes : l'etape 1 rappelle la recompense, les suivantes la
+     rapprochent. Deux bandeaux empiles auraient dit la meme chose deux
+     fois a vingt pixels d'ecart. */
+  var MESSAGES_ETAPE = {
+    1: 'Votre estimation vous attend à l\u2019étape 5',
+    2: 'Plus qu\u2019une info : la surface détermine le prix',
+    3: 'Estimation débloquée dans 2 questions',
+    4: 'Dernière étape avant votre fourchette',
+    5: 'Votre estimation est calculée. Où l\u2019envoyer ?'
+  };
+
   var NB_ETAPES = 5;
   /* Les deux dernieres etapes sont designees par leur role, jamais par
      leur numero : une renumerotation ne peut alors plus les oublier. */
@@ -3118,6 +3211,8 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
   var etiquette = $('#prog-etiquette');
   var pourcent = $('#prog-pourcent');
   var progression = $('#progression');
+  var recompense = $('#recompense');
+  var recompenseTexte = $('#recompense-texte');
   var boutonRetour = $('#retour-etape');
   var annonce = $('#formulaire-annonce');
   var ecranLocataire = $('#ecran-locataire');
@@ -3184,6 +3279,15 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
     }
     if (ecranLocataire) { ecranLocataire.hidden = true; }
     if (ecranHorsZone) { ecranHorsZone.hidden = true; }
+
+    /* Le bandeau de recompense accompagne les cinq etapes, et
+       disparait avec la progression sur les ecrans de sortie. */
+    if (recompense) {
+      recompense.hidden = false;
+      if (recompenseTexte && MESSAGES_ETAPE[n]) {
+        recompenseTexte.textContent = MESSAGES_ETAPE[n];
+      }
+    }
     if (ecranResultat) { ecranResultat.hidden = true; }
 
     etape = n;
@@ -3261,6 +3365,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       etapes[i].hidden = true;
     }
     if (progression) { progression.hidden = true; }
+    if (recompense) { recompense.hidden = true; }
     if (boutonRetour) { boutonRetour.hidden = true; }
     if (ecranLocataire) { ecranLocataire.hidden = (element !== ecranLocataire); }
     if (ecranHorsZone) { ecranHorsZone.hidden = (element !== ecranHorsZone); }
@@ -3786,12 +3891,23 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       var obs = new PerformanceObserver(function (liste) {
         var entrees = liste.getEntries();
         dernier = entrees[entrees.length - 1];
+        /* Si le chargement est deja fini, c'est cette entree qui
+           debloque l'envoi. */
+        if (chargee) { auRepos(envoyer); }
       });
       obs.observe({ type: 'largest-contentful-paint', buffered: true });
     } catch (e) { return; }
 
+    /* Deux conditions, dans un ordre qu'on ne maitrise pas : la page
+       doit avoir fini de charger, et le LCP doit avoir ete observe au
+       moins une fois. Sur une machine chargee, l'evenement load peut
+       arriver AVANT la premiere entree LCP — une version precedente
+       renoncait alors definitivement, et rien n'etait jamais emis.
+       C'est donc le dernier des deux qui declenche l'envoi. */
+    var chargee = false;
+
     function envoyer() {
-      if (envoye || !dernier) { return; }
+      if (envoye || !chargee || !dernier) { return; }
       envoye = true;
       try { obs.disconnect(); } catch (e) {}
       var cible = dernier.element;
@@ -3801,11 +3917,14 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
           (cible.className ? '.' + String(cible.className).split(' ')[0] : '')) : 'inconnu'
       });
     }
+
+    /* Un onglet qu'on quitte fige le LCP : on envoie ce qu'on a. */
     document.addEventListener('visibilitychange', function () {
-      if (document.visibilityState === 'hidden') { envoyer(); }
+      if (document.visibilityState === 'hidden') { chargee = true; envoyer(); }
     });
-    if (document.readyState === 'complete') { auRepos(envoyer); }
-    else { window.addEventListener('load', function () { auRepos(envoyer); }); }
+    function marquerChargee() { chargee = true; auRepos(envoyer); }
+    if (document.readyState === 'complete') { marquerChargee(); }
+    else { window.addEventListener('load', marquerChargee); }
   }
 
   /* scroll_25 / 50 / 75 : chaque palier une fois et une seule.
