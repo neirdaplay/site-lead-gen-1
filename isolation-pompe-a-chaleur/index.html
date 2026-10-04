@@ -8,12 +8,12 @@
 <!-- Page de destination publicitaire : pas d'indexation. -->
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0B7A4B">
-<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 
 <!-- ==================================================================
      Page d'atterrissage « Isolation / Pompe à chaleur — Nord (59) »
      Fichier autonome : HTML + CSS + JS, aucune dépendance externe,
-     compatible avec la CSP stricte de netlify.toml.
+     compatible avec la CSP stricte de vercel.json.
 
      Public visé : propriétaires de 45 à 70 ans. D'où :
        - corps de texte à 18 px, contrastes forts, boutons larges ;
@@ -28,8 +28,8 @@
      ================================================================== -->
 
 <style>
-@font-face{font-family:"DM Sans Variable";font-style:normal;font-display:swap;font-weight:100 1000;src:url("../assets/fonts/dm-sans-latin-wght-normal.woff2") format("woff2-variations");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"DM Sans Variable";font-style:normal;font-display:swap;font-weight:100 1000;src:url("../assets/fonts/dm-sans-latin-ext-wght-normal.woff2") format("woff2-variations");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:"DM Sans Variable";font-style:normal;font-display:swap;font-weight:100 1000;src:url("/assets/fonts/dm-sans-latin-wght-normal.woff2") format("woff2-variations");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"DM Sans Variable";font-style:normal;font-display:swap;font-weight:100 1000;src:url("/assets/fonts/dm-sans-latin-ext-wght-normal.woff2") format("woff2-variations");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C0}
 :root{
   --vert:#10B96A;
   --vert-vif:#1FD27E;
@@ -82,8 +82,8 @@ html,body{overflow-x:hidden}
 .hero{position:relative;color:#fff;overflow:hidden;background:#0A1512}
 /* Photo de chantier en fond, très assombrie : on la devine, elle ne
    concurrence pas le texte. */
-.hero__photo{position:absolute;inset:0;background:url("../assets/img/hero-ite-800.webp") center 30%/cover no-repeat;opacity:.38}
-@media (min-width:760px){.hero__photo{background-image:url("../assets/img/hero-ite-1600.webp")}}
+.hero__photo{position:absolute;inset:0;background:url("/assets/img/hero-ite-800.webp") center 30%/cover no-repeat;opacity:.38}
+@media (min-width:760px){.hero__photo{background-image:url("/assets/img/hero-ite-1600.webp")}}
 .hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(8,18,16,.82) 0%,rgba(8,18,16,.55) 55%,rgba(8,18,16,.35) 100%),linear-gradient(0deg,rgba(8,18,16,.55),transparent 40%)}
 .entete{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0}
 .logo{display:flex;align-items:flex-start;gap:2px;color:#fff;text-decoration:none;font-weight:700;font-size:26px;letter-spacing:-.035em;line-height:1}
@@ -343,8 +343,8 @@ html,body{overflow-x:hidden}
           <p class="progression__texte" id="progression-texte">Question 1 sur 8</p>
         </div>
         <div class="carte-form__corps">
-          <form id="form-lead" name="lead-renov" method="POST" action="./" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-            <input type="hidden" name="form-name" value="lead-renov">
+          <form id="form-lead" name="lead-renov" method="POST" action="/api/lead" novalidate>
+            <input type="hidden" name="formulaire" value="renov">
             <p class="hp"><label>Ne pas remplir <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
             <input type="hidden" name="utm_source"><input type="hidden" name="utm_medium"><input type="hidden" name="utm_campaign"><input type="hidden" name="utm_content"><input type="hidden" name="utm_term"><input type="hidden" name="fbclid"><input type="hidden" name="gclid"><input type="hidden" name="page"><input type="hidden" name="revenus">
 
@@ -452,7 +452,7 @@ html,body{overflow-x:hidden}
                 <input id="email" name="email" type="email" autocomplete="email" placeholder="vous@exemple.fr">
                 <p class="champ__erreur" id="err-email">Cette adresse e-mail semble incomplète.</p>
               </div>
-              <label class="consent"><input type="checkbox" id="consent" name="consentement" value="oui" required><span>J'accepte d'être rappelé(e) au sujet de mon projet. Mes données ne sont ni revendues ni utilisées pour du démarchage. <a href="../confidentialite.html" target="_blank" rel="noopener">En savoir plus</a></span></label>
+              <label class="consent"><input type="checkbox" id="consent" name="consentement" value="oui" required><span>J'accepte d'être rappelé(e) au sujet de mon projet. Mes données ne sont ni revendues ni utilisées pour du démarchage. <a href="/confidentialite" target="_blank" rel="noopener">En savoir plus</a></span></label>
               <p class="champ__erreur" id="err-consent">Cochez la case pour que l'on puisse vous rappeler.</p>
             </fieldset>
 
@@ -471,7 +471,7 @@ html,body{overflow-x:hidden}
             <p id="merci-revenus" style="font-size:16px;color:var(--gris)"></p>
           </div>
 
-          <p class="mentions-form" id="mentions-form">Vos réponses restent confidentielles. <a href="../mentions-legales.html">Mentions légales</a> · <a href="../confidentialite.html">Confidentialité</a></p>
+          <p class="mentions-form" id="mentions-form">Vos réponses restent confidentielles. <a href="/mentions-legales">Mentions légales</a> · <a href="/confidentialite">Confidentialité</a></p>
         </div>
       </div>
     </div>
@@ -633,7 +633,7 @@ html,body{overflow-x:hidden}
     <a class="logo" href="#top">Rénov'<b>Nord</b><i aria-hidden="true">✦</i></a>
     <p>Rénov'Nord met en relation les propriétaires du Nord (59) avec des artisans certifiés RGE pour leurs travaux d'isolation et de chauffage, et les accompagne dans leurs demandes d'aides.</p>
     <p style="font-size:13px">* Selon les revenus du foyer et les travaux réalisés, dans la limite des barèmes officiels en vigueur.</p>
-    <nav><a href="../mentions-legales.html">Mentions légales</a><a href="../confidentialite.html">Confidentialité</a><a href="../conditions-generales.html">Conditions générales</a></nav>
+    <nav><a href="/mentions-legales">Mentions légales</a><a href="/confidentialite">Confidentialité</a><a href="/conditions-generales">Conditions générales</a></nav>
   </div>
 </footer>
 
@@ -725,8 +725,7 @@ html,body{overflow-x:hidden}
       '<label class="option"><input type="radio" name="revenus_choix" value="Je ne sais pas"><span>Je ne sais pas</span></label>';
     $('#choix-revenus').innerHTML = html;
   }
-  /* Le champ doit exister dans le HTML initial pour que Netlify Forms le
-     connaisse : on construit une première fois au chargement. */
+  /* Première construction au chargement (foyer de 2 par défaut). */
   construireRevenus();
 
   function afficher(i) {
@@ -815,7 +814,7 @@ html,body{overflow-x:hidden}
     return !premier;
   }
 
-  /* ---------- Envoi (Netlify Forms) ---------- */
+  /* ---------- Envoi (fonction Vercel api/lead.js) ---------- */
   var envoi = false;
   form.addEventListener('submit', function (ev) {
     ev.preventDefault();
@@ -834,7 +833,7 @@ html,body{overflow-x:hidden}
     btnEnvoyer.disabled = true;
     btnEnvoyer.textContent = 'Envoi en cours…';
 
-    fetch(window.location.pathname, {
+    fetch('/api/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams(new FormData(form)).toString()

@@ -35,7 +35,7 @@ au-dessus du centre : sur une photo de maison la toiture est toujours en haut,
 et un recadrage centré l'aurait coupée.
 
 **Attention à l'extension.** Plusieurs fichiers ont été déposés en `.JPG`
-majuscules. Netlify distingue la casse, contrairement à Windows : ces images
+majuscules. Vercel distingue la casse, contrairement à Windows : ces images
 s'affichaient en local et auraient renvoyé une **404 en ligne**. Elles ont été
 renommées en minuscules. Vérifiez ce point à chaque nouvel envoi.
 

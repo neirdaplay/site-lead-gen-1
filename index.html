@@ -1357,7 +1357,7 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 
     </div>
 
-    <!-- ============ FORMULAIRE — 7 etapes, Netlify Forms ============ -->
+    <!-- ============ FORMULAIRE — 7 etapes, envoi vers /api/lead ============ -->
     <!-- Sur mobile le formulaire vient AVANT les puces, pour que la
          premiere question soit visible sans defiler. Les puces sont
          donc sorties de la colonne de texte et placees apres, en
@@ -1365,9 +1365,9 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
          remet a gauche via grid-template-areas. -->
     <div class="hero__colonne hero__colonne--form" id="devis">
       <form class="formulaire" id="formulaire-devis" name="lead" method="POST"
-            data-netlify="true" netlify-honeypot="bot-field" novalidate
+            action="/api/lead" novalidate
             aria-labelledby="formulaire-titre">
-        <input type="hidden" name="form-name" value="lead">
+        <input type="hidden" name="formulaire" value="toiture">
 
         <h2 class="formulaire__titre" id="formulaire-titre">Votre fourchette de prix</h2>
         <p class="formulaire__accroche">5 questions. Votre estimation s’affiche à la
@@ -2853,23 +2853,9 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
 </div>
 
 <!-- ==================================================================
-     Pas de formulaire caché en doublon : c'est volontaire.
-
-     Netlify analyse index.html au déploiement pour détecter les
-     formulaires. Le formulaire visible #formulaire-devis porte
-     data-netlify="true" et contient déjà la totalité des 26 champs
-     en dur dans le HTML — y compris les <input type="hidden"> que le
-     script remplit, dont estimation_basse et estimation_haute que
-     l'estimateur renseigne avant l'envoi. Le doublon serait donc
-     redondant, et deux
-     <form name="lead"> sur la même page rendaient la détection
-     Netlify indéterminée : c'est ce qui faisait échouer l'envoi.
-
-     Rappel : la détection des formulaires doit être ACTIVÉE dans
-     l'interface Netlify (onglet Forms > Usage and configuration >
-     Form detection > Enable form detection).
-     Elle est désactivée par défaut sur les nouveaux sites, et sans
-     elle le POST sur / répond 404. Voir README.md.
+     Le formulaire #formulaire-devis est envoyé en JavaScript (fetch)
+     vers la fonction Vercel /api/lead, qui transmet la demande sur
+     Telegram, par e-mail et/ou vers un webhook. Voir README.md.
      ================================================================== -->
 
 <noscript>
@@ -3008,12 +2994,12 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
      clic sur le bouton d'envoi. Nous ne l'utilisons pas, et c'est
      deliberé — un clic n'est pas un lead. Le formulaire peut echouer
      apres le clic : refus du serveur, coupure reseau, formulaire non
-     detecte par Netlify. Compter le clic reviendrait a declarer des
+     recu par le serveur. Compter le clic reviendrait a declarer des
      conversions fantomes, sur lesquelles les encheres automatiques
      apprendraient.
 
      signalerConversion() est donc appelee un cran plus loin, quand
-     Netlify a repondu que la demande est enregistree. Une conversion
+     le serveur a repondu que la demande est transmise. Une conversion
      comptee = un lead reellement recu. L'event_callback de l'extrait,
      qui sert a differer une navigation, n'a pas lieu d'etre : la page
      ne quitte pas, elle affiche l'ecran de confirmation. */
@@ -3642,11 +3628,8 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       return;
     }
 
-    /* Netlify Forms attend le POST sur l'URL de la page qui porte le
-       formulaire, pas sur une route dediee. On vise donc le chemin
-       courant, ce qui reste juste meme si la page est servie ailleurs
-       qu'a la racine. */
-    var cible = window.location.pathname || '/';
+    /* Fonction serverless Vercel : api/lead.js. */
+    var cible = '/api/lead';
 
     fetch(cible, {
       method: 'POST',
@@ -3654,14 +3637,13 @@ url('assets/img/hero-couvreur.jpg') type('image/jpeg'))}
       body: corps
     }).then(function (reponse) {
       if (!reponse.ok) {
-        /* 404 ou 405 = Netlify n'a pas enregistre le formulaire :
-           detection des formulaires desactivee dans l'interface, ou
-           deploiement anterieur a l'ajout de data-netlify. */
+        /* 502 = aucun canal de notification n'a accepte le lead :
+           variables d'environnement Vercel absentes ou erronees.
+           Voir README.md. */
         if (window.console && console.error) {
           console.error('Envoi refuse par le serveur : HTTP ' + reponse.status +
-            ' sur ' + cible + '. Si 404 ou 405 : dans Netlify, onglet Forms > ' +
-            'Usage and configuration > Form detection > Enable form detection, ' +
-            'puis redeployer le site.');
+            ' sur ' + cible + '. Si 502 : verifier les variables ' +
+            'd\'environnement dans Vercel (Settings > Environment Variables).');
         }
         echec(null, reponse.status);
         return;

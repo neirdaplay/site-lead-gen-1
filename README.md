@@ -15,10 +15,10 @@ l'écran dans ce cas.
 ## Table des matières
 
 1. [Arborescence](#1-arborescence)
-2. [Variables d'environnement Netlify](#2-variables-denvironnement-netlify)
+2. [Variables d'environnement Vercel](#2-variables-denvironnement-vercel)
 3. [Notification Telegram](#3-notification-telegram)
-4. [Notification e-mail Netlify Forms](#4-notification-e-mail-netlify-forms)
-5. [Déploiement](#5-déploiement)
+4. [E-mail et webhook](#4-e-mail-et-webhook)
+5. [Déploiement sur Vercel](#5-déploiement-sur-vercel)
 6. [À compléter avant mise en ligne](#6-à-compléter-avant-mise-en-ligne)
 7. [Le formulaire](#7-le-formulaire)
 8. [Détection de ville](#8-détection-de-ville)
@@ -32,40 +32,66 @@ l'écran dans ce cas.
 ## 1. Arborescence
 
 ```
-index.html                             tout le site : HTML + CSS + JS
+index.html                             page toiture : HTML + CSS + JS
+isolation-pompe-a-chaleur/index.html   page isolation / pompe à chaleur (59)
 mentions-legales.html                  page autonome, CSS minimal inline
 confidentialite.html                   page autonome, CSS minimal inline
 conditions-generales.html              page autonome, CSS minimal inline
-assets/img/                            visuels (gabarits gris à remplacer)
-netlify/functions/
-  submission-created.js                notification Telegram (seul fichier serveur)
-netlify.toml                           publication, en-têtes, redirections
+assets/img/                            visuels
+assets/fonts/                          police DM Sans (licence OFL), auto-hébergée
+api/lead.js                            fonction serverless : reçoit les formulaires
+vercel.json                            en-têtes de sécurité, URL propres, redirections
 README.md
 ```
 
 Les trois pages légales sont obligatoires pour la validation Google Ads. Elles
 sont liées depuis le pied de page de chaque page.
 
-`netlify/functions/submission-created.js` est le **seul** fichier serveur. Son
-nom est réservé par Netlify : la fonction se déclenche automatiquement à chaque
-soumission acceptée par Netlify Forms. Elle n'est jamais appelée depuis
-`index.html`.
+`api/lead.js` est le **seul** fichier serveur. Les deux formulaires y envoient
+leurs réponses en `POST /api/lead`, avec un champ caché `formulaire`
+(`toiture` ou `renov`) qui choisit le format du message.
+
+URL en ligne (grâce à `cleanUrls` dans `vercel.json`, sans `.html`) :
+
+| Page | URL |
+|---|---|
+| Toiture | `/` |
+| Isolation / pompe à chaleur | `/isolation-pompe-a-chaleur` |
+| Pages légales | `/mentions-legales`, `/confidentialite`, `/conditions-generales` (et `/cgu`) |
 
 ---
 
-## 2. Variables d'environnement Netlify
+## 2. Variables d'environnement Vercel
 
-À créer dans **Site configuration → Environment variables**. **Aucune clé ne
-doit être committée** — `.gitignore` bloque déjà `.env`.
+À créer dans **Project → Settings → Environment Variables** (environnement
+*Production*, et *Preview* si vous testez sur les URL de prévisualisation).
+**Aucune clé ne doit être committée** — `.gitignore` bloque déjà `.env`.
 
-| Variable | Obligatoire | Rôle |
+| Variable | Canal | Rôle |
 |---|---|---|
-| `TELEGRAM_BOT_TOKEN` | oui, pour la notification | Jeton du bot, donné par `@BotFather` |
-| `TELEGRAM_CHAT_ID` | oui, pour la notification | Identifiant du salon ou de la conversation qui reçoit les alertes |
+| `TELEGRAM_BOT_TOKEN` | Telegram | Jeton du bot, donné par `@BotFather` |
+| `TELEGRAM_CHAT_ID` | Telegram | Salon ou conversation qui reçoit les alertes |
+| `RESEND_API_KEY` | E-mail | Clé API du service Resend |
+| `LEAD_EMAIL_TO` | E-mail | Adresse(s) qui reçoivent les leads, séparées par des virgules |
+| `LEAD_EMAIL_FROM` | E-mail (facultatif) | Expéditeur, ex. `Leads <leads@votre-domaine.fr>` (domaine à vérifier dans Resend) |
+| `LEAD_WEBHOOK_URL` | Webhook | URL Make / Zapier / Google Apps Script / CRM qui reçoit le lead en JSON |
 
-Si l'une des deux manque, la fonction journalise un avertissement et retourne
-quand même `200` : **le lead reste enregistré dans Netlify Forms**. Une
-notification ratée ne fait jamais perdre un lead.
+**Important — différence avec Netlify :** Vercel ne stocke pas les
+formulaires. Un lead n'existe que s'il est arrivé sur au moins un canal.
+Configurez-en **au moins deux** (par exemple Telegram + webhook vers un Google
+Sheet), pour qu'une panne de l'un ne fasse rien perdre.
+
+Comportement de `api/lead.js` :
+
+- au moins un canal a accepté → `200`, le visiteur voit l'écran de remerciement ;
+- aucun canal configuré ou tous en échec → `502`, le visiteur voit un message
+  d'erreur (et non un faux « merci »). Le lead est alors écrit dans les
+  journaux de la fonction (**Vercel → Logs**) en dernier recours ;
+- téléphone invalide → `400` ;
+- champ anti-robot `bot-field` rempli → `200` sans rien transmettre.
+
+Après avoir ajouté ou modifié une variable, **redéployez** : les fonctions ne
+lisent les variables qu'au déploiement.
 
 ---
 
@@ -83,18 +109,18 @@ notification ratée ne fait jamais perdre un lead.
 ### Format du message
 
 ```
-🔔 Nouveau lead toiture
+🔔 Nouveau lead toiture                🔔 Nouveau lead isolation / PAC
 
-Projet : Reprotection de toiture
-Surface : 100 à 150 m²
-Délai : Urgent (fuite en cours)
-Code postal : 59310
-
+Projet : Reprotection de toiture       Projet : Isolation des murs par l'extérieur
+Surface : 100 à 150 m²                 Logement : Maison · Propriétaire occupant
+Code postal : 59310                    Chauffage : Fioul · Construite : Avant 1975
+💶 Estimation vue : 6 000 € – 9 000 €   Foyer : 2 pers. · Revenus : Modestes (…)
+                                       Code postal : 59100
 Jean Dupont
-📞 06 12 34 56 78          ← cliquable
+📞 06 12 34 56 78   ← cliquable
 ✉️ jean.dupont@exemple.fr
 
-Source : toiture-nord / reprotection
+Source : facebook / campagne / mot-clé
 ```
 
 Le numéro est un lien `tel:` : un appui suffit pour rappeler depuis le
@@ -103,85 +129,61 @@ qui est envoyé en `parse_mode: "HTML"`.
 
 ---
 
-## 4. Notification e-mail Netlify Forms
+## 4. E-mail et webhook
 
-Filet de sécurité indépendant de Telegram. Elle **se configure dans le
-dashboard, pas dans le code** :
+**E-mail (Resend).** Créer un compte sur resend.com, vérifier votre domaine
+(quelques enregistrements DNS), créer une clé API, puis renseigner
+`RESEND_API_KEY`, `LEAD_EMAIL_TO` et `LEAD_EMAIL_FROM`. Sans domaine vérifié,
+Resend n'envoie qu'à l'adresse du compte.
 
-**Forms → Form notifications → Add notification → Email notification**
-→ choisir le formulaire `lead` → saisir l'adresse de contact.
-
-Gardez les deux actives : si l'API Telegram est indisponible, l'e-mail passe
-quand même, et la soumission reste de toute façon consultable dans
-**Forms → lead**.
+**Webhook.** `LEAD_WEBHOOK_URL` reçoit un `POST` JSON contenant tous les
+champs du formulaire, plus `recu_le` (date ISO). C'est le moyen le plus simple
+de garder un **historique** des leads : un scénario Make ou Zapier qui ajoute
+une ligne dans Google Sheets, ou l'envoi direct vers un CRM.
 
 ---
 
-## 5. Déploiement
+## 5. Déploiement sur Vercel
 
 1. Pousser ce dépôt sur GitHub.
-2. Sur Netlify : **Add new site → Import an existing project**.
-3. Netlify lit `netlify.toml` : rien à saisir. Publication à la racine, aucune
-   commande de build, fonctions dans `netlify/functions`.
-4. Renseigner les deux variables d'environnement (§ 2).
-5. Déployer.
+2. Sur vercel.com : **Add New → Project → Import** le dépôt.
+3. Réglages du projet :
+   - **Framework Preset : Other**
+   - **Build Command : vide** (bouton *Override*, laisser vide)
+   - **Output Directory : vide** (le site est à la racine)
+   - **Install Command : vide**
+4. Renseigner les variables d'environnement (§ 2).
+5. **Deploy**. Vercel détecte `api/lead.js` tout seul et en fait une fonction.
+6. Ajouter le domaine : **Settings → Domains**. Choisir l'apex comme domaine
+   principal ; Vercel propose de rediriger la variante `www` vers lui.
 
-Le glisser-déposer du dossier dans l'interface Netlify fonctionne également :
-il n'y a aucune dépendance à installer.
+Chaque push sur une branche crée une **prévisualisation** avec sa propre URL ;
+seule la branche de production (en général `main`) met à jour le site en ligne.
 
-### Détection du formulaire
+### Vérifier l'envoi
 
-> **À faire une fois, sinon aucun lead n'arrive.**
-> La détection des formulaires est **désactivée par défaut** sur les sites
-> Netlify récents. Ouvrez
-> Netlify a basculé ce réglage sur « off » pour tous les sites créés depuis
-> avril 2023, afin d'accélérer les builds.
->
-> Ouvrez l'onglet **Forms → Usage and configuration → Form detection →
-> Enable form detection**, puis **redéployez**
-> (Deploys → Trigger deploy → Deploy site). La détection se fait à
-> l'analyse du déploiement : activer l'option ne suffit pas, il faut un
-> déploiement **postérieur** à l'activation.
->
-> Tant que ce n'est pas fait, le `POST` du formulaire répond `404` et la page
-> affiche « L'envoi n'a pas abouti… (réf. 404) ».
-
-Côté HTML, un seul élément est nécessaire, et il est déjà en place : le
-formulaire visible `#formulaire-devis` porte `name="lead"`,
-`data-netlify="true"`, `netlify-honeypot="bot-field"`, un champ caché
-`form-name`, et **la totalité des 25 champs en dur dans le HTML** — y compris
-les `<input type="hidden">` que le script remplit (`projet`, `gclid`,
-`consent_text`…).
-
-Il n'y a volontairement **pas** de formulaire caché en doublon. Le doublon
-n'apporte rien ici — tous les champs sont déjà dans le HTML statique — et deux
-`<form name="lead">` sur la même page rendent la détection Netlify
-indéterminée. Ne le réintroduisez pas.
-
-Après le premier déploiement, vérifiez que le formulaire `lead` apparaît bien
-dans **Forms**. S'il n'y est pas, c'est la détection qui est en cause, pas le
-HTML.
+Après le déploiement, remplir chaque formulaire avec un vrai numéro, puis
+contrôler l'arrivée du message sur chaque canal. En cas de souci,
+**Vercel → Project → Logs** (filtre `/api/lead`) indique quel canal a échoué
+et pourquoi.
 
 ### Si l'envoi échoue
 
-Le message d'erreur affiche une référence courte qui dit quoi corriger :
+Le message d'erreur de la page toiture affiche une référence courte :
 
 | Référence | Cause | Correctif |
 |---|---|---|
-| `réf. 404` ou `réf. 405` | Netlify n'a pas enregistré le formulaire | Forms → Usage and configuration → Form detection → Enable, **puis redéployer** |
-| `réf. 403` | Soumission bloquée (filtre anti-spam, honeypot rempli) | Vérifier **Forms → lead → Spam submissions** |
+| `réf. 502` | Aucun canal n'a accepté le lead | Vérifier les variables d'environnement (§ 2), **puis redéployer** |
+| `réf. 400` | Numéro de téléphone refusé par le serveur | Vérifier le format saisi |
+| `réf. 404` | La fonction n'est pas déployée | Vérifier que `api/lead.js` est bien à la racine du dépôt |
 | `réf. reseau` | La requête n'a pas abouti (hors ligne, blocage) | Vérifier la connexion ; la console du navigateur donne le détail |
-| `réf. 5xx` | Incident côté Netlify | Réessayer ; consulter status.netlify.com |
-
-La console du navigateur (F12 → Console) journalise dans tous les cas le
-statut HTTP exact et l'URL visée.
 
 ### Aperçu local
 
-`index.html` s'ouvre directement dans un navigateur, sans serveur. Toute la
-page fonctionne : les 7 étapes, les écrans de sortie, la FAQ, la détection de
-ville. Seul l'envoi final affiche un message expliquant qu'il nécessite le site
-en ligne — Netlify Forms n'existe pas en `file://`.
+Les pages s'ouvrent directement dans un navigateur, sans serveur. Tout
+fonctionne sauf l'envoi final, qui affiche un message expliquant qu'il
+nécessite le site en ligne. Pour tester l'envoi en local :
+`npx vercel dev` (avec les variables dans un fichier `.env` non versionné).
 
 ---
 
@@ -200,7 +202,7 @@ NOM EI », mention obligatoire de l'article R. 526-27 du code de commerce).
 
 | Élément | Où |
 |---|---|
-| Adresse de Netlify, Inc. | `mentions-legales.html` (à vérifier sur netlify.com) |
+| Adresse de Vercel Inc. | `mentions-legales.html` (à vérifier sur vercel.com) |
 
 Le reste est renseigné : identité et SIRET, adresse de contact, communes des
 photos, dates de mise à jour, et le nom de domaine (voir ci-dessous).
@@ -211,10 +213,10 @@ Le site est servi à l'apex, **sans `www`** : `https://devis-toiture-nord.fr/`.
 C'est cette forme qui figure dans le `<link rel="canonical">`, dans `og:url` et
 dans `og:image` des quatre pages, ainsi que dans le corps des pages légales.
 
-Une seule adresse doit répondre. Dans Netlify, **Domain management → Primary
-domain**, désignez `devis-toiture-nord.fr` : la variante `www` est alors
-redirigée en 301 vers l'apex. Si vous changez un jour de forme canonique, il
-faut modifier les deux en même temps — le réglage Netlify **et** les balises des
+Une seule adresse doit répondre. Dans Vercel, **Settings → Domains**, ajoutez
+`devis-toiture-nord.fr` et `www.devis-toiture-nord.fr`, et réglez la variante
+`www` en redirection (308) vers l'apex. Si vous changez un jour de forme
+canonique, il faut modifier les deux en même temps — le réglage Vercel **et** les balises des
 quatre pages — sinon Google reçoit deux signaux contradictoires.
 
 ### Photos
@@ -432,11 +434,9 @@ on reparle ainsi du montant que le visiteur a réellement lu.
 > d'attendre un rappel qui n'arrivera pas, on l'invite à appeler. `t-envoi.mjs`
 > le vérifie sur un 404 et sur une coupure réseau.
 
-**Il n'y a pas de formulaire caché en doublon, et il ne faut pas en ajouter.**
-Les 26 champs, `estimation_basse` et `estimation_haute` compris, sont en dur
-dans le HTML du formulaire visible — c'est ce que Netlify analyse. Deux
-`<form name="lead">` sur la même page rendaient la détection indéterminée :
-c'est ce qui faisait échouer l'envoi au départ.
+Tous les champs, `estimation_basse` et `estimation_haute` compris, sont en dur
+dans le HTML du formulaire visible, et partent tels quels vers `/api/lead`
+(champ caché `formulaire=toiture`).
 Un chevron à droite de chaque carte dit qu'elle fait avancer, au lieu de la
 laisser passer pour une case à cocher ; il est dessiné en CSS pour ne pas
 ajouter un SVG à chacune des quinze réponses.
@@ -682,12 +682,12 @@ L'interface propose « Chargement de page » ou « Clic » ; l'extrait généré
 mode « Clic » expose une fonction `gtag_report_conversion()` à appeler sur le
 bouton d'envoi. Elle n'est pas utilisée, parce qu'**un clic n'est pas un
 lead** : l'envoi peut échouer après le clic — refus du serveur, coupure
-réseau, formulaire non détecté par Netlify — et compter le clic déclarerait
+réseau, fonction serveur indisponible — et compter le clic déclarerait
 des conversions fantômes, sur lesquelles les enchères automatiques
 apprendraient.
 
 La conversion part donc un cran plus loin, sur **`lead_submit` et lui seul**,
-quand Netlify a répondu que la demande est enregistrée. Une conversion comptée
+quand `/api/lead` a répondu que la demande est transmise. Une conversion comptée
 = un lead réellement reçu. Ni l'ouverture du formulaire, ni un clic sur le
 téléphone, ni `lead_disqualified` ne comptent : sans quoi l'algorithme
 apprendrait à acheter des locataires et des demandes hors zone.
@@ -820,7 +820,7 @@ Sept événements sont poussés dans le `dataLayer` :
 | `phone_click` | clic sur un lien `tel:` | `position`, `numero` |
 | `form_start` | premier clic dans l'étape 1 | `premier_champ`, `premiere_valeur` |
 | `form_step` | changement d'étape | `step_number`, `step_name` |
-| `lead_submit` | envoi accepté par Netlify | voir §9 |
+| `lead_submit` | envoi accepté par `/api/lead` | voir §9 |
 
 **`page_view_complete` porte la valeur du LCP mesurée sur le terrain**, sur de
 vrais téléphones et un vrai réseau, plutôt que sur un banc d'essai. Il part au
@@ -883,7 +883,7 @@ sortante.
 
 ### Si la balise ne se déclenche pas
 
-Le CSP de `netlify.toml` est en liste blanche stricte. Il autorise
+Le CSP de `vercel.json` est en liste blanche stricte. Il autorise
 nommément les domaines de Google Ads (`www.googletagmanager.com`,
 `www.googleadservices.com`, `googleads.g.doubleclick.net`,
 `td.doubleclick.net`, `www.google.com`, `www.google.fr`,
@@ -951,7 +951,7 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] Onglet Network : **aucune requête `clarity.ms` avant d'avoir accepté**
 - [ ] Une session de test apparaît dans Clarity, et les champs du formulaire y sont masqués
 - [ ] Aucun « Refused to load » dans la console (CSP)
-- [ ] Le build Netlify passe sans erreur
+- [ ] Le déploiement Vercel passe sans erreur
 - [ ] **Form detection activée** dans Forms → Usage and configuration, puis site redéployé
 - [ ] Le formulaire `lead` apparaît dans **Forms** après le premier déploiement
 - [ ] Un envoi de test réel arrive dans **Forms → lead** *et* sur Telegram
@@ -965,8 +965,8 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] Aucun token, aucune clé, aucun identifiant dans `index.html` ni dans un
       fichier versionné
 - [ ] `.gitignore` couvre `.env`
-- [ ] `TELEGRAM_BOT_TOKEN` et `TELEGRAM_CHAT_ID` créées sur Netlify
-- [ ] Notification e-mail Netlify Forms activée vers l'adresse de contact
+- [ ] Au moins deux canaux configurés dans Vercel (§ 2), puis redéploiement
+- [ ] Un envoi test de chaque formulaire arrive bien sur chaque canal
 - [ ] Une soumission de test déclenche bien la notification Telegram
 - [ ] Plus aucune occurrence de `a-completer` : `grep -rn "a-completer" *.html`
 - [x] Photo du hero déposée et compressée
@@ -979,18 +979,19 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 
 ## Page « Isolation / Pompe à chaleur — Nord (59) »
 
-`isolation-pac/index.html` est une seconde page d'atterrissage, autonome,
-destinée aux publicités isolation / pompe à chaleur (cible : propriétaires
-de 45 à 70 ans, département 59 uniquement). URL en ligne : `/isolation-pac/`.
+`isolation-pompe-a-chaleur/index.html` est une seconde page d'atterrissage,
+autonome, destinée aux publicités isolation / pompe à chaleur (cible :
+propriétaires de 45 à 70 ans, département 59 uniquement). URL en ligne :
+`/isolation-pompe-a-chaleur` (l'ancienne adresse `/isolation-pac` y redirige).
 
-- **Formulaire** (Netlify Forms, nom `lead-renov`) en 8 questions, une par
+- **Formulaire** (envoi vers `/api/lead`, champ `formulaire=renov`) en 8 questions, une par
   écran : logement, projet, statut, chauffage, année de construction,
   taille du foyer, revenu fiscal (tranches MaPrimeRénov' calculées selon
   la taille du foyer), puis code postal et coordonnées.
 - **Filtre géographique** : tout code postal hors `59xxx` est refusé avec
   un message poli (`CONFIG.departements` dans le script).
-- **Notification Telegram** : `submission-created.js` reconnaît le
-  formulaire `lead-renov` et envoie un message dédié.
+- **Notification** : `api/lead.js` reconnaît `formulaire=renov` et envoie un
+  message dédié (Telegram, e-mail, webhook).
 - **Lisibilité seniors** : texte à 18 px, gros boutons, une question par
   écran, avancement automatique au clic.
 
@@ -1007,4 +1008,4 @@ de 45 à 70 ans, département 59 uniquement). URL en ligne : `/isolation-pac/`.
    à vérifier sur france-renov.gouv.fr.
 7. Pages légales : elles visent aujourd'hui l'activité toiture.
 8. Pixel Meta / balise Google : non installés sur cette page ; la CSP de
-   `netlify.toml` devra autoriser les domaines de Meta si besoin.
+   `vercel.json` devra autoriser les domaines de Meta si besoin.
