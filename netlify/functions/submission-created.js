@@ -35,9 +35,11 @@ function lienTelephone(brut) {
 
 exports.handler = async function (evenement) {
   let donnees = {};
+  let formulaire = '';
   try {
     const corps = JSON.parse(evenement.body || '{}');
     donnees = (corps && corps.payload && corps.payload.data) || {};
+    formulaire = (corps && corps.payload && corps.payload.form_name) || '';
   } catch (erreur) {
     console.error('[submission-created] Charge utile illisible :', erreur.message);
     return { statusCode: 200, body: 'ok' };
@@ -69,7 +71,25 @@ exports.handler = async function (evenement) {
   const tel = lienTelephone(donnees.telephone);
   const source = [donnees.utm_campaign, donnees.utm_term].filter(Boolean).join(' / ');
 
-  const lignes = [
+  /* Page isolation / pompe a chaleur (isolation-pac/) : questions
+     differentes, donc message different. */
+  const lignes = formulaire === 'lead-renov' ? [
+    '🔔 <b>Nouveau lead isolation / PAC</b>',
+    '',
+    'Projet : ' + echapper(donnees.projet),
+    'Logement : ' + echapper(donnees.logement) + ' · ' + echapper(donnees.statut),
+    'Chauffage : ' + echapper(donnees.chauffage) + ' · Construite : ' + echapper(donnees.anciennete),
+    'Foyer : ' + echapper(donnees.personnes) + ' pers. · Revenus : ' + echapper(donnees.revenus),
+    'Code postal : ' + echapper(donnees.code_postal),
+    '',
+    echapper(donnees.prenom) + ' ' + echapper(donnees.nom),
+    '📞 ' + (tel
+      ? '<a href="tel:' + echapper(tel) + '">' + echapper(donnees.telephone) + '</a>'
+      : '—'),
+    '✉️ ' + (donnees.email ? echapper(donnees.email) : 'non renseigné'),
+    '',
+    'Source : ' + (source ? echapper(source) : 'directe')
+  ] : [
     '🔔 <b>Nouveau lead toiture</b>',
     '',
     'Projet : ' + echapper(donnees.projet),

@@ -974,3 +974,37 @@ décennale, zone d'intervention, délai de rappel, un seul technicien.
 - [ ] Commune des légendes avant / après exacte (Hazebrouck par défaut)
 - [ ] Chiffres 2012 / 250 / 3 000+ vérifiés et à jour
 - [ ] Test sur mobile réel : le formulaire est visible sans défilement
+
+---
+
+## Page « Isolation / Pompe à chaleur — Nord (59) »
+
+`isolation-pac/index.html` est une seconde page d'atterrissage, autonome,
+destinée aux publicités isolation / pompe à chaleur (cible : propriétaires
+de 45 à 70 ans, département 59 uniquement). URL en ligne : `/isolation-pac/`.
+
+- **Formulaire** (Netlify Forms, nom `lead-renov`) en 8 questions, une par
+  écran : logement, projet, statut, chauffage, année de construction,
+  taille du foyer, revenu fiscal (tranches MaPrimeRénov' calculées selon
+  la taille du foyer), puis code postal et coordonnées.
+- **Filtre géographique** : tout code postal hors `59xxx` est refusé avec
+  un message poli (`CONFIG.departements` dans le script).
+- **Notification Telegram** : `submission-created.js` reconnaît le
+  formulaire `lead-renov` et envoie un message dédié.
+- **Lisibilité seniors** : texte à 18 px, gros boutons, une question par
+  écran, avancement automatique au clic.
+
+### À compléter avant diffusion (marqué `[A REMPLACER]` dans le code)
+
+1. Nom et logo de la marque (provisoirement « Rénov'Nord »).
+2. Chiffres du hero et note 4,8/5 : uniquement des chiffres réels.
+3. **Avis clients : ce sont des exemples de mise en page.** Les remplacer par
+   de vrais avis avant toute diffusion (faux avis = pratique commerciale
+   trompeuse).
+4. Exemples de chantiers : idéalement de vrais chantiers avec photos.
+5. Téléphone : `CONFIG.telephone` (vide = masqué).
+6. Plafonds de revenus `CONFIG.plafonds` : barème 2025 hors Île-de-France,
+   à vérifier sur france-renov.gouv.fr.
+7. Pages légales : elles visent aujourd'hui l'activité toiture.
+8. Pixel Meta / balise Google : non installés sur cette page ; la CSP de
+   `netlify.toml` devra autoriser les domaines de Meta si besoin.
