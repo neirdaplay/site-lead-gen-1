@@ -1,9 +1,7 @@
 /*!
  * api/lead.js — Fonction serverless Vercel (runtime Node.js).
  *
- * Reçoit en POST les deux formulaires du site :
- *   - formulaire=toiture  → index.html (toiture)
- *   - formulaire=renov    → isolation-pompe-a-chaleur/index.html
+ * Reçoit en POST le formulaire de index.html (isolation / pompe à chaleur).
  *
  * Vercel n'a pas d'équivalent à Netlify Forms : rien n'est stocké côté
  * hébergeur. Le lead est donc transmis à un ou plusieurs CANAUX, chacun
@@ -22,11 +20,6 @@
  *
  * Aucune clé ne figure dans le code ni dans le HTML.
  */
-
-const LIBELLES = {
-  toiture: 'toiture',
-  renov: 'isolation / PAC'
-};
 
 /* Échappement HTML : le message Telegram est envoyé en parse_mode "HTML".
    Les valeurs viennent d'un formulaire public, donc d'une source non sûre. */
@@ -48,19 +41,6 @@ function lienTelephone(brut) {
   return nettoye;
 }
 
-/* Les deux bornes arrivent en chaînes : soit des entiers (« 8000 »),
-   soit un prix au mètre carré (« 80 €/m² »). */
-function estimationVue(d) {
-  const bas = (d.estimation_basse || '').trim();
-  const haut = (d.estimation_haute || '').trim();
-  if (!bas || !haut) { return 'non calculée'; }
-  const auM2 = /m²/.test(bas);
-  const nombre = (v) => v.replace(/[^\d]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  return auM2
-    ? echapper(nombre(bas) + ' à ' + nombre(haut) + ' € par m²')
-    : echapper(nombre(bas) + ' € – ' + nombre(haut) + ' €');
-}
-
 /* Corps de la requête : Vercel le parse déjà pour les types courants,
    mais on reste robuste si on reçoit une chaîne brute. */
 function lireCorps(req) {
@@ -75,36 +55,21 @@ function lireCorps(req) {
 function lignesMessage(d) {
   const tel = lienTelephone(d.telephone);
   const source = [d.utm_source, d.utm_campaign, d.utm_term].filter(Boolean).join(' / ');
-  const contact = [
+  return [
+    '🔔 <b>Nouveau lead isolation / PAC</b>',
+    '',
+    'Projet : ' + echapper(d.projet),
+    'Logement : ' + echapper(d.logement) + ' · ' + echapper(d.statut),
+    'Chauffage : ' + echapper(d.chauffage) + ' · Construite : ' + echapper(d.anciennete),
+    'Foyer : ' + echapper(d.personnes) + ' pers. · Revenus : ' + echapper(d.revenus),
+    'Code postal : ' + echapper(d.code_postal),
+    '',
     echapper(d.prenom) + ' ' + echapper(d.nom),
     '📞 ' + (tel ? '<a href="tel:' + echapper(tel) + '">' + echapper(d.telephone) + '</a>' : '—'),
     '✉️ ' + (d.email ? echapper(d.email) : 'non renseigné'),
     '',
     'Source : ' + (source ? echapper(source) : 'directe')
   ];
-
-  if (d.formulaire === 'renov') {
-    return [
-      '🔔 <b>Nouveau lead isolation / PAC</b>',
-      '',
-      'Projet : ' + echapper(d.projet),
-      'Logement : ' + echapper(d.logement) + ' · ' + echapper(d.statut),
-      'Chauffage : ' + echapper(d.chauffage) + ' · Construite : ' + echapper(d.anciennete),
-      'Foyer : ' + echapper(d.personnes) + ' pers. · Revenus : ' + echapper(d.revenus),
-      'Code postal : ' + echapper(d.code_postal),
-      ''
-    ].concat(contact);
-  }
-
-  return [
-    '🔔 <b>Nouveau lead toiture</b>',
-    '',
-    'Projet : ' + echapper(d.projet),
-    'Surface : ' + echapper(d.surface),
-    'Code postal : ' + echapper(d.code_postal),
-    '💶 Estimation vue : ' + estimationVue(d),
-    ''
-  ].concat(contact);
 }
 
 /* ---------------- Canaux ---------------- */
@@ -138,7 +103,7 @@ async function envoyerEmail(lignes, d) {
     body: JSON.stringify({
       from: process.env.LEAD_EMAIL_FROM || 'Leads <onboarding@resend.dev>',
       to: dest.split(',').map((s) => s.trim()).filter(Boolean),
-      subject: 'Nouveau lead ' + (LIBELLES[d.formulaire] || '') + ' — ' +
+      subject: 'Nouveau lead isolation / PAC — ' +
         String(d.code_postal || '').slice(0, 5) + ' ' + String(d.prenom || '').slice(0, 40),
       html
     })
@@ -179,7 +144,6 @@ module.exports = async function handler(req, res) {
     if (k === 'bot-field') { return; }
     d[String(k).slice(0, 40)] = String(brut[k] == null ? '' : brut[k]).slice(0, 300);
   });
-  if (!LIBELLES[d.formulaire]) { d.formulaire = 'toiture'; }
 
   const telOk = /^0[1-9]\d{8}$/.test(lienTelephone(d.telephone).replace(/^\+33/, '0'));
   if (!telOk) { return res.status(400).json({ ok: false, erreur: 'telephone' }); }

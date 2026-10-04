@@ -1,1011 +1,124 @@
-# Mon Couvreur Nord — landing page de génération de leads (Nord, 59)
+# Rénov'Nord — page de captation de leads isolation / pompe à chaleur (Nord, 59)
 
-Page unique de captation de demandes de devis en toiture, alimentée par Google
-Ads Search. **Tout le site tient dans `index.html`** : le HTML, le CSS dans une
-balise `<style>`, le JavaScript dans une balise `<script>`. Aucun framework,
-aucune dépendance, aucune étape de build. Le **seul** domaine tiers appelé
-est celui de la balise Google Ads, et uniquement sur le site en ligne.
+Page d'atterrissage pour des publicités « isolation » et « pompe à chaleur »,
+ciblant les propriétaires de 45 à 70 ans du département du Nord.
 
-`index.html` s'ouvre et fonctionne en double-cliquant dessus en local. Seul
-l'envoi final du formulaire nécessite le site en ligne — c'est indiqué à
-l'écran dans ce cas.
-
----
-
-## Table des matières
-
-1. [Arborescence](#1-arborescence)
-2. [Variables d'environnement Vercel](#2-variables-denvironnement-vercel)
-3. [Notification Telegram](#3-notification-telegram)
-4. [E-mail et webhook](#4-e-mail-et-webhook)
-5. [Déploiement sur Vercel](#5-déploiement-sur-vercel)
-6. [À compléter avant mise en ligne](#6-à-compléter-avant-mise-en-ligne)
-7. [Le formulaire](#7-le-formulaire)
-8. [Détection de ville](#8-détection-de-ville)
-9. [Attribution publicitaire](#9-attribution-publicitaire)
-10. [Icônes](#10-icônes)
-11. [Ce qui est volontairement absent](#11-ce-qui-est-volontairement-absent)
-12. [Checklist de vérification](#12-checklist-de-vérification)
+Site statique sans framework ni étape de build, hébergé sur **Vercel**. La
+page tient dans `index.html` (HTML + CSS + JS). Le seul code serveur est la
+fonction `api/lead.js`, qui reçoit le formulaire.
 
 ---
 
 ## 1. Arborescence
 
 ```
-index.html                             page toiture : HTML + CSS + JS
-isolation-pompe-a-chaleur/index.html   page isolation / pompe à chaleur (59)
-mentions-legales.html                  page autonome, CSS minimal inline
-confidentialite.html                   page autonome, CSS minimal inline
-conditions-generales.html              page autonome, CSS minimal inline
-assets/img/                            visuels
-assets/fonts/                          police DM Sans (licence OFL), auto-hébergée
-api/lead.js                            fonction serverless : reçoit les formulaires
-vercel.json                            en-têtes de sécurité, URL propres, redirections
-README.md
+index.html                 la page (HTML + CSS + JS)
+mentions-legales.html      pages légales autonomes
+confidentialite.html
+conditions-generales.html
+api/lead.js                fonction serverless Vercel : reçoit le formulaire
+assets/img/                photo de l'en-tête + favicon
+assets/fonts/              police DM Sans (licence OFL), auto-hébergée
+vercel.json                en-têtes de sécurité, URL propres, redirections
 ```
 
-Les trois pages légales sont obligatoires pour la validation Google Ads. Elles
-sont liées depuis le pied de page de chaque page.
-
-`api/lead.js` est le **seul** fichier serveur. Les deux formulaires y envoient
-leurs réponses en `POST /api/lead`, avec un champ caché `formulaire`
-(`toiture` ou `renov`) qui choisit le format du message.
-
-URL en ligne (grâce à `cleanUrls` dans `vercel.json`, sans `.html`) :
-
-| Page | URL |
-|---|---|
-| Toiture | `/` |
-| Isolation / pompe à chaleur | `/isolation-pompe-a-chaleur` |
-| Pages légales | `/mentions-legales`, `/confidentialite`, `/conditions-generales` (et `/cgu`) |
+URL en ligne (sans `.html`, grâce à `cleanUrls`) : `/`, `/mentions-legales`,
+`/confidentialite`, `/conditions-generales` (et `/cgu`). Les anciennes
+adresses `/isolation-pac` et `/isolation-pompe-a-chaleur` redirigent vers `/`.
 
 ---
 
-## 2. Variables d'environnement Vercel
+## 2. Déploiement sur Vercel
 
-À créer dans **Project → Settings → Environment Variables** (environnement
-*Production*, et *Preview* si vous testez sur les URL de prévisualisation).
-**Aucune clé ne doit être committée** — `.gitignore` bloque déjà `.env`.
+1. Sur vercel.com : **Add New → Project → Import** ce dépôt.
+2. Réglages du projet :
+   - **Framework Preset : Other**
+   - **Build Command, Output Directory, Install Command : vides**
+3. **Settings → Git → Production Branch** : choisir la branche qui doit être
+   en ligne (celle qui contient ce README). Les autres branches ne donnent
+   que des prévisualisations.
+4. Ajouter les variables d'environnement (§ 3), puis **Deploy**.
+5. **Settings → Domains** : ajouter le domaine.
+
+Après chaque modification de variable d'environnement, **redéployer**.
+
+---
+
+## 3. Réception des leads — variables d'environnement
+
+Vercel **ne stocke pas** les formulaires : un lead n'existe que s'il arrive
+sur au moins un canal. Configurez-en **au moins deux**.
 
 | Variable | Canal | Rôle |
 |---|---|---|
-| `TELEGRAM_BOT_TOKEN` | Telegram | Jeton du bot, donné par `@BotFather` |
-| `TELEGRAM_CHAT_ID` | Telegram | Salon ou conversation qui reçoit les alertes |
-| `RESEND_API_KEY` | E-mail | Clé API du service Resend |
-| `LEAD_EMAIL_TO` | E-mail | Adresse(s) qui reçoivent les leads, séparées par des virgules |
-| `LEAD_EMAIL_FROM` | E-mail (facultatif) | Expéditeur, ex. `Leads <leads@votre-domaine.fr>` (domaine à vérifier dans Resend) |
-| `LEAD_WEBHOOK_URL` | Webhook | URL Make / Zapier / Google Apps Script / CRM qui reçoit le lead en JSON |
+| `TELEGRAM_BOT_TOKEN` | Telegram | Jeton du bot (`@BotFather` → `/newbot`) |
+| `TELEGRAM_CHAT_ID` | Telegram | Identifiant du groupe qui reçoit les alertes |
+| `RESEND_API_KEY` | E-mail | Clé API resend.com |
+| `LEAD_EMAIL_TO` | E-mail | Destinataire(s), séparés par des virgules |
+| `LEAD_EMAIL_FROM` | E-mail (facultatif) | Expéditeur sur un domaine vérifié dans Resend |
+| `LEAD_WEBHOOK_URL` | Webhook | Make / Zapier / Google Apps Script / CRM — reçoit le lead en JSON |
 
-**Important — différence avec Netlify :** Vercel ne stocke pas les
-formulaires. Un lead n'existe que s'il est arrivé sur au moins un canal.
-Configurez-en **au moins deux** (par exemple Telegram + webhook vers un Google
-Sheet), pour qu'une panne de l'un ne fasse rien perdre.
+**Telegram :** créer le bot avec `@BotFather`, l'ajouter à un groupe, y écrire
+un message, puis ouvrir `https://api.telegram.org/bot<JETON>/getUpdates` et
+relever `message.chat.id` (négatif pour un groupe).
+
+**Historique des leads :** le plus simple est un webhook Make ou Zapier qui
+ajoute une ligne dans un Google Sheet.
 
 Comportement de `api/lead.js` :
 
-- au moins un canal a accepté → `200`, le visiteur voit l'écran de remerciement ;
-- aucun canal configuré ou tous en échec → `502`, le visiteur voit un message
-  d'erreur (et non un faux « merci »). Le lead est alors écrit dans les
-  journaux de la fonction (**Vercel → Logs**) en dernier recours ;
-- téléphone invalide → `400` ;
-- champ anti-robot `bot-field` rempli → `200` sans rien transmettre.
-
-Après avoir ajouté ou modifié une variable, **redéployez** : les fonctions ne
-lisent les variables qu'au déploiement.
-
----
-
-## 3. Notification Telegram
-
-### Obtenir les deux valeurs
-
-1. Écrire à `@BotFather` sur Telegram, envoyer `/newbot`, suivre les questions.
-   Le jeton renvoyé va dans `TELEGRAM_BOT_TOKEN`.
-2. Créer un groupe, y ajouter le bot, envoyer un message quelconque dedans.
-3. Ouvrir `https://api.telegram.org/bot<JETON>/getUpdates` dans un navigateur et
-   relever `result[0].message.chat.id`. Cette valeur va dans
-   `TELEGRAM_CHAT_ID` (elle est négative pour un groupe).
-
-### Format du message
-
-```
-🔔 Nouveau lead toiture                🔔 Nouveau lead isolation / PAC
-
-Projet : Reprotection de toiture       Projet : Isolation des murs par l'extérieur
-Surface : 100 à 150 m²                 Logement : Maison · Propriétaire occupant
-Code postal : 59310                    Chauffage : Fioul · Construite : Avant 1975
-💶 Estimation vue : 6 000 € – 9 000 €   Foyer : 2 pers. · Revenus : Modestes (…)
-                                       Code postal : 59100
-Jean Dupont
-📞 06 12 34 56 78   ← cliquable
-✉️ jean.dupont@exemple.fr
-
-Source : facebook / campagne / mot-clé
-```
-
-Le numéro est un lien `tel:` : un appui suffit pour rappeler depuis le
-téléphone. Les valeurs sont échappées avant d'être insérées dans le message,
-qui est envoyé en `parse_mode: "HTML"`.
-
----
-
-## 4. E-mail et webhook
-
-**E-mail (Resend).** Créer un compte sur resend.com, vérifier votre domaine
-(quelques enregistrements DNS), créer une clé API, puis renseigner
-`RESEND_API_KEY`, `LEAD_EMAIL_TO` et `LEAD_EMAIL_FROM`. Sans domaine vérifié,
-Resend n'envoie qu'à l'adresse du compte.
-
-**Webhook.** `LEAD_WEBHOOK_URL` reçoit un `POST` JSON contenant tous les
-champs du formulaire, plus `recu_le` (date ISO). C'est le moyen le plus simple
-de garder un **historique** des leads : un scénario Make ou Zapier qui ajoute
-une ligne dans Google Sheets, ou l'envoi direct vers un CRM.
-
----
-
-## 5. Déploiement sur Vercel
-
-1. Pousser ce dépôt sur GitHub.
-2. Sur vercel.com : **Add New → Project → Import** le dépôt.
-3. Réglages du projet :
-   - **Framework Preset : Other**
-   - **Build Command : vide** (bouton *Override*, laisser vide)
-   - **Output Directory : vide** (le site est à la racine)
-   - **Install Command : vide**
-4. Renseigner les variables d'environnement (§ 2).
-5. **Deploy**. Vercel détecte `api/lead.js` tout seul et en fait une fonction.
-6. Ajouter le domaine : **Settings → Domains**. Choisir l'apex comme domaine
-   principal ; Vercel propose de rediriger la variante `www` vers lui.
-
-Chaque push sur une branche crée une **prévisualisation** avec sa propre URL ;
-seule la branche de production (en général `main`) met à jour le site en ligne.
-
-### Vérifier l'envoi
-
-Après le déploiement, remplir chaque formulaire avec un vrai numéro, puis
-contrôler l'arrivée du message sur chaque canal. En cas de souci,
-**Vercel → Project → Logs** (filtre `/api/lead`) indique quel canal a échoué
-et pourquoi.
-
-### Si l'envoi échoue
-
-Le message d'erreur de la page toiture affiche une référence courte :
-
-| Référence | Cause | Correctif |
+| Cas | Réponse | Ce que voit le visiteur |
 |---|---|---|
-| `réf. 502` | Aucun canal n'a accepté le lead | Vérifier les variables d'environnement (§ 2), **puis redéployer** |
-| `réf. 400` | Numéro de téléphone refusé par le serveur | Vérifier le format saisi |
-| `réf. 404` | La fonction n'est pas déployée | Vérifier que `api/lead.js` est bien à la racine du dépôt |
-| `réf. reseau` | La requête n'a pas abouti (hors ligne, blocage) | Vérifier la connexion ; la console du navigateur donne le détail |
+| Au moins un canal a accepté | `200` | Écran de remerciement |
+| Aucun canal configuré / tous en échec | `502` | Message d'erreur (le lead est écrit dans **Vercel → Logs** en dernier recours) |
+| Téléphone invalide | `400` | Message d'erreur |
+| Champ anti-robot rempli | `200` | Rien n'est transmis |
 
-### Aperçu local
-
-Les pages s'ouvrent directement dans un navigateur, sans serveur. Tout
-fonctionne sauf l'envoi final, qui affiche un message expliquant qu'il
-nécessite le site en ligne. Pour tester l'envoi en local :
-`npx vercel dev` (avec les variables dans un fichier `.env` non versionné).
+Pour tester l'envoi en local : `npx vercel dev` avec les variables dans un
+fichier `.env` (jamais versionné, `.gitignore` le bloque).
 
 ---
 
-## 6. À compléter avant mise en ligne
+## 4. Le formulaire
 
-Toutes les valeurs manquantes sont **surlignées en jaune** dans les pages, via
-la classe `a-completer`. Pour les lister :
+Une question par écran, avancement automatique au clic :
 
-```sh
-grep -rn "a-completer" *.html
-```
+1. Maison / appartement
+2. Projet (murs par l'extérieur, combles, pompe à chaleur, je ne sais pas)
+3. Statut (propriétaire occupant, bailleur, locataire)
+4. Chauffage actuel
+5. Période de construction
+6. Personnes au foyer
+7. Revenu fiscal de référence — tranches MaPrimeRénov' calculées selon la
+   taille du foyer (`CONFIG.plafonds`)
+8. Code postal (**59 uniquement**, `CONFIG.departements`) et coordonnées
 
-Le site est édité par un **entrepreneur individuel** : les pages légales sont
-déjà rédigées dans cette forme (pas de capital social, dénomination « Prénom
-NOM EI », mention obligatoire de l'article R. 526-27 du code de commerce).
+Les paramètres `utm_*`, `fbclid` et `gclid` de l'URL publicitaire sont
+recopiés dans des champs cachés et partent avec le lead.
 
-| Élément | Où |
-|---|---|
-| Adresse de Vercel Inc. | `mentions-legales.html` (à vérifier sur vercel.com) |
-
-Le reste est renseigné : identité et SIRET, adresse de contact, communes des
-photos, dates de mise à jour, et le nom de domaine (voir ci-dessous).
-
-### Nom de domaine
-
-Le site est servi à l'apex, **sans `www`** : `https://devis-toiture-nord.fr/`.
-C'est cette forme qui figure dans le `<link rel="canonical">`, dans `og:url` et
-dans `og:image` des quatre pages, ainsi que dans le corps des pages légales.
-
-Une seule adresse doit répondre. Dans Vercel, **Settings → Domains**, ajoutez
-`devis-toiture-nord.fr` et `www.devis-toiture-nord.fr`, et réglez la variante
-`www` en redirection (308) vers l'apex. Si vous changez un jour de forme
-canonique, il faut modifier les deux en même temps — le réglage Vercel **et** les balises des
-quatre pages — sinon Google reçoit deux signaux contradictoires.
-
-### Photos
-
-`assets/img/` contient des **gabarits gris aux bonnes dimensions** : la mise en
-page est déjà juste, déposer une photo ne déplacera rien.
-
-Trois fichiers à déposer, **exactement sous ces noms** :
-
-| Fichier | Emplacement sur la page | Format | Poids |
-|---|---|---|---|
-| `assets/img/hero-couvreur.jpg` | Fond du hero, en faible opacité sous le voile bleu nuit | 1600 × 1067 | 157 Ko |
-| `assets/img/avant-hazebrouck.jpg` | Vignette « Avant » | 1600 × 900 | 178 Ko |
-| `assets/img/apres-hazebrouck.jpg` | Vignette « Après » | 1600 × 900 | 221 Ko |
-| `assets/img/og-partage.jpg` | Aperçu lors d'un partage (Facebook, LinkedIn, WhatsApp) | 1200 × 630 | 104 Ko |
-| `assets/img/favicon.svg` | Icône d'onglet | — | 0,4 Ko |
-
-**Les quatre visuels sont en place.** Les gabarits gris ont été supprimés, ainsi
-que les replis (`onerror` sur les vignettes, seconde couche de fond sur le
-hero) qui n'avaient plus de raison d'être.
-
-> **Compressez avant de déposer.** La photo du hero est arrivée en
-> 2560 × 1707 pour 545 Ko ; elle a été ramenée à 1600 px et 157 Ko, soit
-> 71 % de moins, sans différence visible. C'est la ressource la plus lourde
-> de la page et elle pèse directement sur le temps de chargement en 4G.
-> Visez **moins de 200 Ko** pour chaque photo, en 1600 px de large.
->
-> Et **un seul fichier par image** : un `hero-couvreur.jpeg` en doublon du
-> `.jpg` a été supprimé. Le nom attendu est celui du tableau ci-dessus, à la
-> lettre près.
-
-Pour remplacer une photo, écrasez le fichier en gardant le même nom : il n'y a
-aucun chemin à modifier dans le code. Gardez le format 1600 × 900 pour les
-vignettes — les attributs `width` et `height` du HTML valent 1600 et 900, et
-c'est ce qui garantit qu'aucun décalage de mise en page ne se produit au
-chargement.
-
-`og-partage.jpg` est un recadrage de la photo du hero en 1200 × 630. C'est un
-JPEG et non un SVG : les réseaux sociaux ne savent pas afficher un SVG en
-aperçu de partage.
-
-#### Réglage du hero
-
-La photo du hero est volontairement en **faible opacité** : elle sert de
-texture, pas de sujet. Le bleu nuit reste la couleur dominante, et un voile
-bleu passe encore par-dessus. Deux réglages, tous deux dans le `<style>` de
-`index.html` :
-
-| Réglage | Mobile | Desktop (≥ 1000 px) | Effet |
-|---|---|---|---|
-| `.hero__fond { opacity }` | `.18` | `.24` | Combien de photo on laisse passer |
-| `.hero__voile { background }` | `rgba(15,39,69,.45)` | `rgba(15,39,69,.35)` | Intensité du bleu par-dessus |
-
-Monter l'opacité rend la photo plus présente **et le texte moins lisible** :
-le contraste a été mesuré sur le composite réel, pixel par pixel, avec ces
-valeurs. Sur le fond le plus clair derrière le titre, on obtient 9,9:1 pour le
-blanc et 3,8:1 pour le mot en vert (grand texte). Si vous augmentez `opacity`,
-remesurez — ou compensez en augmentant l'alpha du voile.
-
-Choisissez malgré tout une photo **lumineuse et lisible** : à 24 % d'opacité,
-une prise de vue sombre ne donne plus qu'un aplat. Sujet décentré vers la
-droite, le texte occupe la gauche sur desktop.
-
-Pour l'avant / après, le **même angle** est ce qui rend la preuve crédible :
-repérez un point fixe (souche de cheminée, poteau, lampadaire) et gardez-le au
-même endroit dans le cadre.
-
-> **Les légendes mentionnent Hazebrouck et une toiture en tuile béton.** Si
-> vous changez de chantier, changez la commune et le matériau dans les deux
-> `figcaption`, dans les deux `alt` et dans le sous-titre de la section. Ne
-> légendez jamais une photo avec une commune où le chantier n'a pas eu lieu.
-
-> **Quinze ans de tenue, dix ans de garantie.** La distinction est assumée et
-> écrite noir sur blanc : dans le sous-titre de la section Avant / Après, sous
-> le tableau de prix, et sur la carte « Reprotection de toiture ». Une durée de
-> vie constatée n'est pas une garantie contractuelle — mais une durabilité
-> annoncée doit pouvoir être justifiée. Conservez de quoi l'étayer.
-
-### Chiffres affichés
-
-La section « Intervention dans le Nord » affiche **2012** (année de création),
-**250** chantiers par an et **3 000+** toitures traitées depuis l'ouverture.
-
-Ce sont des affirmations commerciales au sens du Code de la consommation :
-elles doivent rester **exactes et justifiables**. Mettez-les à jour quand elles
-évoluent, et ne les arrondissez jamais vers le haut. Un commentaire le rappelle
-à l'endroit du code concerné.
-
-La carte est un tracé du département dessiné à la main en SVG inline —
-aucune requête réseau. Elle porte huit villes repères (Dunkerque, Hazebrouck,
-Lille, Roubaix, Douai, Valenciennes, Cambrai, Maubeuge) pour que le lecteur se
-situe, et 116 points semés sur une trame régulière bruitée à l'intérieur du
-contour. Sur petit écran, les deux repères les plus proches d'un autre
-(Roubaix, Douai) sont masqués et les libellés grossis.
-
-La légende dit « **répartition indicative** » et non « un point = un
-chantier » : 116 points ne représentent pas les 3 000 chantiers réalisés, ils
-en montrent l'étendue géographique. Gardez cette formulation tant que vous ne
-disposez pas de la liste réelle des communes ; le jour où vous l'aurez,
-remplacez les coordonnées des `<circle>` et reformulez la légende.
+Événements poussés dans `window.dataLayer` : `form_start`, `form_step`,
+`cta_click`, `hors_zone`, `lead_submit`.
 
 ---
 
-## 7. Le formulaire — l'estimateur
-
-Cinq étapes, une question par écran, cartes cliquables pleine largeur qui font
-avancer automatiquement. Aucun bouton « suivant » sur les questions à choix.
-
-| Étape | Question | Champ |
-|---|---|---|
-| 1 | Votre projet de toiture concerne | `projet` |
-| 2 | Surface approximative | `surface` |
-| 3 | Vous êtes | `statut` |
-| 4 | Votre code postal | `code_postal` |
-| 5 | Vos coordonnées | `prenom`, `nom`, `telephone`, `email` *(facultatif)*, `consentement` |
-
-**Le formulaire tient sa promesse : il affiche vraiment une fourchette.** Il
-n'existe aucun chemin qui promette une estimation sans la donner.
-
-### Annoncer la récompense
-
-Un formulaire dont on ignore la contrepartie ne se remplit pas. Le prix qui
-attend au bout est donc annoncé **avant** qu'on demande quoi que ce soit :
-
-| Où | Quoi |
-|---|---|
-| `<h1>` | *Combien coûte le traitement de votre toiture en 2026 ?* |
-| Bouton principal du hero | *Obtenir ma fourchette de prix* |
-| Titre de la carte | *Votre fourchette de prix* |
-| Sous-titre de la carte | *5 questions. Votre estimation s'affiche à la fin, avant tout appel.* |
-| Liséré sous le hero | *Fourchette de prix immédiate*, en première position |
-| Bandeau `.recompense` | un message par étape |
-
-**Le bouton d'appel est passé en second, en contour vert sur blanc.** Le chemin
-principal est devenu l'estimation ; l'appel reste à un doigt, mais ce n'est
-plus le choix par défaut.
-
-**Le bandeau `.recompense` est un seul élément, cinq messages** (`MESSAGES_ETAPE`
-dans le script) : l'étape 1 rappelle ce qui attend, les suivantes rapprochent la
-récompense. Deux bandeaux verts empilés auraient dit la même chose deux fois à
-vingt pixels d'écart. Il disparaît avec la barre de progression sur les écrans
-de sortie.
-
-Sur l'**étape 5**, l'encadré `.pret` (« ✓ Votre estimation est prête ») remplace
-le titre de l'étape, qui disait exactement la même chose : le `<h3>` reste dans
-le document en `sr-only`, parce qu'il structure l'étape pour les lecteurs
-d'écran.
-
-> **Le titre et le sous-titre de la carte sont désormais visibles sur mobile.**
-> Ils y étaient masqués pour gagner une cinquantaine de pixels — mais ce sont
-> eux qui annoncent la récompense. En contrepartie, **la première réponse n'est
-> plus au-dessus de la ligne de flottaison en 320 × 568** : six annonces
-> successives y remplissent l'écran. Elle l'est encore en 360 × 640 et
-> au-delà, ce que `t-perf.mjs` vérifie ; en 320 il ne contrôle plus que la
-> présence du mot *estimation* ou *fourchette* sans défiler.
-
-> **Le bandeau est en 13 px**, en dessous des 15 px retenus ailleurs pour une
-> audience de 65 ans et plus. C'est un rappel qui accompagne, pas un texte à
-> lire, et le contraste mesuré est de **5,06:1**. Le passer à 15 px est une
-> ligne dans `.recompense`.
-
-### Les montants : `TARIFS`, source unique
-
-Tous les chiffres de la page viennent d'une seule constante, en tête du script :
-
-```js
-var TARIFS = {
-  'Nettoyage / Démoussage':  { bas: 20,  haut: 30 },
-  'Reprotection hydrofuge':  { bas: 80,  haut: 120 },
-  'Couverture neuve':        { bas: 190, haut: 280 }
-};
-```
-
-Les clés doivent correspondre **exactement** aux `data-valeur` des boutons de
-l'étape 1. Une seconde table, `SURFACES`, donne les bornes retenues par tranche.
-Changer un prix, c'est changer une ligne — il n'y a plus nulle part ailleurs à
-répercuter, puisque le tableau de prix a été retiré de la page.
-
-**La fourchette est volontairement large** : on prend la borne basse de la
-surface pour le bas et la borne haute pour le haut. C'est cette largeur qui
-crée le besoin d'un appel pour la resserrer. Les totaux sont arrondis à la
-centaine.
-
-> **« Je ne sais pas » n'affiche jamais de total.** Sans surface, on donne le
-> prix au mètre carré — « 80 € à 120 € par m² » — qui reste une information
-> vraie, plutôt qu'un total tiré au hasard. `SURFACES` n'a volontairement pas
-> d'entrée pour cette réponse : c'est l'absence de clé qui déclenche ce mode.
-
-### L'écran de résultat
-
-Il remplace l'ancienne confirmation. Le montant, l'objet de l'estimation et la
-mention légale sortent du calcul ; le reste est statique.
-
-Deux détails à ne pas défaire :
-
-- **La signature du pied de carte est masquée sur cet écran**
-  (`.formulaire__pied[hidden]`), parce que le bloc « Adrien vous rappelle » le
-  dit déjà juste au-dessus, en plus grand. Notez la règle CSS
-  `.formulaire__pied[hidden]{display:none}` : sans elle, le `display:flex`
-  l'emporterait sur l'attribut et le masquage ne ferait rien.
-- **Le numéro du bouton d'appel porte `.nombre-tel{white-space:nowrap}}`** : dix
-  chiffres coupés en plein milieu ne se lisent plus.
-
-### L'envoi : l'estimation d'abord, le POST ensuite
-
-L'estimation est calculée **avant** de construire le corps de la requête, et
-écrite dans deux champs cachés — `estimation_basse` et `estimation_haute` — qui
-partent avec le lead et figurent dans la notification Telegram. Au téléphone,
-on reparle ainsi du montant que le visiteur a réellement lu.
-
-> **Un envoi qui échoue n'efface pas l'estimation.** Elle a été calculée chez le
-> visiteur, elle ne dépend d'aucun serveur, et la lui refuser parce qu'un POST
-> a échoué serait lui faire payer une panne qui n'est pas la sienne. L'écran de
-> résultat s'affiche quand même ; seule la suite annoncée change — au lieu
-> d'attendre un rappel qui n'arrivera pas, on l'invite à appeler. `t-envoi.mjs`
-> le vérifie sur un 404 et sur une coupure réseau.
-
-Tous les champs, `estimation_basse` et `estimation_haute` compris, sont en dur
-dans le HTML du formulaire visible, et partent tels quels vers `/api/lead`
-(champ caché `formulaire=toiture`).
-Un chevron à droite de chaque carte dit qu'elle fait avancer, au lieu de la
-laisser passer pour une case à cocher ; il est dessiné en CSS pour ne pas
-ajouter un SVG à chacune des quinze réponses.
-
-**Sur mobile, la carte s'ouvre directement sur la progression, puis la
-question.** Le titre « Votre demande de devis » et son accroche sont retirés à
-l'œil sous 760 px : le `<h1>` juste au-dessus dit déjà de quoi il s'agit, et
-« Étape 1 sur 6 » suffit à annoncer un formulaire. Ce sont une cinquantaine de
-pixels rendus à la première question. Le titre reste dans le document, hors
-écran — c'est lui qui nomme le formulaire pour les lecteurs d'écran via
-`aria-labelledby`, il ne peut donc pas être supprimé.
-
-### L'écran d'arrivée
-
-**L'appel passe devant le formulaire**, sans le chasser de l'écran. Sur un
-écran de 360 × 640, sans défiler, on voit dans l'ordre :
-
-1. la médaille « Artisan assuré en décennale » ;
-2. un H1 concret — *Nettoyage et démoussage de toiture à [Ville]* ;
-3. la ligne *Devis gratuit, sans engagement* ;
-4. **le bouton d'appel**, pleine largeur, 64 px de haut, libellé
-   *Parler à un couvreur* ;
-5. le formulaire, avec ses trois premières réponses.
-
-**La taille du titre suit la largeur, pas la hauteur d'écran.**
-`font-size:clamp(23px, 6.6vw, 29px)`. Un point de rupture en `max-height` s'en
-chargeait auparavant, si bien qu'un 360 × 800 — très courant sur Android —
-gardait 29 px et cassait *Nettoyage et démoussage* en deux, laissant
-*démoussage* seul sur sa ligne juste avant la coupure fixe. Le clamp fait tenir
-cette première ligne de 320 px à 440 px, vérifié sur sept tailles réelles.
-
-**Le titre est coupé à la main.** Un `<br class="coupe-mobile">` sépare
-*Nettoyage et démoussage* du reste, sous 760 px seulement — en deux colonnes la
-place ne manque pas. C'est la seule façon d'obtenir une première ligne stable
-quel que soit le nom de commune injecté ; la suite se replie librement, puisque
-`à Villeneuve-d'Ascq` et `dans le Nord` n'occupent pas la même largeur.
-
-> **Le titre n'a plus de `min-height`.** Elle réservait trois lignes pour
-> absorber le remplacement du nom de commune. Mais ce remplacement est
-> synchrone et se produit **avant la première peinture** — le titre est déjà
-> définitif quand le navigateur dessine, il n'y a aucun décalage à absorber.
-> Avec la coupure fixe, le titre par défaut ne fait que deux lignes, et la
-> troisième réservée pour rien ouvrait un vide visible sous le titre. CLS
-> mesuré à 0 sans elle.
-
-C'est un renversement assumé : 83 % de l'audience a 65 ans ou plus, et pour
-cette tranche le téléphone reste le geste naturel là où six étapes de
-formulaire demandent un effort. Mais l'appel garde la première place **par son
-poids visuel** — pleine largeur, vert plein, deux fois la hauteur d'une carte
-de réponse — et non en occupant l'écran à lui seul.
-
-> **Ne redonnez pas au bloc de titre la hauteur du premier écran.** Une version
-> intermédiaire posait `min-height:calc(100svh - 130px)` sur
-> `.hero__colonne--texte`, contenu centré, pour que le formulaire commence sous
-> la ligne de flottaison. Sur un vrai téléphone, barre du navigateur comprise,
-> cela laissait un grand vide au-dessus du badge et le formulaire
-> n'apparaissait plus du tout. Le critère de recette est vérifié dans
-> `t-perf.mjs` en 320 × 568, 360 × 640 et 390 × 844 : le bouton d'appel entier
-> **et** la première réponse visible, les deux à la fois.
-
-Il n'y a **pas** de lien « Ou décrivez votre projet en ligne » : il occupait
-une ligne pour dire ce que le formulaire juste en dessous montre déjà.
-
-> **Le vert #12B76A est bien celui demandé — mais le texte dessus est en bleu
-> nuit, pas en blanc.** Blanc sur #12B76A ne donne que **2,62:1**, sous les
-> 4,5:1 exigés et même sous les 3:1 des grands textes. `#0F2745` sur `#12B76A`
-> donne **5,72:1** : conforme AA à toutes les tailles, et le vert reste
-> exactement celui demandé. Sur une audience dont la sensibilité aux
-> contrastes baisse avec l'âge, ce n'était pas négociable. Repasser le texte
-> en blanc est une seule ligne dans `.bouton-appel`, en connaissance de cause.
-
-### Réassurance du hero
-
-La pastille en haut du hero porte une **médaille** et la seule promesse
-vérifiable de la page : *Artisan assuré en décennale*. Les travaux sont
-exécutés par Technitoit, dont la responsabilité civile décennale est citée dans
-les mentions légales — l'accroche et les pages légales disent donc la même
-chose.
-
-> **Aucune note, aucun classement, aucun « mieux noté ».** Un superlatif qu'on
-> ne peut pas justifier relève de la pratique commerciale trompeuse
-> (art. L. 121-2 du code de la consommation). La médaille apporte le signal
-> visuel recherché ; la garantie décennale apporte le fond.
-
-**Les puces de réassurance ont quitté le hero** pour le liséré juste en
-dessous, afin de ne laisser au-dessus de la ligne de flottaison que le titre,
-la ligne et le bouton d'appel. Le liséré en compte six ; *100 % gratuit* et
-*Sans engagement* en ont été retirés, la ligne sous le titre le disant déjà —
-répéter les mêmes termes à cent pixels d'écart se lit comme une erreur de
-relecture, pas comme une insistance.
-
-**L'e-mail n'est pas obligatoire.** Le rappel se fait par téléphone : exiger
-une adresse coûtait des demandes sans rien apporter. S'il est saisi, il doit
-être valide ; s'il est laissé vide, le lead part normalement et la notification
-Telegram affiche « non renseigné ».
-
-**La case de consentement n'est pas pré-cochée, et ne doit jamais l'être** : un
-consentement pré-coché est nul (RGPD art. 4-11, arrêt Planet49 de la CJUE).
-Seule son ergonomie a été travaillée — toute la surface du bloc répond au clic,
-la case fait 24 px, et le bouton d'envoi s'affiche en retrait tant qu'elle est
-vide. Le bouton reste cliquable : c'est son clic qui affiche « Merci de cocher
-la case pour continuer », plutôt qu'un bouton mort qui n'explique rien.
-
-### Avis
-
-**Le tableau `AVIS` est vide, et la section est masquée.** Six avis d'exemple
-occupaient cette place ; ils étaient signalés comme tels dans le code, mais
-rien ne les distinguait de vrais avis à l'écran — exactement ce qu'on ne veut
-pas sur une page qui promet des chantiers réels.
-
-`monterAvis()` masque toute la section « Nos avis clients récents » tant que le
-tableau est vide. Pour la faire revenir, il suffit d'y ajouter des entrées,
-rien d'autre — ni HTML, ni CSS :
-
-```js
-{ prenom: 'Michel', commune: 'Armentières', note: 5,
-  texte: 'mot pour mot ce que la personne a écrit',
-  date: 'Mars 2026' }
-```
-
-Ne recopiez que des avis réellement reçus. Aucune note moyenne ni compteur
-d'avis ne sera affiché sans fiche publique vérifiable.
-
-### Carrousels
-
-Un seul mécanisme sert aux avis et aux avant/après. Le défilement est **natif**
-— `scroll-snap` fait le swipe, l'inertie et l'alignement — et le script ne gère
-que les flèches, les points et l'état courant. La piste reste utilisable si le
-script casse. Aucune bibliothèque, et **aucun défilement automatique** : cette
-audience a souvent passé 65 ans, un carrousel qui bouge seul lui fait perdre le
-fil.
-
-Le nombre d'étapes est piloté par `NB_ETAPES` et par les attributs
-`data-etape` : la barre de progression, le compteur et les annonces vocales
-s'y alignent seuls. Pour ajouter ou retirer une question, il suffit du
-`<fieldset>` et de la constante — rien d'autre n'est codé en dur.
-
-Il n'y a **pas** de question sur le type de tuiles : le technicien l'identifie
-sur place, et c'était une étape de perdue pour une information qui ne
-qualifiait rien.
-
-Il n'y a pas non plus de question sur le type de logement : le métier implique
-une maison.
-
-### Deux sorties sans envoi
-
-- **Locataire** (étape 2) → écran de sortie immédiat. Aucun envoi, aucune
-  collecte de coordonnées, pas de formulaire de repli. Le message invite à
-  transmettre l'information au propriétaire.
-- **Code postal hors 59** (étape 6) → écran de sortie courtois indiquant la
-  zone couverte. Aucun envoi.
-
-Dans les deux cas les réponses restent dans le navigateur et rien ne part.
-
-### Champs cachés transmis
-
-`gclid`, `gbraid`, `wbraid`, `utm_source`, `utm_medium`, `utm_campaign`,
-`utm_content`, `utm_term`, `page_url`, `consent_text`, `consent_timestamp`,
-`user_agent`, `ville_detectee`.
-
-### Consentement
-
-Case **non pré-cochée et obligatoire**. Le texte affiché est :
-
-> J'accepte d'être recontacté par un professionnel pour mon projet. Voir notre
-> politique de confidentialité.
-
-Le **singulier** est délibéré : la page promet « un seul technicien vous
-contacte ». Un consentement au pluriel autoriserait plus que ce qui est promis,
-et la contradiction se verrait sur la même page.
-
-Il est recopié **intégralement** dans le champ `consent_text` au moment de
-l'envoi, avec l'horodatage ISO 8601 dans `consent_timestamp` : c'est la pièce
-justificative en cas de contestation. Si vous modifiez ce texte dans
-`index.html`, répercutez-le dans `confidentialite.html` § 2.2.
-
----
-
-## 8. Détection de ville
-
-Un script inline synchrone dans le `<head>` contient la table des communes du
-Nord (377 communes, 8 secteurs) et lit le paramètre d'URL `?ville=`, à alimenter
-depuis Google Ads. **Aucune géolocalisation IP, aucune API, aucun fichier
-séparé.**
-
-Le texte est écrit avant la première peinture : `__appliquerGeo()` est appelé
-une première fois juste après le hero — donc avant que le navigateur n'ait peint
-son contenu — puis une seconde fois en fin de document pour les sections
-suivantes. Sans paramètre `?ville=`, la page affiche « dans le Nord », qui est
-déjà le texte présent dans le HTML : il n'y a donc rien à remplacer et aucun
-flash possible.
-
-La résolution tolère accents, apostrophes, casse, « Orchies, Nord, France » et
-les formes abrégées non ambiguës (`Templeuve` → `Templeuve-en-Pévèle`).
-
-Où la ville apparaît : le `<h1>` (mot surligné en vert), le titre de la section
-zone d'intervention, le nom du secteur, les puces de communes voisines, le CTA
-final et le `<title>`.
-
-**Honnêteté :** les formulations sont « Intervention à X » et « Nous intervenons
-à X ». Jamais « Basé à X », jamais de gentilé. Une implantation locale fausse,
-générée dynamiquement pour deux cents communes, est une allégation trompeuse.
-
-### Test rapide
-
-```
-index.html?ville=Orchies
-index.html?ville=Villeneuve-d%27Ascq     ← la plus longue, vérifie la hauteur du titre
-index.html?ville=Le%20Cateau             ← vérifie « au Cateau-Cambrésis »
-index.html?ville=Paris                   ← doit retomber sur « dans le Nord »
-index.html                               ← « dans le Nord »
-```
-
----
-
-## 9. Attribution publicitaire
-
-Au chargement, le script lit dans l'URL `gclid`, `gbraid`, `wbraid` et les
-`utm_*`, puis les écrit dans le cookie first-party `attr`, valable 90 jours.
-**Une valeur existante n'est jamais écrasée par une valeur vide** : un visiteur
-qui revient en direct conserve son attribution d'origine. Les valeurs sont
-injectées dans les champs cachés au moment de l'envoi.
-
-Le script pousse par ailleurs des événements dans `window.dataLayer`
-(`form_start`, `form_step`, `lead_submit`, `lead_disqualified`, `phone_click`,
-`cta_formulaire`, `consentement_pub`). Le push lui-même ne fait aucune requête :
-c'est un tableau en mémoire, que la balise Google lit.
-
-### Balise Google Ads
-
-`AW-18335177160`, posée en clair dans le `<head>` de `index.html`. Un
-identifiant de conversion **n'est pas un secret** : il figure dans le HTML de
-tout site qui mesure ses conversions, et n'a rien à faire en variable
-d'environnement.
-
-Action de conversion **« Envoi de formulaire de lead »** :
-`AW-18335177160/RwVzCJ6r-OYcEMiz8qZE`, valeur `1.0 EUR`. Les trois constantes
-`CONVERSION_LEAD`, `CONVERSION_VALEUR` et `CONVERSION_DEVISE` sont en haut du
-script de `index.html`.
-
-**Le déclencheur diffère volontairement de l'extrait fourni par Google.**
-L'interface propose « Chargement de page » ou « Clic » ; l'extrait généré en
-mode « Clic » expose une fonction `gtag_report_conversion()` à appeler sur le
-bouton d'envoi. Elle n'est pas utilisée, parce qu'**un clic n'est pas un
-lead** : l'envoi peut échouer après le clic — refus du serveur, coupure
-réseau, fonction serveur indisponible — et compter le clic déclarerait
-des conversions fantômes, sur lesquelles les enchères automatiques
-apprendraient.
-
-La conversion part donc un cran plus loin, sur **`lead_submit` et lui seul**,
-quand `/api/lead` a répondu que la demande est transmise. Une conversion comptée
-= un lead réellement reçu. Ni l'ouverture du formulaire, ni un clic sur le
-téléphone, ni `lead_disqualified` ne comptent : sans quoi l'algorithme
-apprendrait à acheter des locataires et des demandes hors zone.
-
-L'`event_callback` de l'extrait, qui sert à différer une navigation, n'a pas
-lieu d'être : la page ne quitte pas, elle affiche l'écran de confirmation.
-
-> **La valeur `1.0 EUR` est un repère, pas une estimation.** Si vous passez un
-> jour aux enchères sur la valeur de conversion, remplacez-la par ce que vaut
-> réellement un lead pour vous (marge moyenne d'un chantier × taux de
-> transformation) — l'algorithme optimisera sur ce chiffre.
-
-**Aucune donnée du formulaire n'est transmise à Google** : ni nom, ni adresse
-électronique, ni téléphone, ni code postal. Les « conversions améliorées » ne
-sont pas activées.
-
-### Microsoft Clarity
-
-Projet `y7tr5kz2g8`. Mesure d'audience et **enregistrement de session** :
-mouvements, clics, défilement, cartes de chaleur.
-
-**Chargée dès le premier rendu**, comme la balise Google. Ce n'est pas le
-chargement qui dépend du consentement, c'est l'enregistrement — via l'API
-`clarity('consentv2', { ad_Storage, analytics_Storage })`, appelée en `denied`
-avant le script et rejouée en `granted` à l'acceptation.
-
-> **C'est cet appel qui manquait, et c'est pourquoi Clarity n'enregistrait
-> rien.** Le script était bien chargé après acceptation, mais aucun signal
-> `consentv2` ne lui parvenait : il tournait en mode sans cookie, y compris
-> pour les visiteurs ayant accepté.
-
-Charger le script plus tôt ne suffit d'ailleurs pas à enregistrer davantage :
-depuis le **31 octobre 2025**, Microsoft applique lui-même la règle pour l'EEE,
-le Royaume-Uni et la Suisse. Sans signal de consentement, Clarity bascule en
-mode sans cookie et n'enregistre aucune session, quelle que soit la date de
-chargement. La CNIL, de son côté, **exclut expressément le session replay** de
-l'exemption de consentement accordée à la mesure d'audience.
-
-**Les champs du formulaire sont masqués côté page.** Les cinq champs personnels
-— prénom, nom, e-mail, téléphone, code postal — portent
-`data-clarity-mask="true"`. Clarity masque déjà les saisies dans son réglage par
-défaut, mais ce réglage se change depuis son interface : l'attribut le fige dans
-le code, où il ne peut pas être désactivé par mégarde. **Ne le retirez pas.**
-
-Clarity répartit sa charge sur `a.clarity.ms` à `z.clarity.ms`, d'où le joker
-`https://*.clarity.ms` dans le CSP, plus `c.bing.com` pour sa synchronisation.
-
-### Appel téléphonique
-
-**Les deux boutons du haut portent un libellé, pas le numéro** : *Appeler* dans
-l'en-tête, *Parler à un couvreur* sur le grand bouton vert du hero. Sur un
-téléphone, personne ne recopie dix chiffres — on appuie ; et un numéro répété
-deux fois en haut d'écran mangeait toute la largeur de la barre, forçant le nom
-de marque à se tronquer sous 360 px.
-
-Chacun porte un `aria-label` complet — *Appeler le 07 86 50 55 80*, *Parler à
-un couvreur au 07 86 50 55 80* — pour qu'un lecteur d'écran annonce la
-destination.
-
-> **Le numéro n'est pas perdu pour autant.** Il reste écrit en toutes lettres
-> **cinq fois** plus bas dans la page : bloc interlocuteur, FAQ, appel final,
-> pied de page, écran de confirmation. C'est ce qui sert à qui veut composer à
-> la main ou rappeler depuis un fixe — un cas réel sur une audience à 83 % de
-> 65 ans et plus. `t-appel.mjs` vérifie ce compte : si une refonte faisait
-> tomber le numéro de la page, le test échouerait.
-
-**Il n'y a plus de barre collante en bas d'écran.** Elle a été retirée : elle
-recouvrait en permanence 78 px de contenu et donnait à la page l'air comprimé.
-L'en-tête a pris le relais — elle est `position:sticky` — si bien que le bouton
-d'appel vert reste atteignable à tout moment sans rien masquer. C'est 58 px en
-haut au lieu de 78 en bas, et surtout au-dessus du contenu plutôt que dessus.
-
-Les ancres tiennent compte de cette en-tête via `scroll-padding-top:72px` sur
-`html` : sans quoi un lien vers `#devis` aurait calé le haut du formulaire
-derrière la barre.
-
-**La carte du formulaire n'en porte pas.** Un bouton d'appel y avait été ajouté
-puis retiré : il repoussait le parcours et alourdissait la carte. Le formulaire
-reprend le haut de la carte, sur son titre. Les écrans de sortie gardent leur
-ligne « Une urgence ? », qui est antérieure et voulue.
-
-> **Le vert demandé, #12B76A, n'a pas été retenu pour les fonds de bouton.**
-> Avec du texte blanc il donne **2,62:1**, sous le seuil de 3:1 réservé aux
-> grands textes et loin des 4,5:1 exigés en dessous de 18,66 px. C'est le vert
-> bouton du site, `--vert-fonce` (#0A7A46), qui est utilisé : **5,41:1**, sûr à
-> toutes les tailles. Sur une audience qui perd en sensibilité aux contrastes
-> avec l'âge, ce n'était pas un détail. #12B76A reste utilisé là où il ne porte
-> pas de texte : pastilles, étoiles, barre de progression.
-
-**Suivi.** Chaque lien `tel:` pousse un `phone_click` dans le `dataLayer` avec
-sa `position` — `header`, `footer`, ou la section d'origine — et émet le même
-événement en gtag, pour que Google Ads puisse s'en servir sans conteneur GTM.
-
-Pour en faire une **conversion secondaire** : créez une action de conversion
-« Appel depuis le site » dans Google Ads, puis collez sa valeur `send_to` dans
-la constante `CONVERSION_APPEL` de `index.html`. Tant qu'elle est vide,
-l'événement reste dans le dataLayer et rien n'est envoyé.
-
-### Section « Combien coûte un traitement de toiture ? »
-
-**Elle ne contient plus aucun chiffre.** Le tableau de prix au m² qui s'y
-trouvait a été retiré : il faisait double emploi avec l'estimateur et donnait
-gratuitement l'information que le formulaire échange contre des coordonnées.
-
-À la place, trois cartes expliquent **ce qui fait varier le prix** — la surface
-réelle des versants, l'accessibilité du toit, l'état du support — sans citer un
-seul montant. Puis le paragraphe sur le démoussage qui laisse la tuile poreuse,
-et un CTA orange qui remonte au formulaire.
-
-Elle reste **tout en bas, après la FAQ**, et c'est délibéré : placée haut, elle
-laissait le visiteur se disqualifier sur un chiffre avant d'avoir vu un seul
-chantier ni la moindre explication de ce qu'on fait.
-
-L'introduction porte `.section__sous-titre--long`, qui la passe au fer à
-gauche : un paragraphe centré au-delà de deux ou trois lignes se lit mal, l'œil
-devant rechercher le début de ligne à chaque retour.
-
-> **`TARIFS` est désormais la seule source de vérité des montants**, et elle
-> n'est lue que par l'estimateur. Si vous remettez des chiffres dans cette
-> section, vous créez une seconde source qui divergera.
-
-### Instrumentation
-
-Sept événements sont poussés dans le `dataLayer` :
-
-| Événement | Quand | Données |
-|---|---|---|
-| `page_view_complete` | au LCP définitif | `lcp_ms`, `lcp_element` |
-| `scroll_25` / `_50` / `_75` | palier de lecture atteint | `profondeur` |
-| `phone_click` | clic sur un lien `tel:` | `position`, `numero` |
-| `form_start` | premier clic dans l'étape 1 | `premier_champ`, `premiere_valeur` |
-| `form_step` | changement d'étape | `step_number`, `step_name` |
-| `lead_submit` | envoi accepté par `/api/lead` | voir §9 |
-
-**`page_view_complete` porte la valeur du LCP mesurée sur le terrain**, sur de
-vrais téléphones et un vrai réseau, plutôt que sur un banc d'essai. Il part au
-premier des deux : masquage de l'onglet, ou chargement complet — le LCP n'est
-définitif qu'à ce moment, et un visiteur qui s'en va sans rien émettre ne
-laisse aucune trace de ce qu'il a attendu.
-
-**Les paliers de défilement mesurent la part de page vue**, pas la position de
-défilement : sur une page de 15 000 px, « avoir défilé de 25 % » et « avoir vu
-le quart de la page » ne sont pas la même chose. Chaque palier part une fois et
-une seule, et le calcul se fait au repos après l'événement — lire `scrollHeight`
-force une mise en page, et le faire à chaque pixel parcouru rendrait le
-défilement saccadé.
-
-### Consentement (Consent Mode v2)
-
-Les quatre signaux — `ad_storage`, `ad_user_data`, `ad_personalization`,
-`analytics_storage` — sont à `denied` au chargement, **avant** la commande
-`config`. Sans action du visiteur, Google ne dépose aucun cookie et ne reçoit
-qu'un signal anonyme, dont il tire une modélisation des conversions.
-
-Le bandeau couvre **les deux outils**. Son texte le dit explicitement : mesure
-des annonces d'un côté, enregistrement de la navigation de l'autre. Refuser
-bloque les deux.
-
-Un bandeau demande le choix à la première visite. Refuser et accepter ont la
-même taille et le même poids visuel, comme l'exige la CNIL. La réponse est
-gardée six mois dans le cookie first-party `consentement_pub` ; la supprimer
-fait réapparaître le bandeau.
-
-**Le bandeau ne s'ouvre plus à l'arrivée.** L'écran d'accueil reste net, et
-c'est lui qui décide si le visiteur commence le formulaire. Deux déclencheurs
-seulement :
-
-1. **Le hero est entièrement passé au-dessus de l'écran.** Le formulaire vit
-   dedans, donc ce seul test suffit à garantir qu'un panneau fixe en bas
-   d'écran ne recouvrira jamais une question en cours de réponse.
-2. **Une minuterie de 25 s** (`DELAI_BANDEAU`) — mais elle est annulée dès le
-   premier clic dans le formulaire. Quelqu'un qui répond aux questions ne doit
-   pas voir surgir un bandeau au milieu ; pour lui, seul le défilement compte.
-
-> Attention si vous touchez à cette logique : le bandeau est
-> `position:fixed; bottom:0` et haut de plusieurs lignes sur mobile. Une
-> première version l'ouvrait au premier clic dans le formulaire — elle
-> masquait la réponse suivante. `t-bandeau.mjs` verrouille ce comportement :
-> il répond à trois questions d'affilée sans défiler et vérifie qu'aucun
-> élément fixe ne chevauche la carte.
-
-> **Ce report ne déplace aucun stockage, seulement la question.** Rien n'a
-> jamais été déposé avant réponse : les quatre signaux Google partent à
-> `denied` et Clarity à `consentv2 denied`, dès la première ligne du `<head>`.
-> Le bandeau sert à **obtenir** un accord, pas à annoncer un dépôt déjà fait —
-> le retarder ne retarde donc rien d'autre que la sollicitation. Un visiteur
-> qui rebondit en trois secondes ne le voit jamais, et n'aurait de toute façon
-> rien apporté à mesurer.
-
-**En aperçu local (`file://`), le script Google n'est pas injecté et le bandeau
-ne s'affiche pas** : le double-clic sur `index.html` reste sans aucune requête
-sortante.
-
-### Si la balise ne se déclenche pas
-
-Le CSP de `vercel.json` est en liste blanche stricte. Il autorise
-nommément les domaines de Google Ads (`www.googletagmanager.com`,
-`www.googleadservices.com`, `googleads.g.doubleclick.net`,
-`td.doubleclick.net`, `www.google.com`, `www.google.fr`,
-`pagead2.googlesyndication.com`) et ceux de Clarity (`https://*.clarity.ms`,
-`c.bing.com`). Si vous ajoutez un autre outil, il faudra l'y déclarer, sinon le
-navigateur le bloquera silencieusement — la console indique alors
-« Refused to load ».
-
----
-
-## 10. Icônes
-
-Toutes les icônes sont des SVG inline définis **une seule fois** dans un
-`<svg style="display:none">` en haut du `<body>`, sous forme de `<symbol>`,
-réutilisés via `<use href="#id">`.
-
-Règle unique, sans exception : `24 × 24`, `fill="none"`,
-`stroke="currentColor"`, `stroke-width="1.5"`, extrémités et jonctions
-arrondies, couleur héritée (bleu nuit `#0F2745`). **Style ligne uniquement :
-pas d'emoji, pas d'icône pleine, pas de couleur, pas de mélange de styles.**
-
-Chaque option de réponse porte son icône dans une tuile carrée arrondie de
-44 px, fond gris très clair `#F5F7FA`, alignée à gauche de la carte.
-
-Un même symbole réutilisé plusieurs fois est voulu — c'est ce qui garantit la
-cohérence. `i-calendrier` sert pour « Dans 3 mois » et « Dans 3 à 6 mois »,
-`i-horloge` pour « Dans 6 à 12 mois » et « L'année prochaine », `i-question`
-pour les deux « Je ne sais pas ». N'inventez pas de variantes.
-
----
-
-## 11. Ce qui est volontairement absent
-
-Ces absences sont des décisions, pas des oublis :
-
-- **Aucun faux avis, aucune fausse note, aucun compteur de chantiers inventé.**
-  Le bloc « avis » existe, est stylé, et reste `hidden` tant qu'il n'y a pas de
-  vrais avis Google. Le commentaire dans `index.html` indique où les brancher.
-  Attention : un widget chargé depuis un domaine tiers serait à la fois une
-  requête de plus et une ligne de plus au CSP — préférez une recopie manuelle depuis la
-  fiche, avec le lien public vers celle-ci pour vérification.
-- **Aucun flux d'activité en direct, aucun compte à rebours, aucune rareté
-  artificielle, aucune promesse de résultat non vérifiable.**
-- **Aucune affirmation d'implantation locale.** « Intervention à », jamais
-  « Basé à ».
-- **Aucune police externe** : pile système. **Aucun CDN, aucune bibliothèque
-  d'icônes, aucun outil de mesure d'audience.** Le seul domaine tiers toléré
-  dans l'onglet Network est celui de la balise Google Ads ; tout autre est une
-  régression.
-- **Aucun service en dehors des trois proposés.** Ni gouttières, ni zinguerie,
-  ni toit plat, ni isolation, ni étanchéité, ni réparation d'urgence comme
-  prestation distincte.
-
-La réassurance repose uniquement sur des faits vérifiables : assurance
-décennale, zone d'intervention, délai de rappel, un seul technicien.
-
----
-
-## 12. Checklist de vérification
-
-- [ ] `index.html` s'ouvre et fonctionne en double-cliquant dessus, hors serveur
-- [ ] Onglet Network : aucune requête tierce hors domaines Google Ads
-- [ ] Un envoi de test réel remonte dans Google Ads sous « Envoi de formulaire de lead »
-- [ ] Bandeau de consentement : « Refuser » puis « Accepter » testés, choix mémorisé
-- [ ] Onglet Network : **aucune requête `clarity.ms` avant d'avoir accepté**
-- [ ] Une session de test apparaît dans Clarity, et les champs du formulaire y sont masqués
-- [ ] Aucun « Refused to load » dans la console (CSP)
-- [ ] Le déploiement Vercel passe sans erreur
-- [ ] **Form detection activée** dans Forms → Usage and configuration, puis site redéployé
-- [ ] Le formulaire `lead` apparaît dans **Forms** après le premier déploiement
-- [ ] Un envoi de test réel arrive dans **Forms → lead** *et* sur Telegram
-- [ ] `?ville=Orchies` affiche la ville dans le titre, sans flash
-- [ ] Sans paramètre, le titre affiche « dans le Nord »
-- [ ] Les 7 étapes s'enchaînent, le bouton retour fonctionne
-- [ ] « Locataire » affiche l'écran de sortie et n'envoie rien
-- [ ] Un code postal hors 59 affiche l'écran de sortie et n'envoie rien
-- [ ] La case de consentement est non pré-cochée et bloque l'envoi
-- [ ] Toutes les icônes partagent le même style de trait
-- [ ] Aucun token, aucune clé, aucun identifiant dans `index.html` ni dans un
-      fichier versionné
-- [ ] `.gitignore` couvre `.env`
-- [ ] Au moins deux canaux configurés dans Vercel (§ 2), puis redéploiement
-- [ ] Un envoi test de chaque formulaire arrive bien sur chaque canal
-- [ ] Une soumission de test déclenche bien la notification Telegram
-- [ ] Plus aucune occurrence de `a-completer` : `grep -rn "a-completer" *.html`
-- [x] Photo du hero déposée et compressée
-- [ ] Photos avant / après déposées sous les noms exacts, `onerror` retirés
-- [ ] Commune des légendes avant / après exacte (Hazebrouck par défaut)
-- [ ] Chiffres 2012 / 250 / 3 000+ vérifiés et à jour
-- [ ] Test sur mobile réel : le formulaire est visible sans défilement
-
----
-
-## Page « Isolation / Pompe à chaleur — Nord (59) »
-
-`isolation-pompe-a-chaleur/index.html` est une seconde page d'atterrissage,
-autonome, destinée aux publicités isolation / pompe à chaleur (cible :
-propriétaires de 45 à 70 ans, département 59 uniquement). URL en ligne :
-`/isolation-pompe-a-chaleur` (l'ancienne adresse `/isolation-pac` y redirige).
-
-- **Formulaire** (envoi vers `/api/lead`, champ `formulaire=renov`) en 8 questions, une par
-  écran : logement, projet, statut, chauffage, année de construction,
-  taille du foyer, revenu fiscal (tranches MaPrimeRénov' calculées selon
-  la taille du foyer), puis code postal et coordonnées.
-- **Filtre géographique** : tout code postal hors `59xxx` est refusé avec
-  un message poli (`CONFIG.departements` dans le script).
-- **Notification** : `api/lead.js` reconnaît `formulaire=renov` et envoie un
-  message dédié (Telegram, e-mail, webhook).
-- **Lisibilité seniors** : texte à 18 px, gros boutons, une question par
-  écran, avancement automatique au clic.
-
-### À compléter avant diffusion (marqué `[A REMPLACER]` dans le code)
+## 5. À compléter avant diffusion
+
+Repérés par `[A REMPLACER]` dans la page et surlignés en jaune (classe
+`a-completer`) dans les pages légales :
+`grep -rn "A REMPLACER\|a-completer" *.html`
 
 1. Nom et logo de la marque (provisoirement « Rénov'Nord »).
-2. Chiffres du hero et note 4,8/5 : uniquement des chiffres réels.
+2. Chiffres et note 4,8/5 de l'en-tête : uniquement des chiffres réels.
 3. **Avis clients : ce sont des exemples de mise en page.** Les remplacer par
    de vrais avis avant toute diffusion (faux avis = pratique commerciale
    trompeuse).
-4. Exemples de chantiers : idéalement de vrais chantiers avec photos.
-5. Téléphone : `CONFIG.telephone` (vide = masqué).
-6. Plafonds de revenus `CONFIG.plafonds` : barème 2025 hors Île-de-France,
-   à vérifier sur france-renov.gouv.fr.
-7. Pages légales : elles visent aujourd'hui l'activité toiture.
-8. Pixel Meta / balise Google : non installés sur cette page ; la CSP de
-   `vercel.json` devra autoriser les domaines de Meta si besoin.
+4. Exemples de chantiers : idéalement de vrais chantiers.
+5. Téléphone de l'en-tête : `CONFIG.telephone` (vide = masqué).
+6. Plafonds de revenus `CONFIG.plafonds` : barème 2025 hors Île-de-France, à
+   vérifier sur france-renov.gouv.fr.
+7. Pages légales : entreprise RGE partenaire, nom de domaine, médiateur de la
+   consommation, crédit de la photo, adresse de Vercel, services d'e-mail /
+   webhook utilisés.
+8. Pixel Meta ou balise Google : non installés. Il faudra ajouter leurs
+   domaines dans la CSP de `vercel.json`, un bandeau de consentement, et
+   mettre à jour la section « Cookies » de `confidentialite.html`.
