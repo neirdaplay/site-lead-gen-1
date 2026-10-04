@@ -88,13 +88,18 @@ html,body{overflow-x:hidden}
 .labels{display:flex;align-items:center;gap:8px}
 .labels img{height:40px;width:auto;padding:4px 6px;background:#fff;border-radius:8px}
 .labels--entete{display:none}
-.labels--hero{margin:0 0 18px}
+.labels--hero{margin:22px 0 0}
 .labels--hero img{height:36px}
 
-.hero__grille{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr);gap:36px;padding:28px 0 72px;align-items:center}
+.hero__grille{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr);gap:24px;padding:14px 0 56px;align-items:center}
+/* Mobile : texte, puis formulaire, puis chiffres (ordre du HTML). */
+.hero__texte .hero__intro{margin-bottom:0}
+.hero__plus{padding-top:8px}
+.hero__plus .chiffres{margin-bottom:24px}
 .note{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font-size:14px;font-weight:500;backdrop-filter:blur(4px)}
 .etoiles{color:var(--jaune);letter-spacing:1px}
 .hero h1{color:#fff;font-size:clamp(32px,4.4vw,52px);font-weight:700;letter-spacing:-.03em;line-height:1.08;margin:22px 0 20px}
+@media (max-width:759px){.hero h1{margin:16px 0 14px}.hero__intro{font-size:17px}}
 .hero h1 .vert{color:var(--vert-vif)}
 .hero__intro{font-size:18px;font-weight:400;line-height:1.55;color:rgba(255,255,255,.82);max-width:540px;margin:0 0 30px}
 .chiffres{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 24px;max-width:420px;margin:0 0 30px;padding:0;list-style:none}
@@ -194,8 +199,11 @@ html,body{overflow-x:hidden}
 /* ================== EXEMPLES ================== */
 .exemples{display:grid;grid-template-columns:1fr;gap:22px;max-width:900px;margin:0 auto}
 .exemple{border-radius:var(--rayon);background:#fff;border:1px solid var(--bord);box-shadow:var(--ombre);overflow:hidden}
-.exemple__visuel{position:relative;height:190px;background:linear-gradient(180deg,#DFF3E8,#F5F8F6)}
-.exemple__visuel svg{width:100%;height:100%}
+.exemple__visuel{position:relative;height:200px;display:grid;grid-template-columns:1fr 1fr;gap:3px;background:#fff}
+.exemple__vue{position:relative;margin:0;overflow:hidden}
+.exemple__vue svg{width:100%;height:100%}
+.exemple__vue figcaption{position:absolute;left:10px;bottom:10px;padding:2px 10px;border-radius:99px;background:rgba(15,30,46,.75);color:#fff;font-size:12px;font-weight:600}
+.exemple__vue + .exemple__vue figcaption{left:auto;right:auto;left:10px;background:var(--vert-fonce)}
 .exemple__lieu{position:absolute;top:12px;left:12px;padding:4px 12px;border-radius:99px;background:#fff;font-size:13px;font-weight:700;color:var(--encre);box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .exemple__gain{position:absolute;right:12px;bottom:12px;padding:6px 12px;border-radius:10px;background:var(--vert);color:#fff;font-size:14px;font-weight:800}
 .exemple__corps{padding:18px 20px 20px}
@@ -204,6 +212,10 @@ html,body{overflow-x:hidden}
 .exemple dt{font-size:13px;color:var(--gris)}
 .exemple dd{margin:0;font-weight:800;color:var(--encre)}
 .exemple dd.vert{color:var(--vert)}
+.exemple__gain{bottom:auto;top:12px}
+.dpe-saut{display:flex;align-items:center;gap:6px;color:var(--gris)}
+.dpe{display:inline-grid;place-items:center;min-width:28px;height:28px;padding:0 6px;border-radius:6px;color:#fff;font-weight:800;font-size:15px}
+.dpe--a{background:#009C6D}.dpe--b{background:#52B153}.dpe--c{background:#78BD76;}.dpe--d{background:#F4E70F;color:#3D3A00}.dpe--e{background:#F0B40F;color:#3D2C00}.dpe--f{background:#EB8235}.dpe--g{background:#D7221F}
 .note-bas{max-width:900px;margin:18px auto 0;text-align:center;font-size:14px;color:var(--gris)}
 
 /* ================== AVIS ================== */
@@ -256,7 +268,12 @@ html,body{overflow-x:hidden}
   .barre p{font-size:17px}
 }
 @media (min-width:960px){
-  .hero__grille{grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:64px;padding:20px 0 80px}
+  .hero__grille{grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);grid-template-areas:"texte form" "plus form";gap:0 64px;padding:20px 0 80px;align-content:center}
+  .hero__texte{grid-area:texte;align-self:end}
+  .hero__texte .hero__intro{margin-bottom:30px}
+  .hero__plus{grid-area:plus;align-self:start;padding-top:0}
+  .hero__plus .chiffres{margin-bottom:30px}
+  .carte-form{grid-area:form;align-self:center}
   .entete__tel{display:inline-flex}
   .menu-bouton{display:none}
   .menu{display:flex!important;position:static;background:none;box-shadow:none;padding:0;gap:4px;align-items:center}

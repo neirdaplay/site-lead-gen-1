@@ -134,11 +134,18 @@ Repérés par `[A REMPLACER]` dans la page et surlignés en jaune (classe
 `grep -rn "A REMPLACER\|a-completer" *.html`
 
 1. Nom et logo de la marque (provisoirement « Rénov'Nord »).
-2. Chiffres et note 4,8/5 de l'en-tête : uniquement des chiffres réels.
+2. Chiffres de l'en-tête (« +300 chantiers réalisés », « 70 à 90 % financé
+   par les aides* », note 4,8/5) : uniquement des chiffres réels et
+   justifiables. Le « 70 à 90 % » est expliqué en bas de page (foyers aux
+   revenus modestes et très modestes) ; ajustez-le si vos dossiers montrent
+   autre chose.
 3. **Avis clients : ce sont des exemples de mise en page.** Les remplacer par
    de vrais avis avant toute diffusion (faux avis = pratique commerciale
    trompeuse).
-4. Exemples de chantiers : idéalement de vrais chantiers.
+4. Exemples de chantiers (avant / après, DPE avant → après, économie par an) :
+   ce sont des exemples de mise en page, illustrés par des dessins. Remplacez
+   par de vrais chantiers : photos avant / après, DPE réels, économie
+   constatée, avec l'accord des clients.
 5. Téléphone de l'en-tête : `CONFIG.telephone` dans `assets/js/site.js` (vide = masqué).
 6. Labels RGE / CEE : uniquement si l’entreprise partenaire est qualifiée.
 7. Pages légales : entreprise RGE partenaire, nom de domaine, médiateur de la

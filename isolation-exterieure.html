@@ -61,19 +61,14 @@
     </div>
 
     <div class="hero__grille" id="top">
-      <div>
-        <div class="labels labels--hero"><img src="/assets/img/logo-rge-qualibat.png" width="96" height="48" alt="Entreprise certifiée RGE Qualibat"><img src="/assets/img/logo-cee.png" width="96" height="38" alt="Les certificats d’économies d’énergie (CEE)"></div>
+      <!-- Trois blocs : sur mobile le formulaire passe entre le titre et les
+           chiffres, pour être rempli dès l'arrivée ; sur ordinateur, les deux
+           blocs de texte sont à gauche et le formulaire à droite. -->
+      <div class="hero__texte">
         <!-- [A REMPLACER] note réelle issue de vos avis vérifiés -->
         <span class="note"><span class="etoiles" aria-hidden="true">★★★★★</span> Noté 4,8/5 par nos clients</span>
         <h1>Isolation des murs par&nbsp;l’extérieur&nbsp;: <span class="vert">estimez votre reste à&nbsp;charge</span></h1>
         <p class="hero__intro">Une façade isolée et refaite à neuf, sans perdre un centimètre à l’intérieur. Découvrez en 2 minutes les aides auxquelles vous avez droit dans le Nord.</p>
-        <!-- [A REMPLACER] vos propres chiffres, vérifiables -->
-        <ul class="chiffres"><li><strong>2 min</strong><span>pour répondre</span></li><li><strong>jusqu’à 25 %</strong><span>de chaleur perdue par les murs</span></li><li><strong>4,8/5</strong><span>Avis clients</span></li><li><strong>10 ans</strong><span>Garantie décennale</span></li></ul>
-        <ul class="garanties">
-          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Certifié RGE</li>
-          <li><svg aria-hidden="true"><use href="#i-bouclier"/></svg>Garantie décennale</li>
-          <li><svg aria-hidden="true"><use href="#i-euro"/></svg>Aides déduites du devis</li>
-        </ul>
       </div>
 
       <div class="carte-form" id="formulaire" data-page="ite" data-projet="Isolation extérieure (ITE)">
@@ -85,6 +80,17 @@
         <div class="carte-form__corps" id="formulaire-corps">
           <noscript><p>Le formulaire nécessite JavaScript. Merci de l’activer pour faire votre demande.</p></noscript>
         </div>
+      </div>
+
+      <div class="hero__plus">
+        <!-- [A REMPLACER] vos propres chiffres, vérifiables -->
+        <ul class="chiffres"><li><strong>+300</strong><span>Chantiers réalisés</span></li><li><strong>70 à 90 %</strong><span>Financé par les aides*</span></li><li><strong>4,8/5</strong><span>Avis clients</span></li><li><strong>10 ans</strong><span>Garantie décennale</span></li></ul>
+        <ul class="garanties">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>Certifié RGE</li>
+          <li><svg aria-hidden="true"><use href="#i-bouclier"/></svg>Garantie décennale</li>
+          <li><svg aria-hidden="true"><use href="#i-euro"/></svg>Aides déduites du devis</li>
+        </ul>
+        <div class="labels labels--hero"><img src="/assets/img/logo-rge-qualibat.png" width="96" height="48" alt="Entreprise certifiée RGE Qualibat"><img src="/assets/img/logo-cee.png" width="96" height="38" alt="Les certificats d’économies d’énergie (CEE)"></div>
       </div>
     </div>
   </div>
@@ -152,32 +158,37 @@
     <div class="conteneur">
       <div class="section__tete">
         <span class="pastille">Exemples dans le Nord</span>
-        <h2>Ce que coûtent vraiment les travaux <span class="vert">une fois les aides déduites</span></h2>
+        <h2>Moins de chauffage, <span class="vert">une meilleure étiquette énergie</span></h2>
       </div>
-      <!-- [A REMPLACER] idéalement par de vrais chantiers, avec photos et accord des clients -->
+      <!-- [A REMPLACER] Exemples de mise en page : remplacez-les par de vrais chantiers
+           (photos avant / après, DPE avant et après, économie constatée) avec l'accord des clients. -->
       <div class="exemples">
         <article class="exemple">
-          <div class="exemple__visuel"><svg viewBox="0 0 400 190" aria-hidden="true"><rect x="0" y="160" width="400" height="30" fill="#BFE8D3"/><path d="M110 90l90-60 90 60" fill="#7C2D12"/><rect x="120" y="88" width="160" height="72" fill="#F1F5F9"/><rect x="114" y="88" width="8" height="72" fill="#10B96A"/><rect x="278" y="88" width="8" height="72" fill="#10B96A"/><rect x="140" y="104" width="30" height="26" fill="#93C5FD"/><rect x="230" y="104" width="30" height="26" fill="#93C5FD"/><rect x="186" y="120" width="28" height="40" fill="#475569"/></svg>
-            <span class="exemple__lieu">Maison de 1965 · Roubaix</span>
-            <span class="exemple__gain">Isolation des murs</span>
+          <div class="exemple__visuel">
+            <figure class="exemple__vue"><svg viewBox="0 0 200 150" aria-hidden="true" preserveAspectRatio="xMidYMax slice"><rect width="200" height="150" fill="#E8ECEF"/><rect x="0" y="128" width="200" height="22" fill="#CFE9D9"/><path d="M40 70l60-42 60 42z" fill="#6B3A26"/><rect x="48" y="68" width="104" height="60" fill="#B9B2A8"/><path d="M70 74l6 14-4 8M128 96l-5 10 6 12" stroke="#7D756B" stroke-width="1.5" fill="none"/><rect x="62" y="80" width="22" height="18" fill="#A9C4DB"/><rect x="116" y="80" width="22" height="18" fill="#A9C4DB"/><rect x="90" y="98" width="20" height="30" fill="#5B4636"/><path d="M36 128V60M36 70h10M36 92h10M36 114h10" stroke="#9AA3AD" stroke-width="2"/></svg><figcaption>Avant</figcaption></figure>
+            <figure class="exemple__vue"><svg viewBox="0 0 200 150" aria-hidden="true" preserveAspectRatio="xMidYMax slice"><rect width="200" height="150" fill="#E3F4EA"/><rect x="0" y="128" width="200" height="22" fill="#CFE9D9"/><path d="M38 70l62-44 62 44z" fill="#6B3A26"/><rect x="44" y="68" width="112" height="60" fill="#FAFAF7"/><rect x="44" y="68" width="5" height="60" fill="#10B96A"/><rect x="151" y="68" width="5" height="60" fill="#10B96A"/><rect x="62" y="80" width="22" height="18" fill="#93C5FD"/><rect x="116" y="80" width="22" height="18" fill="#93C5FD"/><rect x="90" y="98" width="20" height="30" fill="#334155"/></svg><figcaption>Après</figcaption></figure>
+            <span class="exemple__lieu">Roubaix</span>
+            <span class="exemple__gain">−40 % sur les factures</span>
           </div>
           <div class="exemple__corps">
-            <h3>Isolation des murs par l’extérieur, 110 m² de façade</h3>
-            <dl><div><dt>Coût des travaux</dt><dd>21 000 €</dd></div><div><dt>Aides</dt><dd class="vert">−13 500 €</dd></div><div><dt>Reste à payer</dt><dd>7 500 €</dd></div></dl>
+            <h3>Isolation extérieure d’une maison de 1965</h3>
+            <dl><div><dt>Surface</dt><dd>110 m²</dd></div><div><dt>DPE</dt><dd class="dpe-saut"><span class="dpe dpe--e">E</span><span aria-label="devient">→</span><span class="dpe dpe--c">C</span></dd></div><div><dt>Économie / an</dt><dd>1 150 €/an</dd></div></dl>
           </div>
         </article>
         <article class="exemple">
-          <div class="exemple__visuel"><svg viewBox="0 0 400 190" aria-hidden="true"><rect x="0" y="160" width="400" height="30" fill="#BFE8D3"/><path d="M110 90l90-60 90 60" fill="#7C2D12"/><rect x="120" y="88" width="160" height="72" fill="#F1F5F9"/><rect x="114" y="88" width="8" height="72" fill="#10B96A"/><rect x="278" y="88" width="8" height="72" fill="#10B96A"/><rect x="140" y="104" width="30" height="26" fill="#93C5FD"/><rect x="230" y="104" width="30" height="26" fill="#93C5FD"/><rect x="186" y="120" width="28" height="40" fill="#475569"/></svg>
-            <span class="exemple__lieu">Maison de 1958 · Valenciennes</span>
-            <span class="exemple__gain">Isolation des murs</span>
+          <div class="exemple__visuel">
+            <figure class="exemple__vue"><svg viewBox="0 0 200 150" aria-hidden="true" preserveAspectRatio="xMidYMax slice"><rect width="200" height="150" fill="#E8ECEF"/><rect x="0" y="128" width="200" height="22" fill="#CFE9D9"/><path d="M40 70l60-42 60 42z" fill="#6B3A26"/><rect x="48" y="68" width="104" height="60" fill="#B9B2A8"/><path d="M70 74l6 14-4 8M128 96l-5 10 6 12" stroke="#7D756B" stroke-width="1.5" fill="none"/><rect x="62" y="80" width="22" height="18" fill="#A9C4DB"/><rect x="116" y="80" width="22" height="18" fill="#A9C4DB"/><rect x="90" y="98" width="20" height="30" fill="#5B4636"/><path d="M36 128V60M36 70h10M36 92h10M36 114h10" stroke="#9AA3AD" stroke-width="2"/></svg><figcaption>Avant</figcaption></figure>
+            <figure class="exemple__vue"><svg viewBox="0 0 200 150" aria-hidden="true" preserveAspectRatio="xMidYMax slice"><rect width="200" height="150" fill="#E3F4EA"/><rect x="0" y="128" width="200" height="22" fill="#CFE9D9"/><path d="M38 70l62-44 62 44z" fill="#6B3A26"/><rect x="44" y="68" width="112" height="60" fill="#FAFAF7"/><rect x="44" y="68" width="5" height="60" fill="#10B96A"/><rect x="151" y="68" width="5" height="60" fill="#10B96A"/><rect x="62" y="80" width="22" height="18" fill="#93C5FD"/><rect x="116" y="80" width="22" height="18" fill="#93C5FD"/><rect x="90" y="98" width="20" height="30" fill="#334155"/></svg><figcaption>Après</figcaption></figure>
+            <span class="exemple__lieu">Valenciennes</span>
+            <span class="exemple__gain">−35 % sur les factures</span>
           </div>
           <div class="exemple__corps">
-            <h3>Isolation extérieure et enduit neuf, 140 m² de façade</h3>
-            <dl><div><dt>Coût des travaux</dt><dd>27 000 €</dd></div><div><dt>Aides</dt><dd class="vert">−15 000 €</dd></div><div><dt>Reste à payer</dt><dd>12 000 €</dd></div></dl>
+            <h3>Isolation extérieure et enduit neuf, maison de 1958</h3>
+            <dl><div><dt>Surface</dt><dd>140 m²</dd></div><div><dt>DPE</dt><dd class="dpe-saut"><span class="dpe dpe--f">F</span><span aria-label="devient">→</span><span class="dpe dpe--d">D</span></dd></div><div><dt>Économie / an</dt><dd>1 300 €/an</dd></div></dl>
           </div>
         </article>
       </div>
-      <p class="note-bas">Exemples indicatifs pour un foyer aux revenus modestes. Le montant réel des aides dépend de vos revenus, de votre logement et des barèmes en vigueur.</p>
+      <p class="note-bas">Exemples indicatifs. L’économie réelle dépend de la maison, de son usage et du prix de l’énergie.</p>
     </div>
   </section>
 
@@ -227,6 +238,7 @@
 <footer class="pied">
   <div class="conteneur">
     <a class="logo" href="/">Rénov'<b>Nord</b><i aria-hidden="true">✦</i></a>
+    <p style="font-size:13px">* Jusqu’à 70 à 90 % du montant des travaux pour les foyers aux revenus modestes et très modestes, selon les travaux et les barèmes en vigueur.</p>
     <p>Rénov'Nord accompagne les propriétaires de maison du Nord (59) dans leurs travaux d'isolation et de chauffage, réalisés par des artisans certifiés RGE, et dans leurs demandes d'aides.</p>
     <nav aria-label="Nos aides"><a href="/isolation-exterieure">Isolation extérieure</a><a href="/isolation-combles">Isolation des combles</a><a href="/pompe-a-chaleur">Pompe à chaleur air/eau</a></nav>
     <nav aria-label="Informations légales" style="margin-top:8px"><a href="/mentions-legales">Mentions légales</a><a href="/confidentialite">Confidentialité</a><a href="/conditions-generales">Conditions générales</a></nav>
