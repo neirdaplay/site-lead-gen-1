@@ -1,7 +1,8 @@
 /*!
  * api/lead.js — Fonction serverless Vercel (runtime Node.js).
  *
- * Reçoit en POST le formulaire de index.html (isolation / pompe à chaleur).
+ * Reçoit en POST le formulaire commun aux quatre pages (assets/js/site.js) :
+ * accueil, isolation extérieure, isolation des combles, pompe à chaleur.
  *
  * Vercel n'a pas d'équivalent à Netlify Forms : rien n'est stocké côté
  * hébergeur. Le lead est donc transmis à un ou plusieurs CANAUX, chacun
@@ -56,13 +57,12 @@ function lignesMessage(d) {
   const tel = lienTelephone(d.telephone);
   const source = [d.utm_source, d.utm_campaign, d.utm_term].filter(Boolean).join(' / ');
   return [
-    '🔔 <b>Nouveau lead isolation / PAC</b>',
+    '🔔 <b>Nouveau lead — ' + echapper(d.projet || 'projet non précisé') + '</b>',
     '',
-    'Projet : ' + echapper(d.projet),
     'Logement : ' + echapper(d.logement) + ' · ' + echapper(d.statut),
-    'Chauffage : ' + echapper(d.chauffage) + ' · Construite : ' + echapper(d.anciennete),
-    'Foyer : ' + echapper(d.personnes) + ' pers. · Revenus : ' + echapper(d.revenus),
+    'Chauffage actuel : ' + echapper(d.chauffage),
     'Code postal : ' + echapper(d.code_postal),
+    'Page : ' + echapper(d.page || d.formulaire),
     '',
     echapper(d.prenom) + ' ' + echapper(d.nom),
     '📞 ' + (tel ? '<a href="tel:' + echapper(tel) + '">' + echapper(d.telephone) + '</a>' : '—'),
@@ -103,7 +103,7 @@ async function envoyerEmail(lignes, d) {
     body: JSON.stringify({
       from: process.env.LEAD_EMAIL_FROM || 'Leads <onboarding@resend.dev>',
       to: dest.split(',').map((s) => s.trim()).filter(Boolean),
-      subject: 'Nouveau lead isolation / PAC — ' +
+      subject: 'Nouveau lead ' + String(d.projet || '').slice(0, 60) + ' — ' +
         String(d.code_postal || '').slice(0, 5) + ' ' + String(d.prenom || '').slice(0, 40),
       html
     })
